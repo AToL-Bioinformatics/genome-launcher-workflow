@@ -56,11 +56,11 @@ export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 
 # set up pipeline
 PIPELINE_PARAMS=(
-        "--input" "${SAMPLE_ID}_samplesheet.csv"
+        "--input" "${SAMPLE_ID}_ascc_samplesheet.csv"
         "--outdir" "${OUTDIR}/ascc"
         "--fcs_gx_database_path" "$(readlink -f results/fcsgx/fcsgx)"
         "-profile" "singularity,pawsey"
-        "-params-file" "${SAMPLE_ID}_config.yaml"
+        "-params-file" "${SAMPLE_ID}_ascc_config.yaml"
         "-r" "${PIPELINE_VERSION}"
         "-c" "ascc.config"
 )
