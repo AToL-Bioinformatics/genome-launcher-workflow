@@ -18,8 +18,8 @@ set -eux
 
 # Set up project. Outdir must be on scratch.
 SAMPLE_ID="rSaiEqu1"
-SAMPLE_VERSION="v3"
-OUTDIR="results/${SAMPLE_ID}.${SAMPLE_VERSION}"
+PIPELINE_ATTEMPT="v3"
+OUTDIR="results/${SAMPLE_ID}.${PIPELINE_ATTEMPT}"
 PIPELINE_VERSION="0.5.3"
 
 # Set up nextflow. Download a GitHub release for the target version if
@@ -58,7 +58,7 @@ export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 PIPELINE_PARAMS=(
         "--input" "${SAMPLE_ID}_samplesheet.csv"
         "--outdir" "${OUTDIR}/ascc"
-        "--fcs_gx_database_path" "$(readlink -f results/fcsgx)"
+        "--fcs_gx_database_path" "$(readlink -f results/fcsgx/fcsgx)"
         "-profile" "singularity,pawsey"
         "-params-file" "${SAMPLE_ID}_config.yaml"
         "-r" "${PIPELINE_VERSION}"
