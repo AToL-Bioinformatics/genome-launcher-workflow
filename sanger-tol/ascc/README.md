@@ -13,7 +13,8 @@
   error message.
 - Using nf 25.04.8, pipeline version 0.5.3 and a local FCSGX database (on
   scratch), the DB gets loaded into RAM correctly but FCSGX fails with no error
-  message.
+  message. I think this might be because the DB didn't copy to scratch
+  correctly, i.e. not the pipeline's fault.
 - nf older than 25.10 can't stage the FCSGX database from S3 correctly (tried
   `25.04.7`,  `25.04.8` and `25.09.2-edge`)
 - Pipeline commits `65b4c1d` and `f152744` both result in
