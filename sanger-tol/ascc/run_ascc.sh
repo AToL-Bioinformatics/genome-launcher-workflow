@@ -17,14 +17,15 @@ unset SBATCH_EXPORT
 set -eux
 
 # Set up project. Outdir must be on scratch.
-SAMPLE_ID=rSaiEqu1
-SAMPLE_VERSION="v2"
+SAMPLE_ID="rSaiEqu1"
+SAMPLE_VERSION="v3"
 OUTDIR="results/${SAMPLE_ID}.${SAMPLE_VERSION}"
+PIPELINE_VERSION="0.5.3"
 
 # Set up nextflow. Download a GitHub release for the target version if
 # required.
-NEXTFLOW_VERSION="25.10.4"
-NEXTFLOW_DIR="${OUTDIR}/nextflow/${NEXTFLOW_VERSION}"
+NEXTFLOW_VERSION="25.04.8"
+NEXTFLOW_DIR="${OUTDIR}/nextflow/${NEXTFLOW_VERSION}/ascc_${PIPELINE_VERSION}"
 mkdir -p "${NEXTFLOW_DIR}/logs"
 
 if [ ! -f "${NEXTFLOW_DIR}/nextflow" ]; then
@@ -45,7 +46,7 @@ export NXF_CACHE_DIR="$(readlink -f "${NEXTFLOW_DIR}/cache")"
 export NXF_WORK="$(readlink -f "${NEXTFLOW_DIR}/work")"
 
 # set up singularity
-if [ -z "${SINGULARITY_CACHEDIR}" ]; then
+if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
         export SINGULARITY_CACHEDIR=/software/projects/pawsey1132/tharrop/.singularity
         export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
 fi
@@ -54,12 +55,12 @@ export NXF_APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 
 # set up pipeline
-PIPELINE_VERSION="65b4c1d"
 PIPELINE_PARAMS=(
-        "--input" "ascc_samplesheet.csv"
+        "--input" "${SAMPLE_ID}_samplesheet.csv"
         "--outdir" "${OUTDIR}/ascc"
+        "--fcs_gx_database_path" "$(readlink -f results/fcsgx)"
         "-profile" "singularity,pawsey"
-        "-params-file" "ascc_config.yaml"
+        "-params-file" "${SAMPLE_ID}_config.yaml"
         "-r" "${PIPELINE_VERSION}"
         "-c" "ascc.config"
 )
