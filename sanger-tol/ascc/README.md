@@ -11,6 +11,9 @@
   in 0.6.0 so the bug shouldn't happen before that.
 - Using nf 25.10 with pipeline release 0.5.3 results in the "manifest maps"
   error message.
+- Using nf 25.04.8, pipeline version 0.5.3 and a local FCSGX database (on
+  scratch), the DB gets loaded into RAM correctly but FCSGX fails with no error
+  message.
 - nf older than 25.10 can't stage the FCSGX database from S3 correctly (tried
   `25.04.7`,  `25.04.8` and `25.09.2-edge`)
 - Pipeline commits `65b4c1d` and `f152744` both result in
