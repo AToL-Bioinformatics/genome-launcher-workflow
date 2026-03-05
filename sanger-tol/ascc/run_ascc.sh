@@ -25,6 +25,7 @@ OUTDIR="results/${SAMPLE_ID}.${SAMPLE_VERSION}"
 # required.
 NEXTFLOW_VERSION="25.10.4"
 NEXTFLOW_DIR="${OUTDIR}/nextflow/${NEXTFLOW_VERSION}"
+mkdir -p "${NEXTFLOW_DIR}/logs"
 
 if [ ! -f "${NEXTFLOW_DIR}/nextflow" ]; then
         wget \
@@ -42,7 +43,6 @@ printf "nextflow: %s\n" "$(readlink -f "$(which nextflow)")"
 export NXF_HOME="$(readlink -f "${NEXTFLOW_DIR}/home")"
 export NXF_CACHE_DIR="$(readlink -f "${NEXTFLOW_DIR}/cache")"
 export NXF_WORK="$(readlink -f "${NEXTFLOW_DIR}/work")"
-mkdir -p "${NEXTFLOW_DIR}/logs"
 
 # set up singularity
 if [ -z "${SINGULARITY_CACHEDIR}" ]; then
