@@ -1,6 +1,6 @@
 reads_path:
-  - "/scratch/pawsey1132/tharrop/atol-genome-launcher-testing/rSaiEqu1/trimmed_pacbio_reads/350822_AusARG_AGRF_DA080843.ccs.trim.fastq.gz"
-  - "/scratch/pawsey1132/tharrop/atol-genome-launcher-testing/rSaiEqu1/trimmed_pacbio_reads/350822_AusARG_AGRF_DA095606.ccs.trim.fastq.gz"
+    - "/scratch/pawsey1132/tharrop/atol-genome-launcher-testing/rSaiEqu1/trimmed_pacbio_reads/350822_AusARG_AGRF_DA080843.ccs.trim.fastq.gz"
+    - "/scratch/pawsey1132/tharrop/atol-genome-launcher-testing/rSaiEqu1/trimmed_pacbio_reads/350822_AusARG_AGRF_DA095606.ccs.trim.fastq.gz"
 reads_type: "hifi"
 reads_layout: "SINGLE"
 sample_id: "rSaiEqu1"

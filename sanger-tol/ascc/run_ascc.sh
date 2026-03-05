@@ -22,26 +22,26 @@ SAMPLE_VERSION="v2"
 OUTDIR="results/${SAMPLE_ID}.${SAMPLE_VERSION}"
 
 # Set up nextflow. Download a GitHub release for the target version if
-# required. 
+# required.
 NEXTFLOW_VERSION="25.10.4"
 NEXTFLOW_DIR="${OUTDIR}/nextflow/${NEXTFLOW_VERSION}"
 
 if [ ! -f "${NEXTFLOW_DIR}/nextflow" ]; then
-    wget \
-        -O "${NEXTFLOW_DIR}/nextflow" \
-        "https://github.com/nextflow-io/nextflow/releases/download/v${NEXTFLOW_VERSION}/nextflow"
+        wget \
+                -O "${NEXTFLOW_DIR}/nextflow" \
+                "https://github.com/nextflow-io/nextflow/releases/download/v${NEXTFLOW_VERSION}/nextflow"
 
-    chmod 755 "${NEXTFLOW_DIR}/nextflow"
+        chmod 755 "${NEXTFLOW_DIR}/nextflow"
 fi
 
 # nf gets confused if either the cache or home directory is shared across
 # pipeline runs. This block contains the nextflow cache, home and work
 # directories to the results directory to limit the damage.
 export PATH="${NEXTFLOW_DIR}:${PATH}"
-printf "nextflow: %s\n" "$( readlink -f "$( which nextflow )" )"
-export NXF_HOME="$( readlink -f "${NEXTFLOW_DIR}/home" )"
-export NXF_CACHE_DIR="$( readlink -f "${NEXTFLOW_DIR}/cache" )"
-export NXF_WORK="$( readlink -f "${NEXTFLOW_DIR}/work" )"
+printf "nextflow: %s\n" "$(readlink -f "$(which nextflow)")"
+export NXF_HOME="$(readlink -f "${NEXTFLOW_DIR}/home")"
+export NXF_CACHE_DIR="$(readlink -f "${NEXTFLOW_DIR}/cache")"
+export NXF_WORK="$(readlink -f "${NEXTFLOW_DIR}/work")"
 mkdir -p "${NEXTFLOW_DIR}/logs"
 
 # set up singularity
