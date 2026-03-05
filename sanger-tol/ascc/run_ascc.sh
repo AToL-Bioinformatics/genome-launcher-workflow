@@ -36,9 +36,9 @@ fi
 
 export PATH="${NEXTFLOW_DIR}:${PATH}"
 printf "nextflow: %s\n" "$( readlink -f "$( which nextflow )" )"
-export NXF_HOME="${NEXTFLOW_DIR}/.nextflow"
-export NXF_CACHE_DIR="${NEXTFLOW_DIR}/cache"
-export NXF_WORK="${NEXTFLOW_DIR}/work"
+export NXF_HOME="$( readlink -f "${NEXTFLOW_DIR}/.nextflow" )"
+export NXF_CACHE_DIR="$( readlink -f "${NEXTFLOW_DIR}/cache" )"
+export NXF_WORK="$( readlink -f "${NEXTFLOW_DIR}/work" )"
 
 # set up singularity
 if [ -z "${SINGULARITY_CACHEDIR}" ]; then
