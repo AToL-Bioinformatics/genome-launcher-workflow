@@ -18,13 +18,13 @@ set -eux
 
 # Set up project. Outdir must be on scratch.
 SAMPLE_ID="rSaiEqu1"
-PIPELINE_ATTEMPT="v2"
+PIPELINE_ATTEMPT="v3"
 OUTDIR="results/${SAMPLE_ID}.${PIPELINE_ATTEMPT}"
-PIPELINE_VERSION="65b4c1d"
+PIPELINE_VERSION="0.5.3"
 
 # Set up nextflow. Download a GitHub release for the target version if
 # required.
-NEXTFLOW_VERSION="25.10.4"
+NEXTFLOW_VERSION="25.04.8"
 NEXTFLOW_DIR="${OUTDIR}/nextflow/${NEXTFLOW_VERSION}/ascc_${PIPELINE_VERSION}"
 mkdir -p "${NEXTFLOW_DIR}/logs"
 
