@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
-rule assembly_data_downloader:
+import yaml_manifest
+from pathlib import Path
+
+# setup paths
+manifest = yaml_manifest.Manifest.from_yaml(Path(config["manifest"]))
+
+
+include: "rules/10_assembly_data_downloader.smk"
+include: "rules/20_qc.smk"
+
+
+rule target:
+    default_target: True
     input:
-        config["manifest"]
-    output:
-        directory("downloads")
-    log:
-        Path("logs", "assembly_data_downloader.log")
-    threads:
-        8
-    container:
-        "docker://quay.io/biocontainers/atol-genome-launcher:0.7.2--pyhdfd78af_0"
-    shell:
-        "assembly-data-downloader "
-        "{input} "
-        "2> {log}"
+        rules.pacbio_qc_target.input,
