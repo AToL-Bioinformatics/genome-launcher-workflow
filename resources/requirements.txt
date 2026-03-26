@@ -54,4 +54,4 @@ urllib3==2.6.3
 wheel==0.46.3
 wrapt==2.1.2
 yte==1.9.4
-git+https://github.com/TomHarrop/atol-genome-launcher@0.7.3
+git+https://github.com/TomHarrop/atol-genome-launcher@0.7.5
