@@ -28,9 +28,8 @@ if ! command -v snakemake >/dev/null 2>&1; then
         python3 -m venv $MYVENV
         source $MYVENV/bin/activate
         python3 -m pip install --upgrade pip setuptools wheel
-        python3 -m pip install -r resources/requirements.txt
+        python3 -m pip install -r config/requirements.txt
+        deploy-pipeline config/manifest.yaml --workflow_tag 0.0.10 --force
 fi
 
-snakemake \
-        --profile profiles/pawsey \
-        -n
+snakemake --profile profiles/pawsey
