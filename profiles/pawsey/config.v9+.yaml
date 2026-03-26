@@ -2,7 +2,7 @@
 apptainer-prefix: $SINGULARITY_CACHEDIR/library
 cluster-generic-cancel-cmd: scancel
 cluster-generic-status-cmd: status-sacct-robust.sh
-cluster-generic-submit-cmd: mkdir -p slurm_logs/{rule} &&
+cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   sbatch
   --time={resources.runtime}
   {resources.partitionFlag}
