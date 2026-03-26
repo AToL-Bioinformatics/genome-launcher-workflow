@@ -17,7 +17,7 @@ if len(ont_reads) > 0:
         log:
             Path(ont_log_parent, "{bpa_package_id}.log"),
         container:
-            "docker://quay.io/biocontainers/atol-qc-raw-ont:0.2.1--pyhdfd78af_0"
+            config["containers"]["atol_qc_raw_ont"]
         threads: 12
         params:
             qc_logs_dir=qc_logs_dir,

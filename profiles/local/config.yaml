@@ -9,6 +9,7 @@ apptainer-args: -B $PWD,/tmp
   --pwd $PWD 
   --env TMPDIR=/tmp 
   --env LC_ALL=C 
+  --env BPA_APIKEY=${BPA_APIKEY}
   --containall --cleanenv --writable-tmpfs
 use-apptainer: True
 use-conda: False

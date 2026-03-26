@@ -16,7 +16,7 @@ if len(hic_reads) > 0:
         log:
             Path(hic_log_parent, "{bpa_package_id}.log"),
         container:
-            "docker://quay.io/biocontainers/atol-qc-raw-shortread:0.3.1--pyhdfd78af_0"
+            config["containers"]["atol_qc_raw_shortread"]
         threads: 12
         params:
             qc_logs_dir=qc_logs_dir,

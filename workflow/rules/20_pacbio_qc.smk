@@ -16,7 +16,7 @@ if len(pacbio_reads) > 0:
         log:
             Path(pacbio_log_parent, "{bpa_package_id}.log"),
         container:
-            "docker://quay.io/biocontainers/atol-qc-raw-pacbio:0.1.1--pyhdfd78af_0"
+            config["containers"]["atol_qc_raw_pacbio"]
         threads: 8
         resources:
             mem="16GB",
