@@ -3,30 +3,30 @@
 import yaml_manifest
 from pathlib import Path
 
-
-def generate_target(wildcards):
-    targets = []
-    if len(manifest.pacbio_reads) > 0:
-        for pb_target in rules.pacbio_qc_target.input:
-            targets.append(pb_target)
-
-    if len(manifest.hic_reads) > 0:
-        for hic_target in rules.hic_qc_target.input:
-            targets.append(hic_target)
-
-    return targets
-
-
 # setup paths
 manifest = yaml_manifest.Manifest.from_yaml(Path(config["manifest"]))
 
 
+include: "rules/01_functions.smk"
+include: "rules/05_globals.smk"
 include: "rules/10_assembly_data_downloader.smk"
 include: "rules/20_pacbio_qc.smk"
+include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
+
+
+rule run_download:
+    input:
+        manifest.reads.flat_paths("raw"),
+
+
+rule run_qc:
+    input:
+        manifest.reads.flat_paths("qc"),
 
 
 rule target:
     default_target: True
     input:
-        generate_target,
+        rules.run_download.input,
+        rules.run_qc.input,
