@@ -27,11 +27,11 @@ max-status-checks-per-second: 10
 printshellcmds: true
 rerun-incomplete: true
 restart-times: 0
-singularity-args: -B ${PWD},${TMPDIR},/scratch \
-  --nv \
-  -H $(mktemp -d) \
-  --pwd ${PWD} \
-  --containall --cleanenv --writable-tmpfs \
+singularity-args: -B ${PWD},${TMPDIR},/scratch
+  --nv
+  -H $(mktemp -d)
+  --pwd ${PWD}
+  --containall --cleanenv --writable-tmpfs
   --env BPA_APIKEY=${BPA_APIKEY}
 singularity-prefix: $SINGULARITY_CACHEDIR/library
 use-conda: False

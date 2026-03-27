@@ -26,8 +26,8 @@ printf "SINGULARITY_CACHEDIR: %s\n" ${SINGULARITY_CACHEDIR} 1>&2
 # profiles/pawsey/preflight.
 source venv/bin/activate
 
-# Override the default snakemake cache location
-export XDG_CACHE_HOME="$(dirname $(readlink -f venv/))/cache"
-mkdir -p "${XDG_CACHE_HOME}"
-
-snakemake --profile profiles/pawsey
+# Setting XDG_CACHE_HOME to a tmpdir on the node is a workaround for a
+# snakemake issue. If you let it cache the workflow you get "Failed to get
+# mtime of cached git source file 0.1.1:workflow/Snakefile"
+XDG_CACHE_HOME="$(mktemp -d)" \
+        snakemake --profile profiles/pawsey

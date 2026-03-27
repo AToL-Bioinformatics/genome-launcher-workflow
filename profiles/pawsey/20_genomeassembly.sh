@@ -24,7 +24,7 @@ PIPELINE_VERSION="0.50.0"
 
 # Set up nextflow. Download a GitHub release for the target version if
 # required.
-NEXTFLOW_VERSION="25.04.6"
+NEXTFLOW_VERSION="25.10.4"
 NEXTFLOW_DIR="results/${PIPELINE}/nextflow/${NEXTFLOW_VERSION}/${PIPELINE_VERSION}"
 mkdir -p "${NEXTFLOW_DIR}/logs"
 
@@ -56,12 +56,13 @@ printf "SINGULARITY_CACHEDIR: %s\n" ${SINGULARITY_CACHEDIR} 1>&2
 export NXF_APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 
-# todo. Use yaml_manifest and format the PIPELINE_PARAMS for result dir etc.
+# TODO. Use yaml_manifest and format the PIPELINE_PARAMS for result dir etc.
 #     "pipeline_output": "results/{pipeline}/{dataset_id}.{assembly_version}",
+# TODO:         "--enable_hic_phasing"
+# TODO paths must be absolute in the yaml file???
 PIPELINE_PARAMS=(
         "--input" "config/genomeassembly.yaml"
         "--outdir" "results/${PIPELINE}/${SAMPLE_ID}"
-        "--enable_hic_phasing"
         "-profile" "singularity,pawsey"
         "-r" "${PIPELINE_VERSION}"
         "-c" "profiles/pawsey/genomeassembly.config"
@@ -70,7 +71,7 @@ PIPELINE_PARAMS=(
 
 # run sangertol assembly pipeline
 nextflow \
-        -log "${NEXTFLOW_DIR}/logs/slurm-%j-${RANDOM}.log" \
+        -log "${NEXTFLOW_DIR}/logs/nextflow-${SLURM_JOB_ID}.log" \
         run \
         "sanger-tol/${PIPELINE}" \
         "${PIPELINE_PARAMS[@]}" \
