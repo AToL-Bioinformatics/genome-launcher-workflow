@@ -20,6 +20,7 @@ if len(pacbio_reads) > 0:
         threads: 8
         resources:
             mem="16GB",
+            runtime="4h",
         params:
             mem_gb=lambda wildcards, resources: resources.mem_mb // 1000,
             qc_logs_dir=qc_logs_dir,
