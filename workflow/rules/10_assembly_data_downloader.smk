@@ -10,5 +10,10 @@ rule assembly_data_downloader:
     container:
         config["containers"]["atol_genome_launcher"]
     threads: 8
+    resources:
+        runtime="2h",
     shell:
-        "assembly-data-downloader {input.manifest} 2> {log}"
+        "assembly-data-downloader "
+        "--parallel_downloads {threads} "
+        "{input.manifest} "
+        "&> {log}"

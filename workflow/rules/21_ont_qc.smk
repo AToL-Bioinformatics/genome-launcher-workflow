@@ -19,6 +19,9 @@ if len(ont_reads) > 0:
         container:
             config["containers"]["atol_qc_raw_ont"]
         threads: 12
+        resources:
+            mem="256GB",
+            runtime="4h",
         params:
             qc_logs_dir=qc_logs_dir,
             min_length=1000,

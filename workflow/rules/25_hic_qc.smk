@@ -18,6 +18,9 @@ if len(hic_reads) > 0:
         container:
             config["containers"]["atol_qc_raw_shortread"]
         threads: 12
+        resources:
+            mem="16GB",
+            runtime="4h",
         params:
             qc_logs_dir=qc_logs_dir,
         shell:

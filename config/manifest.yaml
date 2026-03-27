@@ -1,32 +1,13 @@
-busco_lineage: "sauropsida_odb10"
-dataset_id: "aBcDe1"
-assembly_version: 6
+busco_lineage: "helotiales"
+dataset_id: "gyRhyGra1"
+assembly_version: 2
 hic_motif: "GATC,GANTC,CTNAG,TTAA"
-mito_code: 2
-mito_hmm_name: "lepidosauria_mito"
-scientific_name: "Saiphos equalis"
-taxon_id: 172942
+mito_code: 4
+mito_hmm_name: "dikarya_mito"
+scientific_name: "Rhynchosporium graminicola"
+taxon_id: 2792576
 reads:
-  PACBIO_SMRT: # HiFi
-    bpa-ausarg-pacbio-hifi-350822-da095606:
-      - md5sum: "1c0830aed2482df5fe0c166630db9bb9"
-        url: "https://data.bioplatforms.com/dataset/bpa-ausarg-pacbio-hifi-350822-da095606/resource/1c0830aed2482df5fe0c166630db9bb9/download/350822_AusARG_AGRF_DA095606.ccs.bam"
-    bpa-ausarg-pacbio-hifi-350822-da080843:
-      - url: "https://data.bioplatforms.com/dataset/bpa-ausarg-pacbio-hifi-350822-da080843/resource/4a409be4cc1e33713fd3d5f9e573cff5/download/350822_AusARG_AGRF_DA080843.ccs.bam"
-        md5sum: "4a409be4cc1e33713fd3d5f9e573cff5"
-  Hi-C:
-    bpa-ausarg-hi-c-353997-hmgmjdrxy:
-      r1:
-        - url: "https://data.bioplatforms.com/dataset/bpa-ausarg-hi-c-353997-hmgmjdrxy/resource/f3efb2a937921622b232115fd091f777/download/353997_AusARG_BRF_HMGMJDRXY_S4_L001_R1_001.fastq.gz"
-          md5sum: "f3efb2a937921622b232115fd091f777"
-          lane_number: "L0001"
-        - url: "https://data.bioplatforms.com/dataset/bpa-ausarg-hi-c-353997-hmgmjdrxy/resource/05f8d596dc3a8539d0aa4ed5223ec458/download/353997_AusARG_BRF_HMGMJDRXY_S4_L002_R1_001.fastq.gz"
-          md5sum: "05f8d596dc3a8539d0aa4ed5223ec458"
-          lane_number: "L0002"
-      r2:
-        - url: "https://data.bioplatforms.com/dataset/bpa-ausarg-hi-c-353997-hmgmjdrxy/resource/f11bb9b8a179fc1e5a0dce60c01b98fa/download/353997_AusARG_BRF_HMGMJDRXY_S4_L001_R2_001.fastq.gz"
-          md5sum: "f11bb9b8a179fc1e5a0dce60c01b98fa"
-          lane_number: "L0001"
-        - url: "https://data.bioplatforms.com/dataset/bpa-ausarg-hi-c-353997-hmgmjdrxy/resource/110f148a260ea7c7c57514fa59b3b15e/download/353997_AusARG_BRF_HMGMJDRXY_S4_L002_R2_001.fastq.gz"
-          md5sum: "110f148a260ea7c7c57514fa59b3b15e"
-          lane_number: "L0002"
+  PACBIO_SMRT:
+    bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2:
+      - url: "https://data.bioplatforms.com/dataset/bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2/resource/6c3300906111b99872ebc2efcfa946ee/download/395385_PP_AGRF_m84073_230802_055109_s2.ccs.bam"
+        md5sum: "6c3300906111b99872ebc2efcfa946ee"

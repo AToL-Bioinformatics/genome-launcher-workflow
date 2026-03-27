@@ -26,4 +26,8 @@ printf "SINGULARITY_CACHEDIR: %s\n" ${SINGULARITY_CACHEDIR} 1>&2
 # profiles/pawsey/preflight.
 source venv/bin/activate
 
+# Override the default snakemake cache location
+export XDG_CACHE_HOME="$(dirname $(readlink -f venv/))/cache"
+mkdir -p "${XDG_CACHE_HOME}"
+
 snakemake --profile profiles/pawsey
