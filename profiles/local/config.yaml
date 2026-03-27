@@ -1,6 +1,6 @@
 ---
 printshellcmds: true
-cores: 1
+cores: 8
 rerun-triggers:
   - mtime
 # need to set TMPDIR if we're using cleanenv
