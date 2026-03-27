@@ -41,3 +41,4 @@ rule target:
     input:
         rules.run_download.input,
         rules.run_qc.input,
+        rules.stage_busco.input,
