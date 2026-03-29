@@ -22,6 +22,11 @@ SAMPLE_ID="$(basename $(dirname $(readlink -f venv)))"
 PIPELINE="genomeassembly"
 PIPELINE_VERSION="0.50.0"
 
+# add paths to the YAML file
+if [ ! -f "config/genomeassembly.yaml" ]; then
+        envsubst <config/genomeassembly.yaml.sample >config/genomeassembly.yaml
+fi
+
 # Set up nextflow. Download a GitHub release for the target version if
 # required.
 NEXTFLOW_VERSION="25.10.4"
@@ -66,7 +71,7 @@ PIPELINE_PARAMS=(
         "-profile" "singularity,pawsey"
         "-r" "${PIPELINE_VERSION}"
         "-c" "profiles/pawsey/genomeassembly.config"
-        "--busco_lineage_directory" "resources/staging/busco/lineages"
+        "--busco_lineage_directory" "$(readlink -f resources/staging/busco/lineages)"
 )
 
 # run sangertol assembly pipeline
