@@ -71,7 +71,7 @@ PIPELINE_PARAMS=(
         "-profile" "singularity,pawsey"
         "-r" "${PIPELINE_VERSION}"
         "-c" "profiles/pawsey/genomeassembly.config"
-        "--busco_lineage_directory" "$(readlink -f resources/staging/busco/lineages)"
+        "--busco_lineage_directory" "$(readlink -f resources/staging/busco)"
 )
 
 # run sangertol assembly pipeline
