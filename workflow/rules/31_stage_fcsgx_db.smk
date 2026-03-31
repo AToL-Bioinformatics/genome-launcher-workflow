@@ -7,13 +7,13 @@ envvars:
 
 
 # can't run this in a container, Snakemake doesn't bind the storage directory
-# properly.
+# properly. Takes ages as Snakemake needs to copy it locally twice.
 rule stage_fcsgx:
     input:
-        storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx", retrieve=False),
+        storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx"),
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 60),
+        runtime=lambda wildcards, attempt: int(attempt * 180),
     shell:
         "cp -r {input} {output}"
