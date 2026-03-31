@@ -10,7 +10,7 @@ envvars:
 # properly.
 rule stage_fcsgx:
     input:
-        storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx"),
+        storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx", retrieve=False),
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
     resources:
