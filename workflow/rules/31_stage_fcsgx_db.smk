@@ -10,10 +10,10 @@ envvars:
 # properly. Takes ages as Snakemake needs to copy it locally twice.
 rule stage_fcsgx:
     input:
-        storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx"),
+        storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx", keep_local=False),
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 180),
     shell:
-        "cp -r {input} {output}"
+        "mv {input} {output}"
