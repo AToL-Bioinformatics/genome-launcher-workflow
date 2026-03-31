@@ -7,3 +7,4 @@ rule stage_fcsgx:
         storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx"),
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
+    

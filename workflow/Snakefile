@@ -19,6 +19,7 @@ include: "rules/20_pacbio_qc.smk"
 include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
 include: "rules/30_stage_busco_dataset.smk"
+include: "rules/31_stage_fcsgx_db.smk"
 
 
 rule run_download:
