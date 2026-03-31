@@ -14,6 +14,6 @@ rule stage_fcsgx:
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 20),
+        runtime=lambda wildcards, attempt: int(attempt * 60),
     shell:
         "cp -r {input} {output}"
