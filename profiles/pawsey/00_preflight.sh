@@ -11,9 +11,10 @@ set -euxo pipefail
 module load python/3.11.6
 unset SBATCH_EXPORT
 
-# Array of directories we need for the workflows
+# Array of directories we need for the workflows.
+# TODO: If we deploy these direct from GitHub, we will also need to link the
+# .git directory to scratch.
 scratch_directories=(
-    ".git"
     ".snakemake"
     "logs"
     "resources"
