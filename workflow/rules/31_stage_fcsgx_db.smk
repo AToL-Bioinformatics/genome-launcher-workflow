@@ -1,5 +1,3 @@
-storage acacia:
-    provider="s3",
 
 
 envvars:
@@ -8,13 +6,13 @@ envvars:
     "SNAKEMAKE_STORAGE_S3_ENDPOINT_URL",
 
 
+# can't run this in a container, Snakemake doesn't bind the storage directory
+# properly.
 rule stage_fcsgx:
     input:
         storage.s3("s3://pawsey1132.atol.refdata.fcsgx/fcsgx"),
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
-    container:
-        config["containers"]["pigz"]
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 20),
     shell:
