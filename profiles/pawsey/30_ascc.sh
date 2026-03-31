@@ -18,6 +18,7 @@ set -eux
 
 #set up project
 SAMPLE_ID="$(basename $(dirname $(readlink -f venv)))"
+DATASET_ID="$(grep "dataset_id" config/manifest.yaml | head -n1 | cut -d' ' -f2 | sed "s/\"//g")"
 GENOMEASSEMBLY_PIPELINE="genomeassembly"
 ASCC_PIPELINE="ascc"
 PIPELINE_VERSION="0.5.3"
@@ -30,17 +31,17 @@ echo "sample,assembly_type,assembly_file" > ${SAMPLE_ID}_ascc_samplesheet.csv
 
 #PRIMARY
 #look for hifiasm-hic/scaffolding output first
-if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm-hic.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"; then
-    PRIMARY="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm-hic.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"
-    echo "${SAMPLE_ID},PRIMARY,${PWD}/${PRIMARY}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm-hic.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"; then
+    PRIMARY="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm-hic.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"
+    echo "${DATASET_ID},PRIMARY,${PWD}/${PRIMARY}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # if not there, use hifiasm/scaffolding
-elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"; then
-    PRIMARY="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"
-    echo "${SAMPLE_ID},PRIMARY,${PWD}/${PRIMARY}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"; then
+    PRIMARY="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/scaffolding_hap1/yahs/asm_hap1_scaffolds_final.fa.gz -type f -print)"
+    echo "${DATASET_ID},PRIMARY,${PWD}/${PRIMARY}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # if not there, use hifiasm/purgedups
-elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/purging/asm.purged.fa.gz -type f -print)"; then
-    PRIMARY="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/purging/asm.purged.fa.gz -type f -print)"
-    echo "${SAMPLE_ID},PRIMARY,${PWD}/${PRIMARY}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/purging/asm.purged.fa.gz -type f -print)"; then
+    PRIMARY="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/purging/asm.purged.fa.gz -type f -print)"
+    echo "${DATASET_ID},PRIMARY,${PWD}/${PRIMARY}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # throw an error if none of the above are found
 else
     echo "no primary assembly files found"
@@ -49,17 +50,17 @@ fi
 
 # HAPLO
 #look for hifiasm-hic/scaffolding output first
-if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm-hic.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"; then
-    HAPLO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm-hic.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"
-    echo "${SAMPLE_ID},HAPLO,${PWD}/${HAPLO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm-hic.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"; then
+    HAPLO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm-hic.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"
+    echo "${DATASET_ID},HAPLO,${PWD}/${HAPLO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # if not there, use hifiasm/scaffolding
-elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"; then
-    HAPLO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"
-    echo "${SAMPLE_ID},HAPLO,${PWD}/${HAPLO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"; then
+    HAPLO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/scaffolding_hap2/yahs/asm_hap2_scaffolds_final.fa.gz -type f -print)"
+    echo "${DATASET_ID},HAPLO,${PWD}/${HAPLO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # if not there, use hifiasm/purgedups
-elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/purging/asm.htigs.all.fa.gz -type f -print)"; then
-    HAPLO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/purging/asm.htigs.all.fa.gz -type f -print)"
-    echo "${SAMPLE_ID},HAPLO,${PWD}/${HAPLO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/purging/asm.htigs.all.fa.gz -type f -print)"; then
+    HAPLO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/purging/asm.htigs.all.fa.gz -type f -print)"
+    echo "${DATASET_ID},HAPLO,${PWD}/${HAPLO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # throw an error if none of the above are found
 else
     echo "no alternate assembly files found"
@@ -68,26 +69,26 @@ fi
 
 # MITO
 #look for mitohifi read-mode output first
-if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito.reads/final_mitogenome.fasta -type f -print)"; then
-    MITO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito.reads/final_mitogenome.fasta -type f -print)"
-    echo "${SAMPLE_ID},MITO,${PWD}/${MITO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito.reads/final_mitogenome.fasta -type f -print)"; then
+    MITO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito.reads/final_mitogenome.fasta -type f -print)"
+    echo "${DATASET_ID},MITO,${PWD}/${MITO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 # if not there, look for mitohifi contigs mode
-elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito/final_mitogenome.fasta -type f -print)"; then
-    MITO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito/final_mitogenome.fasta -type f -print)"
-    echo "${SAMPLE_ID},MITO,${PWD}/${MITO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito/final_mitogenome.fasta -type f -print)"; then
+    MITO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito/final_mitogenome.fasta -type f -print)"
+    echo "${DATASET_ID},MITO,${PWD}/${MITO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 #if not there, look for oatk output
-elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito.oatk/*.mito.ctg.fasta -type f -print)"; then
-    MITO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito.oatk/*.mito.ctg.fasta -type f -print)"
-    echo "${SAMPLE_ID},MITO,${PWD}/${MITO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+elif test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito.oatk/*.mito.ctg.fasta -type f -print)"; then
+    MITO="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito.oatk/*.mito.ctg.fasta -type f -print)"
+    echo "${DATASET_ID},MITO,${PWD}/${MITO}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 else
     echo "no mitochondrial assembly found"
 fi
 
 # PLASTID
 # look for oatk output
-if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito.oatk/*.pltd.ctg.fasta -type f -print)"; then 
-    PLASTID="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${SAMPLE_ID}.hifiasm.*/mito.oatk/*.pltd.ctg.fasta -type f -print)"
-    echo "${SAMPLE_ID},PLASTID,${PWD}/${PLASTID}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
+if test -n "$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito.oatk/*.pltd.ctg.fasta -type f -print)"; then 
+    PLASTID="$(find results/${GENOMEASSEMBLY_PIPELINE}/${SAMPLE_ID}/${DATASET_ID}.hifiasm.*/mito.oatk/*.pltd.ctg.fasta -type f -print)"
+    echo "${DATASET_ID},PLASTID,${PWD}/${PLASTID}" >> ${SAMPLE_ID}_ascc_samplesheet.csv
 else
     echo "no plastid assembly found"
 fi
