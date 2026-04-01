@@ -51,7 +51,7 @@ rule expand_busco_lineage_files:
         runtime=lambda wildcards, attempt: int(attempt * 10),
     shell:
         "mkdir -p {output.lineage_directory} && "
-        "tar -zxf {input} -C {output.lineage_directory} --strip-components 1 &> {log} && "
+        "tar -zxfm {input} -C {output.lineage_directory} --strip-components 1 &> {log} && "
         "printf $(date -Iseconds) > {output.lineage_directory}/TIMESTAMP"
 
 
