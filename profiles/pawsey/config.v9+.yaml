@@ -29,6 +29,9 @@ max-status-checks-per-second: 10
 printshellcmds: true
 rerun-incomplete: true
 restart-times: 0
+set-resources:
+  ont_qc:
+    partitionFlag: "--partition=highmem"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   --nv
   -H $(mktemp -d)
