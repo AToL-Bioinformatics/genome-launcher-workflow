@@ -20,11 +20,11 @@ set -eux
 SAMPLE_ID="$(basename $(dirname $(readlink -f venv)))"
 
 PIPELINE="genomeassembly"
-PIPELINE_VERSION="0.50.0"
+PIPELINE_VERSION="e651801"
 
 # add paths to the YAML file
-if [ ! -f "config/genomeassembly.yaml" ]; then
-        envsubst <config/genomeassembly.yaml.sample >config/genomeassembly.yaml
+if [ ! -f "config/genomeassembly.data.yaml" ]; then
+        envsubst <config/genomeassembly.data.yaml.sample >config/genomeassembly.data.yaml
 fi
 
 # Set up nextflow. Download a GitHub release for the target version if
@@ -66,12 +66,13 @@ export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
 # TODO:         "--enable_hic_phasing"
 # TODO paths must be absolute in the yaml file???
 PIPELINE_PARAMS=(
-        "--input" "config/genomeassembly.yaml"
+        "--genomic_data" "config/genomeassembly.data.yaml"
+        "--assembly_specs" "config/genomeassembly.spec.yaml"
+        "--busco_lineage_directory" "$(readlink -f resources/staging/busco)"
         "--outdir" "results/${PIPELINE}/${SAMPLE_ID}"
         "-profile" "singularity,pawsey"
         "-r" "${PIPELINE_VERSION}"
         "-c" "profiles/pawsey/genomeassembly.config"
-        "--busco_lineage_directory" "$(readlink -f resources/staging/busco)"
 )
 
 # run sangertol assembly pipeline
