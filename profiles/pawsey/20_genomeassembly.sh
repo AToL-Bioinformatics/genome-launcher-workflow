@@ -49,6 +49,7 @@ printf "nextflow: %s\n" "$(readlink -f "$(which nextflow)")"
 export NXF_HOME="$(readlink -f "${NEXTFLOW_DIR}/home")"
 export NXF_CACHE_DIR="$(readlink -f "${NEXTFLOW_DIR}/cache")"
 export NXF_WORK="$(readlink -f "${NEXTFLOW_DIR}/work")"
+export NXF_LINEAGE="$(readlink -f "${NEXTFLOW_DIR}/lineage")"
 
 # apptainer setup. SINGULARITY_CACHEDIR must be set.
 if [ -z "${SINGULARITY_CACHEDIR}" ]; then
