@@ -4,5 +4,6 @@ containers:
   atol_qc_raw_ont: "docker://quay.io/biocontainers/atol-qc-raw-ont:0.2.1--pyhdfd78af_0"
   atol_qc_raw_pacbio: "docker://quay.io/biocontainers/atol-qc-raw-pacbio:0.1.1--pyhdfd78af_0"
   atol_qc_raw_shortread: "docker://quay.io/biocontainers/atol-qc-raw-shortread:0.3.1--pyhdfd78af_0"
+  rclone: "docker://rclone/rclone:sha-e9fddaa"
   pigz: "docker://quay.io/biocontainers/pigz:2.8"
   wget: "docker://quay.io/biocontainers/wget:1.25.0"

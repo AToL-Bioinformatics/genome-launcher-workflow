@@ -1,8 +1,4 @@
 ---
-printshellcmds: true
-cores: 8
-rerun-triggers:
-  - mtime
 # need to set TMPDIR if we're using cleanenv
 apptainer-args: -B $PWD,/tmp 
   -H $(mktemp -d) 
@@ -11,7 +7,13 @@ apptainer-args: -B $PWD,/tmp
   --env LC_ALL=C 
   --env BPA_APIKEY=${BPA_APIKEY}
   --containall --cleanenv --writable-tmpfs
+apptainer-prefix: $APPTAINER_CACHEDIR
+benchmark-extended: True
+configfile:
+  - profiles/local/workflow.config.yaml
+cores: 8
+printshellcmds: true
+rerun-triggers:
+  - mtime
 use-apptainer: True
 use-conda: False
-benchmark-extended: True
-apptainer-prefix: $APPTAINER_CACHEDIR

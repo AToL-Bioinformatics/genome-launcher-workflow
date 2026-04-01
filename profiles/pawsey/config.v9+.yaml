@@ -11,6 +11,8 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   --job-name={rule}-smk
   --output=logs/slurm/{rule}/{rule}-%j.out
   --parsable
+configfile:
+  - profiles/pawsey/workflow.config.yaml
 default-resources:
   - partitionFlag=""
   - mem_mb=4000

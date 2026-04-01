@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+# Variables for S3 transfers. Set them to empty strings at runtime if you're
+# not using them.
+envvars:
+    "RCLONE_S3_ACCESS_KEY_ID",
+    "RCLONE_S3_ENDPOINT",
+    "RCLONE_S3_PROVIDER",
+    "RCLONE_S3_SECRET_ACCESS_KEY",
+
+
 qc_logs_dir = manifest.get_stage_logs("qc")
 
 pacbio_reads = manifest.pacbio_reads
