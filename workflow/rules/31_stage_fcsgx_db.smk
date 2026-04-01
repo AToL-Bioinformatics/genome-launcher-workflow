@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 # Run this in a container and copy manually. If you try to use Snakemake's
 # storage backend, two bad things happen: 1. the workflow blocks until the
 # transfer completes; 2. the `snakemake-storage-plugin-s3` causes a `FATAL:
@@ -7,6 +8,8 @@
 rule stage_fcsgx:
     output:
         fcsgx=directory(Path("resources", "staging", "fcsgx")),
+    log:
+        Path("logs", "staging", "stage_fcsgx.log"),
     container:
         config["containers"]["rclone"]
     resources:
@@ -26,4 +29,5 @@ rule stage_fcsgx:
         "--s3-secret-access-key {params.s3_secret_access_key} "
         "copy "
         ":s3:{params.bucket} "
-        "{output}"
+        "{output} "
+        "&> {log}"
