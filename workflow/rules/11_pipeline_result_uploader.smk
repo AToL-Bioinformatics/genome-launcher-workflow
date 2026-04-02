@@ -15,7 +15,7 @@ rule pipeline_result_uploader:
     resources:
         runtime="2h",
     params:
-        bucket=f"{manifest.dataset_id}.{manifest.assembly_version}",
+        bucket=f"{manifest.dataset_id}.{manifest.assembly_version}".lower(),
     shell:
         "pipeline-result-uploader "
         "--parallel_downloads {threads} "
