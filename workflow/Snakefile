@@ -15,6 +15,7 @@ manifest = yaml_manifest.Manifest.from_yaml(Path(config["manifest"]))
 include: "rules/01_functions.smk"
 include: "rules/05_globals.smk"
 include: "rules/10_assembly_data_downloader.smk"
+include: "rules/11_pipeline_result_uploader.smk"
 include: "rules/20_pacbio_qc.smk"
 include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
@@ -35,6 +36,20 @@ rule run_qc:
 rule stage_busco:
     input:
         expand(rules.expand_busco_lineage_files.output, busco_dataset=busco_dataset),
+
+
+rule pre_genomeassembly:
+    input:
+        rules.run_download.input,
+        rules.run_qc.input,
+        rules.stage_busco.input,
+
+
+rule post_genomeassembly:
+    input:
+        rules.stage_busco.input,
+        rules.stage_fcsgx.output,
+        Path(manifest.get_dir("results"), "upload_receipts", "genomeassembly.jsonl"),
 
 
 rule target:

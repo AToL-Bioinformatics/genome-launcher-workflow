@@ -42,4 +42,5 @@ export RCLONE_S3_SECRET_ACCESS_KEY="${RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY}"
 # snakemake issue. If you let it cache the workflow you get "Failed to get
 # mtime of cached git source file 0.1.1:workflow/Snakefile"
 XDG_CACHE_HOME="$(mktemp -d)" \
-        snakemake --profile profiles/pawsey
+        snakemake --profile profiles/pawsey \
+        "${SNAKEMAKE_TARGET}"
