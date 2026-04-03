@@ -43,5 +43,5 @@ run_snakemake() {
 
     # Workaround for snakemake caching issue
     XDG_CACHE_HOME="$(mktemp -d)" \
-        snakemake -n --profile profiles/pawsey "${target}"
+        snakemake --profile profiles/pawsey "${target}"
 }
