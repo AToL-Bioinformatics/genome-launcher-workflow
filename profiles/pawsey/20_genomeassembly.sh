@@ -5,81 +5,36 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4g
-#SBATCH --time=1-00:00:00
+#SBATCH --time=1-00
 #SBATCH --output=logs/slurm/genomeassembly.%j.out
 #SBATCH --error=logs/slurm/genomeassembly.%j.err
 
-module load singularity/4.1.0-slurm
+# Source nextflow environment
+source profiles/pawsey/lib/nextflow_env.sh
 
-unset SBATCH_EXPORT
-
-# Application specific commands:
-set -eux
-
-#set up project
-SAMPLE_ID="$(basename $(dirname $(readlink -f venv)))"
-
+# Pipeline configuration
 PIPELINE="genomeassembly"
 PIPELINE_VERSION="e651801"
+SAMPLE_ID="$(get_sample_id)"
 
-# add paths to the YAML file
+# Setup nextflow
+setup_nextflow "${PIPELINE}" "${PIPELINE_VERSION}" "25.10.4"
+
+# Generate data config if needed
 if [ ! -f "config/genomeassembly.data.yaml" ]; then
         envsubst <config/genomeassembly.data.yaml.sample >config/genomeassembly.data.yaml
 fi
 
-# Set up nextflow. Download a GitHub release for the target version if
-# required.
-NEXTFLOW_VERSION="25.10.4"
-NEXTFLOW_DIR="results/${PIPELINE}/nextflow/${NEXTFLOW_VERSION}/${PIPELINE_VERSION}"
-mkdir -p "${NEXTFLOW_DIR}/logs"
-
-if [ ! -f "${NEXTFLOW_DIR}/nextflow" ]; then
-        wget \
-                -O "${NEXTFLOW_DIR}/nextflow" \
-                "https://github.com/nextflow-io/nextflow/releases/download/v${NEXTFLOW_VERSION}/nextflow"
-
-        chmod 755 "${NEXTFLOW_DIR}/nextflow"
-fi
-
-# nf gets confused if either the cache or home directory is shared across
-# pipeline runs. This block contains the nextflow cache, home and work
-# directories to the results directory to limit the damage.
-export PATH="${NEXTFLOW_DIR}:${PATH}"
-printf "nextflow: %s\n" "$(readlink -f "$(which nextflow)")"
-export NXF_HOME="$(readlink -f "${NEXTFLOW_DIR}/home")"
-export NXF_CACHE_DIR="$(readlink -f "${NEXTFLOW_DIR}/cache")"
-export NXF_WORK="$(readlink -f "${NEXTFLOW_DIR}/work")"
-export NXF_LINEAGE="$(readlink -f "${NEXTFLOW_DIR}/lineage")"
-
-# apptainer setup. SINGULARITY_CACHEDIR must be set.
-if [ -z "${SINGULARITY_CACHEDIR}" ]; then
-        printf "The SINGULARITY_CACHEDIR variable is required" 1>&2
-        exit 1
-fi
-export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
-printf "SINGULARITY_CACHEDIR: %s\n" ${SINGULARITY_CACHEDIR} 1>&2
-
-export NXF_APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
-export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
-
-# TODO. Use yaml_manifest and format the PIPELINE_PARAMS for result dir etc.
-#     "pipeline_output": "results/{pipeline}/{dataset_id}.{assembly_version}",
-# TODO:         "--enable_hic_phasing"
-# TODO paths must be absolute in the yaml file???
+# Pipeline parameters
 PIPELINE_PARAMS=(
         "--genomic_data" "config/genomeassembly.data.yaml"
         "--assembly_specs" "config/genomeassembly.spec.yaml"
         "--busco_lineage_directory" "$(readlink -f resources/staging/busco)"
         "--outdir" "results/${PIPELINE}/${SAMPLE_ID}"
-        "-profile" "singularity,pawsey"
+        "-profile" "singularity,pawsey,genomeassembly"
         "-r" "${PIPELINE_VERSION}"
-        "-c" "profiles/pawsey/genomeassembly.config"
+        "-c" "profiles/pawsey/pawsey.config"
 )
 
-# run sangertol assembly pipeline
-nextflow \
-        -log "${NEXTFLOW_DIR}/logs/nextflow-${SLURM_JOB_ID}.log" \
-        run \
-        "sanger-tol/${PIPELINE}" \
-        "${PIPELINE_PARAMS[@]}" \
-        -resume
+# Run pipeline
+run_nextflow "sanger-tol/${PIPELINE}" PIPELINE_PARAMS
