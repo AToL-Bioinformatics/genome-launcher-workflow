@@ -35,6 +35,7 @@ PIPELINE_PARAMS=(
         "--input" "config/ascc_samplesheet.csv"
         "--outdir" "results/${PIPELINE}/${SAMPLE_ID}"
         "--fcs_gx_database_path" "$(readlink -f resources/staging/fcsgx)"
+        "--busco_lineages_folder" "$(readlink -f resources/staging/busco)"
         "-profile" "singularity,pawsey,ascc"
         "-params-file" "config/ascc.yaml"
         "-r" "${PIPELINE_VERSION}"
