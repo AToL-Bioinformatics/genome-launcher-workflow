@@ -20,13 +20,23 @@ SAMPLE_ID="$(get_sample_id)"
 # Setup nextflow
 setup_nextflow "${PIPELINE}" "${PIPELINE_VERSION}" "25.04.8"
 
+# format samplesheet
+if [ ! -f "config/ascc_samplesheet.csv" ]; then
+        envsubst <config/ascc_samplesheet.csv.sample >config/ascc_samplesheet.csv
+fi
+
+# format yaml file
+if [ ! -f "config/ascc.yaml" ]; then
+        envsubst <config/ascc.yaml.sample >config/ascc.yaml
+fi
+
 # Pipeline parameters
 PIPELINE_PARAMS=(
-        "--input" "${SAMPLE_ID}_ascc_samplesheet.csv"
+        "--input" "config/ascc_samplesheet.csv"
         "--outdir" "results/${PIPELINE}/${SAMPLE_ID}"
-        "--fcs_gx_database_path" "$(readlink -f results/fcsgx/fcsgx)"
+        "--fcs_gx_database_path" "$(readlink -f resources/staging/fcsgx)"
         "-profile" "singularity,pawsey,ascc"
-        "-params-file" "${SAMPLE_ID}_ascc_config.yaml"
+        "-params-file" "config/ascc.yaml"
         "-r" "${PIPELINE_VERSION}"
         "-c" "profiles/pawsey/pawsey.config"
         "-c" "profiles/pawsey/ascc.params.config"
