@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --job-name=post_genomeassembly
 #SBATCH --time=0-04

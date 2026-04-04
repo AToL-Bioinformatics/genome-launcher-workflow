@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --job-name=pre_genomeassembly
 #SBATCH --time=0-12
