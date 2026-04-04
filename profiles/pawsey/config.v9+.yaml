@@ -28,6 +28,8 @@ max-jobs-per-second: 50
 max-status-checks-per-second: 10
 printshellcmds: true
 rerun-incomplete: true
+rerun-triggers:
+  - mtime
 restart-times: 0
 set-resources:
   ont_qc:

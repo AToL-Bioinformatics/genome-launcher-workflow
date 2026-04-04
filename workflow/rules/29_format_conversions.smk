@@ -13,7 +13,7 @@ def get_primary_assembly(wildcards):
 
 
 # TODO: the manifest needs to know where this is
-converted_assembly = replace_ext(get_primary_assembly(None), ".fasta.gz")
+converted_assembly = Path(get_primary_assembly(None).as_posix() + ".gz")
 
 
 # TODO: generalise
@@ -31,6 +31,7 @@ rule reformat_fq_to_fa:
     threads: 6
     resources:
         mem=lambda wildcards, attempt: f"{12* attempt}GB",
+        runtime=lambda wildcards, attempt: int(60 * attempt),
     shell:
         "reformat.sh "
         "-Xmx{resources.mem_mb}m "
