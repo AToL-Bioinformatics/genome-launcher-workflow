@@ -26,6 +26,8 @@ rule reformat_fq_to_fa:
         Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.log"),
     wildcard_constraints:
         file="|".join([str(replace_ext(x.name)) for x in pacbio_reads.flat_paths("qc")]),
+    container:
+        config["containers"]["bbmap"]
     threads: 6
     resources:
         mem=lambda wildcards, attempt: f"{12* attempt}GB",
@@ -46,6 +48,8 @@ rule compress_ascc_assemblies:
         converted_assembly,
     log:
         Path(log_dir_base, "compress_ascc_assemblies.log"),
+    container:
+        config["containers"]["bbmap"]
     threads: 6
     resources:
         mem=lambda wildcards, attempt: f"{12* attempt}GB",
