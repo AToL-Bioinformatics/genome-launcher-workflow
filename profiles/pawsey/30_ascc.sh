@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=32g
+#SBATCH --mem=4g
 #SBATCH --time=1-00
 #SBATCH --output=logs/slurm/ascc.%j.out
 #SBATCH --error=logs/slurm/ascc.%j.err

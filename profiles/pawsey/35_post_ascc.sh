@@ -1,5 +1,6 @@
+
 #!/bin/bash
-#SBATCH --job-name=genome-launcher
+#SBATCH --job-name=post_ascc
 #SBATCH --time=0-12
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
@@ -12,4 +13,4 @@ source profiles/pawsey/lib/snakemake_env.sh
 
 # Setup and run
 setup_snakemake
-run_snakemake "${SNAKEMAKE_TARGET}"
+run_snakemake post_ascc

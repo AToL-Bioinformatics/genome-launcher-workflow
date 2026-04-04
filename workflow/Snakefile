@@ -19,6 +19,7 @@ include: "rules/11_pipeline_result_uploader.smk"
 include: "rules/20_pacbio_qc.smk"
 include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
+include: "rules/29_format_conversions.smk"
 include: "rules/30_stage_busco_dataset.smk"
 include: "rules/31_stage_fcsgx_db.smk"
 
@@ -50,6 +51,13 @@ rule post_genomeassembly:
         rules.stage_busco.input,
         rules.stage_fcsgx.output,
         Path(manifest.get_dir("results"), "upload_receipts", "genomeassembly.jsonl"),
+
+
+rule post_ascc:
+    input:
+        Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
+        [replace_ext(x, ".fasta.gz") for x in pacbio_reads.flat_paths("qc")],
+        converted_assembly,  # TODO: define in manifest
 
 
 rule target:
