@@ -1,1 +1,3 @@
-fcsgx_db: "pawsey1132.atol.refdata.fcsgx/fcsgx"
+s3_buckets:
+  fcsgx_db: "pawsey1132.atol.refdata.fcsgx/fcsgx"
+  diamond_uniprot_database: "pawsey1132.atol.refdata.uniprot.diamond/diamond"

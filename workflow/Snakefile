@@ -21,7 +21,7 @@ include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
 include: "rules/29_format_conversions.smk"
 include: "rules/30_stage_busco_dataset.smk"
-include: "rules/31_stage_fcsgx_db.smk"
+include: "rules/31_stage_s3_bucket.smk"
 
 
 rule run_download:
@@ -49,7 +49,10 @@ rule pre_genomeassembly:
 rule post_genomeassembly:
     input:
         rules.stage_busco.input,
-        rules.stage_fcsgx.output,
+        expand(
+            rules.stage_s3_bucket.output.staging_dir,
+            bucket_name=["fcsgx_db", "diamond_uniprot_database"],
+        ),
         Path(manifest.get_dir("results"), "upload_receipts", "genomeassembly.jsonl"),
 
 

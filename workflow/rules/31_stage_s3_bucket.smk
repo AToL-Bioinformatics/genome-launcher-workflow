@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
 
 
+def get_bucket(wildcards):
+    return config.get("s3_buckets").get(wildcards.bucket_name)
+
+
 # Run this in a container and copy manually. If you try to use Snakemake's
 # storage backend, two bad things happen: 1. the workflow blocks until the
 # transfer completes; 2. the `snakemake-storage-plugin-s3` causes a `FATAL:
 # container creation failed` error for ANY job that uses a container.
-rule stage_fcsgx:
+rule stage_s3_bucket:
     output:
-        fcsgx=directory(Path("resources", "staging", "fcsgx")),
+        staging_dir=directory(Path("resources", "staging", "{bucket_name}")),
     log:
-        Path("logs", "staging", "stage_fcsgx.log"),
+        Path("logs", "stage_s3_bucket", "{bucket_name}.log"),
+    wildcard_constraints:
+        bucket_name="|".join(config.get("s3_buckets").keys()),
     container:
         config["containers"]["rclone"]
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 180),
         shell_exec="sh",
     params:
-        bucket=config["fcsgx_db"],
+        bucket=get_bucket,
         s3_access_key_id=os.getenv("RCLONE_S3_ACCESS_KEY_ID"),
         s3_endpoint=os.getenv("RCLONE_S3_ENDPOINT"),
         s3_provider=os.getenv("RCLONE_S3_PROVIDER", "Ceph"),
