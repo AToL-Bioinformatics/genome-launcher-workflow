@@ -36,4 +36,5 @@ rule stage_s3_bucket:
         "copy "
         ":s3:{params.bucket} "
         "{output} "
-        "&> {log}"
+        "&> {log} "
+        "&& find {output} -exec sh -c 'touch {{}}' \\; "
