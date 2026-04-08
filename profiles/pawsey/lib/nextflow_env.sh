@@ -17,8 +17,9 @@ setup_nextflow() {
     setup_singularity
 
     # Define nextflow directory structure
-    local nextflow_dir="${base_dir}/${pipeline_name}/nextflow/${nextflow_version}/${pipeline_version}"
-    mkdir -p "${nextflow_dir}/logs"
+    local nextflow_dir_relative="${base_dir}/${pipeline_name}/nextflow/${nextflow_version}/${pipeline_version}"
+    mkdir -p "${nextflow_dir_relative}/logs"
+    local nextflow_dir="$(readlink -f ${nextflow_dir_relative})"
 
     # Download nextflow if not present
     if [ ! -f "${nextflow_dir}/nextflow" ]; then
