@@ -1,3 +1,4 @@
 s3_buckets:
   fcsgx_db: "pawsey1132.testbucket/taxid2976176"
   diamond_uniprot_database: "pawsey1132.testbucket/taxid2976176"
+  nt_database : "pawsey1132.testbucket/taxid2976176"

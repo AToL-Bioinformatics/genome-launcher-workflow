@@ -51,7 +51,7 @@ rule post_genomeassembly:
         rules.stage_busco.input,
         expand(
             rules.stage_s3_bucket.output.staging_dir,
-            bucket_name=["fcsgx_db", "diamond_uniprot_database"],
+            bucket_name=["diamond_uniprot_database", "fcsgx_db", "nt_database"],
         ),
         Path(manifest.get_dir("results"), "upload_receipts", "genomeassembly.jsonl"),
 

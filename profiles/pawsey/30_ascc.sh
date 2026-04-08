@@ -36,6 +36,8 @@ PIPELINE_PARAMS=(
         "--outdir" "results/${PIPELINE}/${SAMPLE_ID}"
         "--fcs_gx_database_path" "$(readlink -f resources/staging/fcsgx)"
         "--busco_lineages_folder" "$(readlink -f resources/staging/busco)"
+        "--diamond_uniprot_database_path" "$(readlink -f resources/staging/diamond_uniprot_database/reference_proteomes.dmnd)"
+        "--nt_database_path" "$(readlink -f resources/staging/nt_database)"
         "-profile" "singularity,pawsey,ascc"
         "-params-file" "config/ascc.yaml"
         "-r" "${PIPELINE_VERSION}"

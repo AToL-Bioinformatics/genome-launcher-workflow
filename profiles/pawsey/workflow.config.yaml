@@ -1,3 +1,4 @@
 s3_buckets:
-  fcsgx_db: "pawsey1132.atol.refdata.fcsgx/fcsgx"
   diamond_uniprot_database: "pawsey1132.atol.refdata.uniprot.diamond/diamond"
+  fcsgx_db: "pawsey1132.atol.refdata.fcsgx/fcsgx"
+  nt_database : "pawsey1132.atol.refdata.v1/ncbi_nucleotide_blast"
