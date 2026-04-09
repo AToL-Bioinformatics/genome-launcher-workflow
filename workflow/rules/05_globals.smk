@@ -17,6 +17,9 @@ pacbio_reads = manifest.pacbio_reads
 ont_reads = manifest.ont_reads
 hic_reads = manifest.hic_reads
 
-busco_dataset = f"{manifest.busco_lineage}_odb12"
+
+odb12_busco_dataset = f"{manifest.busco_odb12_dataset_name}_odb12"
+odb10_busco_dataset = f"{manifest.busco_odb10_dataset_name}_odb10"
+
 # wildcard_constraints:
 #     busco_dataset=busco_dataset,

@@ -1,9 +1,11 @@
-busco_lineage: "helotiales"
 dataset_id: "gyRhyGra1"
 assembly_version: 2
+busco_odb10_dataset_name: "helotiales"
+busco_odb12_dataset_name: "helotiales"
 hic_motif: "GATC,GANTC,CTNAG,TTAA"
 mito_code: 4
-mito_hmm_name: "dikarya_mito"
+mitohifi_reference_species: "Rhynchosporium commune"
+oatk_hmm_name: "dikarya_mito"
 scientific_name: "Rhynchosporium graminicola"
 taxon_id: 2792576
 reads:

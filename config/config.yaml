@@ -1,6 +1,6 @@
 manifest: "config/manifest.yaml"
 containers:
-  atol_genome_launcher: "docker://quay.io/biocontainers/atol-genome-launcher:0.10.0--pyhdfd78af_0"
+  atol_genome_launcher: "docker://quay.io/biocontainers/atol-genome-launcher:0.10.1--pyhdfd78af_0"
   atol_qc_raw_ont: "docker://quay.io/biocontainers/atol-qc-raw-ont:0.2.1--pyhdfd78af_0"
   atol_qc_raw_pacbio: "docker://quay.io/biocontainers/atol-qc-raw-pacbio:0.1.1--pyhdfd78af_0"
   atol_qc_raw_shortread: "docker://quay.io/biocontainers/atol-qc-raw-shortread:0.3.1--pyhdfd78af_0"

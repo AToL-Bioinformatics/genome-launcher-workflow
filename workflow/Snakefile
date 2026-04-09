@@ -34,24 +34,23 @@ rule run_qc:
         manifest.reads.flat_paths("qc"),
 
 
-rule stage_busco:
-    input:
-        expand(rules.expand_busco_lineage_files.output, busco_dataset=busco_dataset),
-
-
 rule pre_genomeassembly:
     input:
         rules.run_download.input,
         rules.run_qc.input,
-        rules.stage_busco.input,
+        expand(
+            rules.expand_busco_lineage_files.output, busco_dataset=odb12_busco_dataset
+        ),
 
 
 rule post_genomeassembly:
     input:
-        rules.stage_busco.input,
         expand(
             rules.stage_s3_bucket.output.staging_dir,
             bucket_name=["diamond_uniprot_database", "fcsgx_db", "nt_database"],
+        ),
+        expand(
+            rules.expand_busco_lineage_files.output, busco_dataset=odb10_busco_dataset
         ),
         Path(manifest.get_dir("results"), "upload_receipts", "genomeassembly.jsonl"),
 
