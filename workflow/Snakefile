@@ -47,7 +47,7 @@ rule post_genomeassembly:
     input:
         expand(
             rules.stage_s3_bucket.output.staging_dir,
-            bucket_name=["diamond_uniprot_database", "fcsgx_db", "nt_database"],
+            bucket_name=["diamond_uniprot_database", "fcsgx", "nt_database"],
         ),
         expand(
             rules.expand_busco_lineage_files.output, busco_dataset=odb10_busco_dataset
