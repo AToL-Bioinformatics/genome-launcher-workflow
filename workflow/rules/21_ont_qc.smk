@@ -18,10 +18,10 @@ if len(ont_reads) > 0:
             Path(ont_log_parent, "{bpa_package_id}.log"),
         container:
             config["containers"]["atol_qc_raw_ont"]
-        threads: 12
+        threads: lambda wildcards, attempt: int(64 * attempt)
         resources:
-            mem="256GB",
-            runtime="4h",
+            mem=lambda wildcards, attempt: f"{int(255* attempt)}GB",
+            runtime="24h",
         params:
             qc_logs_dir=qc_logs_dir,
             min_length=1000,

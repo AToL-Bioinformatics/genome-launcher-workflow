@@ -17,7 +17,6 @@ default-resources:
   - partitionFlag=""
   - mem_mb=4000
   - runtime=5
-cores: 50
 executor: cluster-generic
 jobs: 128
 keep-going: true
