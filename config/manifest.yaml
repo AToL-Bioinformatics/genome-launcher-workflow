@@ -17,3 +17,13 @@ reads:
     bpa-ipm-ont-promethion-606218-pbe32261:
       - url: "https://data.bioplatforms.com/dataset/bpa-ipm-ont-promethion-606218-pbe32261/resource/c9d9d5b51706e8fab657471edeb9a185/download/606218_IPM_BRF_PBE32261_ONTPromethION_fastq_pass.tar"
         md5sum: "c9d9d5b51706e8fab657471edeb9a185"
+  Hi-C:
+    bpa-grasslands-hi-c-371565-373565:
+      r1:
+        - url: "https://data.bioplatforms.com/dataset/bpa-grasslands-hi-c-371565-373565/resource/5fb1bde2e50768d6b22aa2e00f97352b/download/369564_LibID371565_AG_BRF_HMMYTDRX3_TCAGCATC_S1_L001_R1_001.fastq.gz"
+          md5sum: "5fb1bde2e50768d6b22aa2e00f97352b"
+          lane_number: "L001"
+      r2:
+        - url: "https://data.bioplatforms.com/dataset/bpa-grasslands-hi-c-371565-373565/resource/31b685a72a8af749b846ee26f0191eff/download/369564_LibID371565_AG_BRF_HMMYTDRX3_TCAGCATC_S1_L001_R2_001.fastq.gz"
+          md5sum: "31b685a72a8af749b846ee26f0191eff"
+          lane_number: "L001"

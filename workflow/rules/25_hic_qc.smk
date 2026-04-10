@@ -22,13 +22,17 @@ if len(hic_reads) > 0:
             mem="16GB",
             runtime="4h",
         params:
+            dataset_id=manifest.dataset_id,
+            hic_kit=config["hic_kit"],
             qc_logs_dir=qc_logs_dir,
         shell:
             "atol-qc-raw-shortread "
-            "--threads {threads} "
+            "--cram {output.cram} "
+            "--dataset_id {params.dataset_id} "
+            "--hic_kit {params.hic_kit} "
             "--in {input.r1} "
             "--in2 {input.r2} "
             "--logs {params.qc_logs_dir} "
-            "--cram {output.cram} "
             "--stats {output.stats} "
+            "--threads {threads} "
             "&> {log} "
