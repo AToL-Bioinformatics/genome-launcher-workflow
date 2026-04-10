@@ -26,10 +26,13 @@ if len(pacbio_reads) > 0:
             qc_logs_dir=qc_logs_dir,
         shell:
             "atol-qc-raw-pacbio "
-            "--threads {threads} "
-            "--mem {params.mem_gb} "
             "--bam {input.reads} "
-            "--out {output.fastq} "
+            "--discard-trimmed "
             "--logs {params.qc_logs_dir} "
+            "--match-read-wildcards "
+            "--mem {params.mem_gb} "
+            "--out {output.fastq} "
+            "--revcomp "
             "--stats {output.stats} "
+            "--threads {threads} "
             "&> {log} "
