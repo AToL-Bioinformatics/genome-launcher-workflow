@@ -59,7 +59,11 @@ rule post_ascc:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
         [replace_ext(x, ".fasta.gz") for x in pacbio_reads.flat_paths("qc")],
-        converted_assembly,  # TODO: define in manifest
+        # TODO: define in manifest
+        expand(
+            rules.compress_ascc_assemblies.output.compressed, TYPE=["PRIMARY", "HAPLO"]
+        ),
+        rules.reheader_for_treeval.output.combined,
 
 
 rule target:

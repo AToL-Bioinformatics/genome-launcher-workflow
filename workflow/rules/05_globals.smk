@@ -21,5 +21,7 @@ hic_reads = manifest.hic_reads
 odb12_busco_dataset = f"{manifest.busco_odb12_dataset_name}_odb12"
 odb10_busco_dataset = f"{manifest.busco_odb10_dataset_name}_odb10"
 
+sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
+
 # wildcard_constraints:
 #     busco_dataset=busco_dataset,

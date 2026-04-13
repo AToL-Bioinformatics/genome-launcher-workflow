@@ -6,5 +6,6 @@ containers:
   atol_qc_raw_shortread: "docker://quay.io/biocontainers/atol-qc-raw-shortread:0.3.1--pyhdfd78af_0"
   bbmap: "docker://quay.io/biocontainers/bbmap:39.81--h9b5c0a0_1"
   rclone: "docker://rclone/rclone:sha-e9fddaa"
+  seqkit: "docker://quay.io/biocontainers/seqkit:2.13.0--he881be0_0"
   pigz: "docker://quay.io/biocontainers/pigz:2.8"
   wget: "docker://quay.io/biocontainers/wget:1.25.0"

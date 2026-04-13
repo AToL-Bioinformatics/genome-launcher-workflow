@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 
-def get_primary_assembly(wildcards):
-    sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
+# TODO: the manifest needs to know where this is. See
+# https://github.com/TomHarrop/atol-genome-launcher/issues/16
+def get_filtered_assemblies(wildcards):
     return Path(
         "results/ascc",
         sample_id,
-        f"{sample_id}_PRIMARY",
+        f"{sample_id}_{wildcards.TYPE}",
         "autofilter",
-        f"{sample_id}_PRIMARY_autofiltered.fasta",
+        f"{sample_id}_{wildcards.TYPE}_autofiltered.fasta",
     )
 
 
-# TODO: the manifest needs to know where this is
-converted_assembly = Path(get_primary_assembly(None).as_posix() + ".gz")
+def get_haplotype_assemblies(wildcards):
+    return {
+        k: expand(rules.compress_ascc_assemblies.output.compressed, TYPE=k)
+        for k in ["PRIMARY", "HAPLO"]
+    }
 
 
 # TODO: generalise
@@ -44,11 +48,17 @@ rule reformat_fq_to_fa:
 
 rule compress_ascc_assemblies:
     input:
-        get_primary_assembly,
+        get_filtered_assemblies,
     output:
-        converted_assembly,
+        compressed=Path(
+            "results/ascc",
+            sample_id,
+            f"{sample_id}_{{TYPE}}",
+            "autofilter",
+            f"{sample_id}_{{TYPE}}_autofiltered.fasta.gz",
+        ),
     log:
-        Path(log_dir_base, "compress_ascc_assemblies.log"),
+        Path(log_dir_base, "compress_ascc_assemblies", "{TYPE}.log"),
     container:
         config["containers"]["bbmap"]
     threads: 6
@@ -62,3 +72,24 @@ rule compress_ascc_assemblies:
         "int=f "
         "out={output} "
         "2> {log} "
+
+
+rule reheader_for_treeval:
+    input:
+        unpack(get_haplotype_assemblies),
+    output:
+        combined=Path(
+            manifest.get_dir("pipeline_output", pipeline="ascc"),
+            "PRIMARY_HAPLO_combined.fasta.gz",
+        ),
+    log:
+        Path(log_dir_base, "reheader_for_treeval.log"),
+    container:
+        config["containers"]["seqkit"]
+    threads: 1
+    resources:
+        mem=lambda wildcards, attempt: f"{2* attempt}GB",
+        runtime=lambda wildcards, attempt: int(5 * attempt),
+    shell:
+        "seqkit replace -p ^ -r HAP1_ < {input.PRIMARY} > {output.combined} 2> {log} && "
+        "seqkit replace -p ^ -r HAP2_ < {input.HAPLO} >> {output.combined} 2>> {log} "
