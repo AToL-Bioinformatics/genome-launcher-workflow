@@ -73,7 +73,7 @@ rule compress_ascc_assemblies:
         "out={output} "
         "2> {log} "
 
-
+# FIXME this outputs uncompressed fasta
 rule reheader_for_treeval:
     input:
         unpack(get_haplotype_assemblies),
@@ -91,5 +91,10 @@ rule reheader_for_treeval:
         mem=lambda wildcards, attempt: f"{2* attempt}GB",
         runtime=lambda wildcards, attempt: int(5 * attempt),
     shell:
-        "seqkit replace -p ^ -r HAP1_ < {input.PRIMARY} > {output.combined} 2> {log} && "
-        "seqkit replace -p ^ -r HAP2_ < {input.HAPLO} >> {output.combined} 2>> {log} "
+        "{{ "
+        "seqkit replace -p ^ -r HAP1_ < {input.PRIMARY} ; "
+        "seqkit replace -p ^ -r HAP2_ < {input.HAPLO} ; "
+        "}} "
+        "2> {log} "
+        "| "
+        "gzip > {output.combined}"

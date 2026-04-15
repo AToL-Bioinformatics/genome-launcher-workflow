@@ -66,6 +66,11 @@ rule post_ascc:
         rules.reheader_for_treeval.output.combined,
 
 
+rule post_treeval:
+    input:
+        Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
+
+
 rule target:
     default_target: True
     input:

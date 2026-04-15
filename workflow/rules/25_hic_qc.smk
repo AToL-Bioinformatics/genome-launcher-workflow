@@ -24,7 +24,7 @@ if len(hic_reads) > 0:
         params:
             dataset_id=manifest.dataset_id,
             hic_kit=config["hic_kit"],
-            qc_logs_dir=qc_logs_dir,
+            qc_logs_dir=lambda wildcards: Path(qc_logs_dir, wildcards.bpa_package_id),
         shell:
             "atol-qc-raw-shortread "
             "--cram {output.cram} "

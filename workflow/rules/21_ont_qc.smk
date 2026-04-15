@@ -23,7 +23,7 @@ if len(ont_reads) > 0:
             mem=lambda wildcards, attempt: f"{int(255* attempt)}GB",
             runtime="24h",
         params:
-            qc_logs_dir=qc_logs_dir,
+            qc_logs_dir=lambda wildcards: Path(qc_logs_dir, wildcards.bpa_package_id),
             min_length=1000,
         shell:
             "atol-qc-raw-ont "
