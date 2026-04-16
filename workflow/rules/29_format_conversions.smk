@@ -89,7 +89,7 @@ rule reheader_for_treeval:
     threads: 1
     resources:
         mem=lambda wildcards, attempt: f"{2* attempt}GB",
-        runtime=lambda wildcards, attempt: int(5 * attempt),
+        runtime=lambda wildcards, attempt: int(20 * attempt),
     shell:
         "{{ "
         "seqkit replace -p ^ -r HAP1_ < {input.PRIMARY} ; "
