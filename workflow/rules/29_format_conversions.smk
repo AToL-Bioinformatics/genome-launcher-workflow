@@ -29,7 +29,9 @@ rule reformat_fq_to_fa:
     log:
         Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.log"),
     wildcard_constraints:
-        file="|".join([str(replace_ext(x.name)) for x in pacbio_reads.flat_paths("qc")]),
+        file="|".join(
+            [str(replace_ext(x.name)) for x in manifest.long_reads.flat_paths("qc")]
+        ),
     container:
         config["containers"]["bbmap"]
     threads: 6
@@ -72,6 +74,7 @@ rule compress_ascc_assemblies:
         "int=f "
         "out={output} "
         "2> {log} "
+
 
 # FIXME this outputs uncompressed fasta
 rule reheader_for_treeval:

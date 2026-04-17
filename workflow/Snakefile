@@ -58,7 +58,7 @@ rule post_genomeassembly:
 rule post_ascc:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
-        [replace_ext(x, ".fasta.gz") for x in pacbio_reads.flat_paths("qc")],
+        [replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
         # TODO: define in manifest
         expand(
             rules.compress_ascc_assemblies.output.compressed, TYPE=["PRIMARY", "HAPLO"]
