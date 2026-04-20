@@ -33,6 +33,10 @@ restart-times: 0
 set-resources:
   ont_qc:
     partitionFlag: "--partition=highmem"
+  assembly_data_downloader:
+    partitionFlag: "--partition=copy"
+  pipeline_result_uploader:
+    partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   --nv
   -H $(mktemp -d)
