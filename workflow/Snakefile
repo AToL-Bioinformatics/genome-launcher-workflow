@@ -24,7 +24,7 @@ include: "rules/30_stage_busco_dataset.smk"
 include: "rules/31_stage_s3_bucket.smk"
 
 
-rule run_download:
+rule download_reads:
     input:
         manifest.reads.flat_paths("raw"),
 
@@ -36,11 +36,11 @@ rule run_qc:
 
 rule pre_genomeassembly:
     input:
-        rules.run_download.input,
         rules.run_qc.input,
         expand(
             rules.expand_busco_lineage_files.output, busco_dataset=odb12_busco_dataset
         ),
+        [replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
 
 
 rule post_genomeassembly:
@@ -73,5 +73,4 @@ rule post_treeval:
 rule target:
     default_target: True
     input:
-        rules.run_download.input,
-        rules.run_qc.input,
+        rules.pre_genomeassembly.input,

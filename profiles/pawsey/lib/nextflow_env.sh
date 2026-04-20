@@ -37,6 +37,8 @@ setup_nextflow() {
     export NXF_CACHE_DIR="$(readlink -f "${nextflow_dir}/cache")"
     export NXF_WORK="$(readlink -f "${nextflow_dir}/work")"
     export NXF_LINEAGE="$(readlink -f "${nextflow_dir}/lineage")"
+    export NXF_TMPDIR="$(readlink -f "${nextflow_dir}/tmp")"
+    mkdir -p "${NXF_TMPDIR}"
 
     export NXF_APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
     export NXF_SINGULARITY_CACHEDIR="${SINGULARITY_CACHEDIR}/library"
