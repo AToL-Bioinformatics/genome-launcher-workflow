@@ -40,7 +40,7 @@ rule pre_genomeassembly:
         expand(
             rules.expand_busco_lineage_files.output, busco_dataset=odb12_busco_dataset
         ),
-        [replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
+        [yaml_manifest.replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
 
 
 rule post_genomeassembly:
