@@ -58,10 +58,6 @@ rule post_genomeassembly:
 rule post_ascc:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
-        [
-            yaml_manifest.replace_ext(x, ".fasta.gz")
-            for x in manifest.long_reads.flat_paths("qc")
-        ],
         manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
 
 
