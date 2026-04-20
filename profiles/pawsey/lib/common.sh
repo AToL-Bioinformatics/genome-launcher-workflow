@@ -8,7 +8,7 @@ unset SBATCH_EXPORT
 
 # Singularity/Apptainer setup
 setup_singularity() {
-    module load singularity/4.1.0-slurm
+    module load singularity/4.1.0-nohost
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
         export SINGULARITY_CACHEDIR=/software/projects/pawsey1132/${USER}/.singularity
@@ -16,6 +16,7 @@ setup_singularity() {
     export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
 
     printf "SINGULARITY_CACHEDIR: %s\n" "${SINGULARITY_CACHEDIR}" 1>&2
+
 }
 
 # Get sample/dataset ID from manifest or directory

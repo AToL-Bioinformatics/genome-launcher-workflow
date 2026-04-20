@@ -8,15 +8,10 @@ source "${SCRIPT_DIR}/common.sh"
 # Setup snakemake environment
 setup_snakemake() {
     module load GCCcore/13.3.0
-    module load Python/3.12.3 Apptainer/1.4.4
+    module load Python/3.12.3
 
     # Singularity setup
-    if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
-        printf "The SINGULARITY_CACHEDIR variable is required" 1>&2
-        exit 1
-    fi
-    export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
-    printf "APPTAINER_CACHEDIR: %s\n" "${APPTAINER_CACHEDIR}" 1>&2
+    setup_singularity
 
     # Activate virtual environment
     if [ ! -f "venv/bin/activate" ]; then

@@ -18,14 +18,15 @@ set_project_dir() {
 
 # Singularity/Apptainer setup
 setup_singularity() {
-    module load singularity/4.1.0-slurm
+    module load Apptainer/1.4.4
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
-        export SINGULARITY_CACHEDIR=/software/projects/pawsey1132/${USER}/.singularity
+        printf "The SINGULARITY_CACHEDIR variable is required" 1>&2
+        exit 1
     fi
     export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
+    printf "APPTAINER_CACHEDIR: %s\n" "${APPTAINER_CACHEDIR}" 1>&2
 
-    printf "SINGULARITY_CACHEDIR: %s\n" "${SINGULARITY_CACHEDIR}" 1>&2
 }
 
 # Get sample/dataset ID from manifest or directory

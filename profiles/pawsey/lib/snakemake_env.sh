@@ -7,15 +7,7 @@ source "${SCRIPT_DIR}/common.sh"
 
 # Setup snakemake environment
 setup_snakemake() {
-    module load python/3.11.6 singularity/4.1.0-nohost
-
-    # Singularity setup
-    if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
-        printf "The SINGULARITY_CACHEDIR variable is required" 1>&2
-        exit 1
-    fi
-    export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
-    printf "SINGULARITY_CACHEDIR: %s\n" "${SINGULARITY_CACHEDIR}" 1>&2
+    module load python/3.11.6
 
     # Activate virtual environment
     if [ ! -f "venv/bin/activate" ]; then
@@ -23,6 +15,9 @@ setup_snakemake() {
         exit 1
     fi
     source venv/bin/activate
+
+    # Load singularity after venv
+    setup_singularity
 
     # Rclone/S3 configuration
     export RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
