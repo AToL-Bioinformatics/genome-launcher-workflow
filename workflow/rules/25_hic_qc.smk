@@ -9,7 +9,7 @@ if len(hic_reads) > 0:
 
     rule hic_qc:
         input:
-            unpack(get_raw_reads),
+            ancient(unpack(get_raw_reads)),
         output:
             cram=Path(hic_cram_parent, "{bpa_package_id}.cram"),
             stats=Path(hic_stats_parent, "{bpa_package_id}.json"),

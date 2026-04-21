@@ -2,7 +2,7 @@
 
 rule assembly_data_downloader:
     input:
-        manifest=config["manifest"],
+        manifest=ancient(config["manifest"]),
     output:
         manifest.reads.flat_paths("raw"),
     log:

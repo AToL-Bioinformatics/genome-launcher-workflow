@@ -11,7 +11,7 @@ def get_haplotype_assemblies(wildcards):
 # TODO: generalise
 rule reformat_fq_to_fa:
     input:
-        Path("{folder}", "{file}.fastq.gz"),
+        ancient(Path("{folder}", "{file}.fastq.gz")),
     output:
         Path("{folder}", "{file}.fasta.gz"),
     log:
