@@ -50,7 +50,7 @@ rule reheader_for_treeval:
         config["containers"]["seqkit"]
     threads: 1
     resources:
-        mem=lambda wildcards, attempt: f"{2* attempt}GB",
+        mem=lambda wildcards, attempt: f"{8* attempt}GB",
         runtime=lambda wildcards, attempt: int(20 * attempt),
     shell:
         "{{ "
