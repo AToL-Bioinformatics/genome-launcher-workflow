@@ -40,7 +40,7 @@ rule pre_genomeassembly:
         expand(
             rules.expand_busco_lineage_files.output, busco_dataset=odb12_busco_dataset
         ),
-        [replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
+        [yaml_manifest.replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
 
 
 rule post_genomeassembly:
@@ -58,11 +58,7 @@ rule post_genomeassembly:
 rule post_ascc:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
-        # TODO: define in manifest
-        expand(
-            rules.compress_ascc_assemblies.output.compressed, TYPE=["PRIMARY", "HAPLO"]
-        ),
-        rules.reheader_for_treeval.output.combined,
+        manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
 
 
 rule post_treeval:

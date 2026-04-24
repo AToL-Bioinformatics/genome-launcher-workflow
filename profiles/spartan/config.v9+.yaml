@@ -12,7 +12,7 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   --output=logs/slurm/{rule}/{rule}-%j.out
   --parsable
 configfile:
-  - profiles/pawsey/workflow.config.yaml
+  - profiles/spartan/workflow.config.yaml
 default-resources:
   - partitionFlag=""
   - mem_mb=4000
@@ -30,14 +30,7 @@ rerun-incomplete: true
 rerun-triggers:
   - mtime
 restart-times: 0
-set-resources:
-  ont_qc:
-    partitionFlag: "--partition=highmem"
-  assembly_data_downloader:
-    partitionFlag: "--partition=copy"
-  pipeline_result_uploader:
-    partitionFlag: "--partition=copy"
-singularity-args: -B ${PWD},${TMPDIR},/scratch
+singularity-args: -B ${PWD},${TMPDIR},/data
   --nv
   -H $(mktemp -d)
   --pwd ${PWD}

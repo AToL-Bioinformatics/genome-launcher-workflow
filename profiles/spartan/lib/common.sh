@@ -6,16 +6,26 @@ set -eux
 # Unset SBATCH_EXPORT to prevent environment leakage
 unset SBATCH_EXPORT
 
+# Spartan uses per-project storage, see
+# https://dashboard.hpc.unimelb.edu.au/data_management/#scratch-directories
+set_project_dir() {
+    if [ -z "${PROJECTID:-}" ]; then
+        printf "The PROJECTID variable is required" 1>&2
+        exit 1
+    fi
+    export MYSCRATCH="/data/scratch/projects/${PROJECTID}"
+}
+
 # Singularity/Apptainer setup
 setup_singularity() {
-    module load singularity/4.1.0-nohost
+    module load Apptainer/1.4.4
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
-        export SINGULARITY_CACHEDIR=/software/projects/pawsey1132/${USER}/.singularity
+        printf "The SINGULARITY_CACHEDIR variable is required" 1>&2
+        exit 1
     fi
     export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
-
-    printf "SINGULARITY_CACHEDIR: %s\n" "${SINGULARITY_CACHEDIR}" 1>&2
+    printf "APPTAINER_CACHEDIR: %s\n" "${APPTAINER_CACHEDIR}" 1>&2
 
 }
 

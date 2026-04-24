@@ -7,7 +7,11 @@ source "${SCRIPT_DIR}/common.sh"
 
 # Setup snakemake environment
 setup_snakemake() {
-    module load python/3.11.6
+    module load GCCcore/13.3.0
+    module load Python/3.12.3
+
+    # Singularity setup
+    setup_singularity
 
     # Activate virtual environment
     if [ ! -f "venv/bin/activate" ]; then
@@ -15,9 +19,6 @@ setup_snakemake() {
         exit 1
     fi
     source venv/bin/activate
-
-    # Load singularity after venv
-    setup_singularity
 
     # Rclone/S3 configuration
     export RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
@@ -38,5 +39,5 @@ run_snakemake() {
 
     # Workaround for snakemake caching issue
     XDG_CACHE_HOME="$(mktemp -d)" \
-        snakemake --profile profiles/pawsey "${target}"
+        snakemake --profile profiles/spartan "${target}"
 }

@@ -10,7 +10,7 @@ if len(ont_reads) > 0:
 
     rule ont_qc:
         input:
-            unpack(get_raw_reads),
+            ancient(unpack(get_raw_reads)),
         output:
             fastq=Path(ont_fastq_parent, "{bpa_package_id}.fastq.gz"),
             stats=Path(ont_stats_parent, "{bpa_package_id}.json"),

@@ -9,7 +9,7 @@ if len(pacbio_reads) > 0:
 
     rule pacbio_qc:
         input:
-            unpack(get_raw_reads),
+            ancient(unpack(get_raw_reads)),
         output:
             fastq=Path(pacbio_fastq_parent, "{bpa_package_id}.fastq.gz"),
             stats=Path(pacbio_stats_parent, "{bpa_package_id}.json"),

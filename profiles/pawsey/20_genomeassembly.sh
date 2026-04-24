@@ -20,6 +20,14 @@ SAMPLE_ID="$(get_sample_id)"
 # Setup nextflow
 setup_nextflow "${PIPELINE}" "${PIPELINE_VERSION}" "25.10.4"
 
+# The genomeassembly pipeline uses Nextflow secrets for the NCBI API
+if [ -z "${NCBI_API_KEY}" ]; then
+        printf "Set the NCBI_API_KEY variable" 1>&2
+        exit 1
+else
+        nextflow secrets set NCBI_API_KEY "${NCBI_API_KEY}"
+fi
+
 # Generate data config if needed
 if [ ! -f "config/genomeassembly.data.yaml" ]; then
         envsubst <config/genomeassembly.data.yaml.sample >config/genomeassembly.data.yaml
