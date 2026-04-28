@@ -29,7 +29,7 @@ if len(ont_reads) > 0:
             "atol-qc-raw-ont "
             "--threads {threads} "
             "--min-length {params.min_length} "
-            "--tarfile {input.reads} "
+            "--tarfile {input.single_end} "
             "--logs {params.qc_logs_dir} "
             "--out {output.fastq} "
             "--stats {output.stats} "

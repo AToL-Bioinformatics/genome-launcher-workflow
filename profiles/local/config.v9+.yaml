@@ -6,6 +6,8 @@ apptainer-args: -B $PWD,/tmp
   --env TMPDIR=/tmp 
   --env LC_ALL=C 
   --env BPA_APIKEY=${BPA_APIKEY}
+  --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
+  --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
   --containall --cleanenv --writable-tmpfs
 apptainer-prefix: $APPTAINER_CACHEDIR
 benchmark-extended: True
