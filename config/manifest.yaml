@@ -26,15 +26,14 @@ reads:
     bpa-grasslands-hi-c-371565-373565:
       base_url: "https://downloads-qcif.bioplatforms.com/bpa/grasslands/genomics-hi-c\
         /BPAOPS-1514/20231109_AG_BRF_HMMYTDRX3/"
-      r1:
-        resources:
+      resources:
+        r1:
           - url: "https://data.bioplatforms.com/dataset/bpa-grasslands-hi-c-371565-373565/r\
               esource/5fb1bde2e50768d6b22aa2e00f97352b/download/369564_LibID371\
               565_AG_BRF_HMMYTDRX3_TCAGCATC_S1_L001_R1_001.fastq.gz"
             md5sum: "5fb1bde2e50768d6b22aa2e00f97352b"
             lane_number: "L001"
-      r2:
-        resources:
+        r2:
           - url: "https://data.bioplatforms.com/dataset/bpa-grasslands-hi-c-371565-373565/r\
               esource/31b685a72a8af749b846ee26f0191eff/download/369564_LibID371\
               565_AG_BRF_HMMYTDRX3_TCAGCATC_S1_L001_R2_001.fastq.gz"
