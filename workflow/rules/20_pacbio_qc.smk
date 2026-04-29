@@ -26,7 +26,7 @@ if len(pacbio_reads) > 0:
             qc_logs_dir=lambda wildcards: Path(qc_logs_dir, wildcards.bpa_package_id),
         shell:
             "atol-qc-raw-pacbio "
-            "--bam {input.reads} "
+            "--bam {input.single_end} "
             "--discard-trimmed "
             "--logs {params.qc_logs_dir} "
             "--match-read-wildcards "
