@@ -1,18 +1,47 @@
-Run the workflow like this:
+# {{ dataset_id }}.{{ assembly_version }}
 
-```bash
-snakemake \
-    --profile profiles/local
-```
+This repository contains the workflows that were used to produce the
+{{ dataset_id }}.{{ assembly_version}} assembly for *{{ scientific_name }}*.
 
-The configfile is loaded from "config/config.yaml"
+It was produced automatically from boilerplate code at
+[AToL-Bioinformatics/genome-launcher-workflow](https://github.com/AToL-Bioinformatics/genome-launcher-workflow).
 
-The path to the assembly manifest is specified in the configfile by the
-manifest key.
+## Overview
 
-```yaml
-manifest: "path/to/manifest.yaml"
-```
+The assembly process has three main steps:
 
-You can override this on the CLI using `--config
-manifest=path/to/some/other/manifest.yaml`.
+1. Assembly with
+   [sanger-tol/genomeassembly](https://github.com/sanger-tol/genomeassembly/)
+2. Decontamination with [sanger-tol/ascc](https://github.com/sanger-tol/ascc/)
+3. Preparation of curation materials with
+   [sanger-tol/treeval](https://github.com/sanger-tol/treeval/), if there are
+   Hi-C reads.
+
+The config files for these steps are in the [config](./config) directory.
+
+The sanger-tol workflows are plumbed together by the [included Snakemake
+worfklow](./workflow/Snakefile).
+
+## Running the assembly
+
+Clone this repo to the HPC where it will be run.
+
+A profile will be needed to configure the job scheduler on the HPC. Profiles
+for [Setonix](./profiles/pawsey) and [Spartan (partial)](./profiles/spartan)
+are included. There is also a profile for [local testing](./profiles/local).
+
+1. Download the reads and run the QC scripts using the genome-launcher-workflow
+   target `pre_genomeassembly`.
+2. Run the `genomeassembly` workflow. See the [example 20_genomeassembly.sh
+   script](profiles/pawsey/20_genomeassembly.sh).
+3. Stage the ASCC reference data using the genome-launcher-workflow target
+   `post_genomeassembly`.
+4. Run the `ascc` workflow. See the [example 30_ascc.sh
+   script](profiles/pawsey/30_ascc.sh).
+5. Convert the ASCC output for TreeVal using the genome-launcher-workflow
+   target `post_ascc`.
+6. If Hi-C is available, run the `treeval` workflow. See the [example
+   40_treeval.sh submission script](profiles/pawsey/40_treeval.sh).
+7. Run the `post_treeval` target to upload the results to object storage. The
+   `post_*` targets all upload the output of the preceding pipeline to object
+   storage. 

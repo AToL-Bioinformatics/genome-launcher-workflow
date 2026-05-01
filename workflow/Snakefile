@@ -16,6 +16,7 @@ include: "rules/01_functions.smk"
 include: "rules/05_globals.smk"
 include: "rules/10_assembly_data_downloader.smk"
 include: "rules/11_pipeline_result_uploader.smk"
+include: "rules/12_status_updates.smk"
 include: "rules/20_pacbio_qc.smk"
 include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
@@ -40,7 +41,11 @@ rule pre_genomeassembly:
         expand(
             rules.expand_busco_lineage_files.output, busco_dataset=odb12_busco_dataset
         ),
-        [yaml_manifest.replace_ext(x, ".fasta.gz") for x in manifest.long_reads.flat_paths("qc")],
+        [
+            yaml_manifest.replace_ext(x, ".fasta.gz")
+            for x in manifest.long_reads.flat_paths("qc")
+        ],
+        Path(manifest.get_dir("results"), "update_assembly_status", "qc.json"),
 
 
 rule post_genomeassembly:
@@ -53,17 +58,24 @@ rule post_genomeassembly:
             rules.expand_busco_lineage_files.output, busco_dataset=odb10_busco_dataset
         ),
         Path(manifest.get_dir("results"), "upload_receipts", "genomeassembly.jsonl"),
+        Path(
+            manifest.get_dir("results"),
+            "update_assembly_status",
+            "genomeassembly.json",
+        ),
 
 
 rule post_ascc:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
         manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+        Path(manifest.get_dir("results"), "update_assembly_status", "ascc.json"),
 
 
 rule post_treeval:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
+        Path(manifest.get_dir("results"), "update_assembly_status", "treeval.json"),
 
 
 rule target:
