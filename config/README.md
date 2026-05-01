@@ -39,7 +39,7 @@ are included. A profile for [local testing](./profiles/local) is also included.
 #### The profile needs at least the following files:
 
 - Snakemake [**job config**](./profiles/pawsey/config.v9+.yaml) and [**workflow
-  config**](.config/workflow.config.yaml): configure the jobs from the
+  config**](./profiles/pawsey/workflow.config.yaml): configure the jobs from the
   genome-launcher-workflow.
 - [**nextflow config**](./profiles/pawsey/pawsey.config): configure the
   processes from the Sanger-Tol pipelines
@@ -66,4 +66,33 @@ are included. A profile for [local testing](./profiles/local) is also included.
    40_treeval.sh submission script](profiles/pawsey/40_treeval.sh).
 7. Run the `post_treeval` target to upload the results to object storage. The
    `post_*` targets all upload the output of the preceding pipeline to object
-   storage. 
+   storage.
+
+
+<details>
+
+<summary>Worked example</summary>
+
+#### Run this assembly on Setonix:
+
+> [!IMPORTANT]
+>
+> The pull command requires a Personal Access Token with read access to code
+> and metadata.
+
+1. Pull the repo:
+   1. `git init . `
+   2. `git remote add origin https://github.com/AToL-Bioinformatics/
+      {{ dataset_id }}.{{ assembly_version }}.git`
+   3. `git pull origin main`
+2. Set up the directory structure: `bash profiles/pawsey/00_preflight.sh`
+3. Run the workflow steps:
+   1. `sbatch profiles/pawsey/10_pre_genomeassembly.sh`
+   2. `sbatch profiles/pawsey/20_genomeassembly.sh`
+   3. `sbatch profiles/pawsey/25_post_genomeassembly.sh`
+   4. `sbatch profiles/pawsey/30_ascc.sh`
+   5. `sbatch profiles/pawsey/35_post_ascc.sh`
+   6. `sbatch profiles/pawsey/40_treeval.sh`
+   7. `sbatch profiles/pawsey/45_post_treeval.sh`
+
+</details>
