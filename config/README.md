@@ -82,8 +82,7 @@ are included. A profile for [local testing](./profiles/local) is also included.
 
 1. Pull the repo:
    1. `git init . `
-   2. `git remote add origin https://github.com/AToL-Bioinformatics/
-      {{ dataset_id }}.{{ assembly_version }}.git`
+   2. `git remote add origin https://github.com/AToL-Bioinformatics/{{ dataset_id }}.{{ assembly_version }}.git`
    3. `git pull origin main`
 2. Set up the directory structure: `bash profiles/pawsey/00_preflight.sh`
 3. Run the workflow steps:
