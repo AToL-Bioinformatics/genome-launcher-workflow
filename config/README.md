@@ -1,9 +1,9 @@
 # {{ dataset_id }}.{{ assembly_version }}
 
-This repository contains the workflows that were used to produce the
-{{ dataset_id }}.{{ assembly_version}} assembly for *{{ scientific_name }}*.
+This repository contains the workflows that were used to assemble the genome
+{{ dataset_id }}.{{ assembly_version}} for *{{ scientific_name }}*.
 
-It was produced automatically from boilerplate code at
+The repo was produced automatically from boilerplate code at
 [AToL-Bioinformatics/genome-launcher-workflow](https://github.com/AToL-Bioinformatics/genome-launcher-workflow).
 
 ## Overview
@@ -24,11 +24,33 @@ worfklow](./workflow/Snakefile).
 
 ## Running the assembly
 
+### Setting up
+
 Clone this repo to the HPC where it will be run.
 
 A profile will be needed to configure the job scheduler on the HPC. Profiles
 for [Setonix](./profiles/pawsey) and [Spartan (partial)](./profiles/spartan)
-are included. There is also a profile for [local testing](./profiles/local).
+are included. A profile for [local testing](./profiles/local) is also included.
+
+<details>
+
+<summary>More information about the profile</summary>
+
+#### The profile needs at least the following files:
+
+- Snakemake [**job config**](./profiles/pawsey/config.v9+.yaml) and [**workflow
+  config**](.config/workflow.config.yaml): configure the jobs from the
+  genome-launcher-workflow.
+- [**nextflow config**](./profiles/pawsey/pawsey.config): configure the
+  processes from the Sanger-Tol pipelines
+- [**ascc.params.config**](./profiles/pawsey/ascc.params.config): the [YAML
+  params
+  file](https://pipelines.tol.sanger.ac.uk/ascc/0.6.0/usage#running-the-pipeline)
+  for ASCC (not shared with the other pipelines).
+
+</details>
+
+### Steps
 
 1. Download the reads and run the QC scripts using the genome-launcher-workflow
    target `pre_genomeassembly`.
