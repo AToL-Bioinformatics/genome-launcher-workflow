@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --job-name=upload_logs
 #SBATCH --time=0-01
