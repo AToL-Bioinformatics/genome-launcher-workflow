@@ -43,6 +43,8 @@ rule upload_all_logs:
         bucket=f"{manifest.dataset_id}.{manifest.assembly_version}".lower(),
         logs_dir=log_dir_base,
         tar_files=remote_log_file,
+    resources:
+        runtime="10m",    
     shell:
         "tar -cv "
         "--directory {params.logs_dir}/ "
