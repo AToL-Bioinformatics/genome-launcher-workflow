@@ -1,0 +1,51 @@
+{
+    "assembly_version": 1,
+    "dataset_id": "eTestTest1",
+    "scientific_name": "Rhynchosporium graminicola",
+    "taxon_id": 2792576,
+    "busco_odb10_dataset_name": "helotiales",
+    "busco_odb12_dataset_name": "helotiales",
+    "ncbi_class": "",
+    "find_plastid": false,
+    "hic_motif": "GATC,GANTC,CTNAG,TTAA",
+    "mito_code": 4,
+    "mitohifi_reference_species": "Rhynchosporium commune",
+    "oatk_hmm_name": "dikarya_mito",
+    "read_files": [
+        {
+            "name": "bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2",
+            "data_type": "PACBIO_SMRT",
+            "base_url": "https://downloads-qcif.bioplatforms.com/bpa/pp_staging/pacbio-hifi/BPAOPS-1452/20230809_PP_AGRF_CAGRF230615297_m84073_230802_055109_s2/",
+            "single_end": [
+                {
+                    "url": "https://data.bioplatforms.com/dataset/bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2/resource/6c3300906111b99872ebc2efcfa946ee/download/395385_PP_AGRF_m84073_230802_055109_s2.ccs.bam",
+                    "md5sum": "6c3300906111b99872ebc2efcfa946ee",
+                    "lane_number": "single_lane",
+                    "raw_path": "resources/raw_reads/PACBIO_SMRT/bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2/single_end/single_lane/reads.ccs.bam"
+                }
+            ]
+        },
+        {
+            "name": "bpa-grasslands-hi-c-371565-373565",
+            "data_type": "Hi-C",
+            "base_url": "https://downloads-qcif.bioplatforms.com/bpa/grasslands/genomics-hi-c/BPAOPS-1514/20231109_AG_BRF_HMMYTDRX3/",
+            "r1": [
+                {
+                    "url": "https://data.bioplatforms.com/dataset/bpa-grasslands-hi-c-371565-373565/resource/5fb1bde2e50768d6b22aa2e00f97352b/download/369564_LibID371565_AG_BRF_HMMYTDRX3_TCAGCATC_S1_L001_R1_001.fastq.gz",
+                    "md5sum": "5fb1bde2e50768d6b22aa2e00f97352b",
+                    "lane_number": "L001",
+                    "raw_path": "resources/raw_reads/Hi-C/bpa-grasslands-hi-c-371565-373565/r1/L001/reads.fastq.gz"
+                }
+            ],
+            "r2": [
+                {
+                    "url": "https://data.bioplatforms.com/dataset/bpa-grasslands-hi-c-371565-373565/resource/31b685a72a8af749b846ee26f0191eff/download/369564_LibID371565_AG_BRF_HMMYTDRX3_TCAGCATC_S1_L001_R2_001.fastq.gz",
+                    "md5sum": "31b685a72a8af749b846ee26f0191eff",
+                    "lane_number": "L001",
+                    "raw_path": "resources/raw_reads/Hi-C/bpa-grasslands-hi-c-371565-373565/r2/L001/reads.fastq.gz"
+                }
+            ],
+            "single_end": null
+        }
+    ]
+}

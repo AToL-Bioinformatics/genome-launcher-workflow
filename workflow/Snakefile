@@ -11,7 +11,8 @@ configfile: "config/config.yaml"
 
 
 # setup paths
-manifest = yaml_manifest.Manifest.from_yaml(Path(config["manifest"]))
+with open(Path(config["manifest"]), "rb") as f:
+    manifest = yaml_manifest.Manifest.model_validate_json(f.read())
 
 
 include: "rules/01_functions.smk"
