@@ -14,6 +14,18 @@ def get_github_token(wildcards):
     return token
 
 
+def assembly_status_input(wildcards):
+    if wildcards.pipeline == "qc":
+        return manifest.reads.flat_paths("qc")
+    return (
+        Path(
+            manifest.get_dir("results"),
+            "upload_receipts",
+            f"{wildcards.pipeline}.jsonl",
+        ),
+    )
+
+
 assembly_status = {
     "ascc": "Decontaminated",
     "genomeassembly": "Assembled",
@@ -24,9 +36,7 @@ assembly_status = {
 
 rule update_assembly_status:
     input:
-        receipts=Path(
-            manifest.get_dir("results"), "upload_receipts", "{pipeline}.jsonl"
-        ),
+        receipts=assembly_status_input,
     output:
         response=Path(
             manifest.get_dir("results"), "update_assembly_status", "{pipeline}.json"
