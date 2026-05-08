@@ -6,6 +6,18 @@ This repository contains the workflows that were used to assemble the genome
 The repo was produced automatically from boilerplate code at
 [AToL-Bioinformatics/genome-launcher-workflow](https://github.com/AToL-Bioinformatics/genome-launcher-workflow).
 
+### Assembly data
+
+<details>
+
+<summary>Click to view YAML</summary>
+
+```yaml
+{{ as_yaml }}
+```
+
+</details>
+
 ## Overview
 
 The assembly process has three main steps:
