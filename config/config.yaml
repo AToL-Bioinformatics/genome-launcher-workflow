@@ -1,4 +1,3 @@
-manifest: "config/manifest.json"
 containers:
   atol_genome_launcher: "docker://quay.io/biocontainers/atol-genome-launcher:0.13.3--pyhdfd78af_0"
   atol_qc_raw_ont: "docker://quay.io/biocontainers/atol-qc-raw-ont:0.2.1--pyhdfd78af_0"
@@ -10,3 +9,5 @@ containers:
   seqkit: "docker://quay.io/biocontainers/seqkit:2.13.0--he881be0_0"
   pigz: "docker://quay.io/biocontainers/pigz:2.8"
   wget: "docker://quay.io/biocontainers/wget:1.25.0"
+manifest: "config/manifest.json"
+webin_ftp: "ftp://webin2.ebi.ac.uk/"
