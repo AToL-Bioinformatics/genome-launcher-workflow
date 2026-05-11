@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 def remote_log_file(wildcards):
     temp_tar_file = Path(
         tempfile.mkstemp(suffix=".tar.gz", prefix=f"logs.{date.today()}.")[1]
@@ -39,12 +42,12 @@ rule upload_all_logs:
         touch(Path(".upload_all_logs.done")),
     container:
         config["containers"]["atol_genome_launcher"]
+    resources:
+        runtime="10m",
     params:
         bucket=f"{manifest.dataset_id}.{manifest.assembly_version}".lower(),
         logs_dir=log_dir_base,
         tar_files=remote_log_file,
-    resources:
-        runtime="10m",    
     shell:
         "tar -cv "
         "--directory {params.logs_dir}/ "

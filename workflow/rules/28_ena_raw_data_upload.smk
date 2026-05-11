@@ -32,11 +32,11 @@ def get_broker_input(wildcards):
     return reads
 
 
-def tbd(wildcards, input):
+def read_md5sum(wildcards, input):
     with open(input.stats_file, "rb") as f:
         stats_data = json.load(f)
-    x = stats_data.get("checksums").get(Path(input.reads).name).get("md5")
-    raise ValueError(x)
+    md5sum = stats_data.get("checksums").get(Path(input.reads).name).get("md5")
+    return md5sum
 
 
 rule broker_raw_reads:
@@ -48,7 +48,32 @@ rule broker_raw_reads:
                 manifest.get_dir("results"), "brokered_reads", "{bpa_package_id}.done"
             )
         ),
+    log:
+        log=Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.log"),
+        trace=Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.trace.txt"),
+    container:
+        config["containers"]["curl"]
+    resources:
+        runtime="4h",
+        shell_exec="sh",
     params:
-        tbd,
+        md5sum=read_md5sum,
+        reads_name=subpath(input.reads, basename=True),
+        webin_ftp=config["webin_ftp"],
     shell:
-        "echo {params}"
+        "printf '%s %s' {params.md5sum} {params.reads_name} > {input.reads}.md5 "
+        "&& "
+        "curl "
+        "--verbose "
+        "--upload-file {input.reads}.md5 "
+        "--user USER:PASS "
+        "{params.webin_ftp} "
+        "&> {log.log} "
+        "&& "
+        "curl "
+        "--verbose "
+        "--upload-file {input.reads} "
+        "--user USER:PASS "
+        "--trace-ascii {log.trace} "
+        "{params.webin_ftp} "
+        "2>&1 >> {log.log} "
