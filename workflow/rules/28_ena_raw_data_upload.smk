@@ -8,11 +8,15 @@ def get_broker_input(wildcards):
     return reads
 
 
-def read_md5sum(wildcards, input):
+def generate_md5sum_file(wildcards, input):
     with open(input.stats_file, "rb") as f:
         stats_data = json.load(f)
-    md5sum = stats_data.get("checksums").get(Path(input.reads).name).get("md5")
-    return md5sum
+    input_reads_name = Path(input.reads).name
+    md5sum = stats_data.get("checksums").get(input_reads_name).get("md5")
+    md5sum_file = Path(tempfile.mkdtemp(), f"{input_reads_name}.md5")
+    with open(md5sum_file, "wt") as f:
+        f.write(f"{md5sum} {input_reads_name}\n")
+    return md5sum_file
 
 
 def webin_credentials(wildcards):
@@ -51,15 +55,12 @@ rule broker_raw_reads:
         runtime="4h",
         shell_exec="sh",
     params:
-        md5sum=read_md5sum,
-        reads_name=subpath(input.reads, basename=True),
+        md5sum_file=generate_md5sum_file,
         webin_ftp=config["webin_ftp"],
         webin_credentials=webin_credentials,
     shell:
-        "printf '%s %s' {params.md5sum} {params.reads_name} > {input.reads}.md5 "
-        "&& "
         "curl "
-        "--upload-file {input.reads}.md5 "
+        "--upload-file {params.md5sum_file} "
         "--user {params.webin_credentials} "
         "{params.webin_ftp} "
         "2> {log.log} "
