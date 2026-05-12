@@ -43,6 +43,8 @@ rule update_assembly_status:
         ),
     log:
         Path("logs", "update_assembly_status", "{pipeline}.log"),
+    benchmark:
+        Path("logs", "update_assembly_status", "{pipeline}.stats.jsonl")
     wildcard_constraints:
         pipeline="|".join(list(assembly_status.keys())),
     container:

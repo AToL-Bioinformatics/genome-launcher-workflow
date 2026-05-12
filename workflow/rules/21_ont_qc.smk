@@ -16,6 +16,8 @@ if len(ont_reads) > 0:
             stats=Path(ont_stats_parent, "{bpa_package_id}.json"),
         log:
             Path(ont_log_parent, "{bpa_package_id}.log"),
+        benchmark:
+            Path(ont_log_parent, "{bpa_package_id}.stats.jsonl")
         container:
             config["containers"]["atol_qc_raw_ont"]
         threads: lambda wildcards, attempt: int(64 * attempt)

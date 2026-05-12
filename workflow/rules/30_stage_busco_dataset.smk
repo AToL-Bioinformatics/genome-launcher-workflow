@@ -45,6 +45,13 @@ rule expand_busco_lineage_files:
         ),
     log:
         Path("logs", "staging", "expand_busco_lineage_files", "{busco_dataset}.log"),
+    benchmark:
+        Path(
+            "logs",
+            "staging",
+            "expand_busco_lineage_files",
+            "{busco_dataset}.stats.jsonl",
+        )
     container:
         config["containers"]["pigz"]
     resources:
@@ -62,6 +69,13 @@ rule download_busco_lineage_files:
         busco_dataset=Path("resources", "busco_lineage_files", "{busco_dataset}.tar.gz"),
     log:
         Path("logs", "staging", "download_busco_lineage_files", "{busco_dataset}.log"),
+    benchmark:
+        Path(
+            "logs",
+            "staging",
+            "download_busco_lineage_files",
+            "{busco_dataset}.stats.jsonl",
+        )
     retries: 3
     shadow:
         "minimal"
@@ -82,6 +96,8 @@ rule download_busco_manifest:
         busco_manifest=Path("resources", "busco_lineage_files", "file_versions.tsv"),
     log:
         Path("logs", "staging", "download_busco_manifest.log"),
+    benchmark:
+        Path("logs", "staging", "download_busco_manifest.stats.jsonl")
     container:
         config["containers"]["wget"]
     params:
