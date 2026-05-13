@@ -2,7 +2,10 @@
 
 from datetime import date
 from functools import cache
+from git import Repo
+from git.exc import InvalidGitRepositoryError
 from pathlib import Path
+import giturlparse
 import json
 import tempfile
 import yaml_manifest
