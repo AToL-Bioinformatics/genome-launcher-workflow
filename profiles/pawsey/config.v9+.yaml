@@ -36,6 +36,8 @@ set-resources:
     partitionFlag: "--partition=highmem"
   assembly_data_downloader:
     partitionFlag: "--partition=copy"
+  broker_raw_reads:
+    partitionFlag: "--partition=copy"
   pipeline_result_uploader:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
