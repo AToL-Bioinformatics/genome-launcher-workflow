@@ -19,7 +19,9 @@ rule pipeline_result_uploader:
     log:
         Path(log_dir_base, "{pipeline}", "pipeline_result_uploader.log"),
     benchmark:
-        Path(log_dir_base, "{pipeline}", "pipeline_result_uploader.stats.jsonl")
+        Path(
+            log_dir_base, "{pipeline}", "pipeline_result_uploader.stats.jsonl"
+        ).as_posix()
     container:
         config["containers"]["atol_genome_launcher"]
     threads: 8

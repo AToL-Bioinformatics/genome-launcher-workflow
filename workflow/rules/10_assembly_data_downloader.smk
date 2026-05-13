@@ -33,7 +33,9 @@ rule download_file:
     log:
         Path(manifest.get_stage_logs("raw"), "download_file", "{raw_file}.log"),
     benchmark:
-        Path(manifest.get_stage_logs("raw"), "download_file", "{raw_file}.stats.jsonl")
+        Path(
+            manifest.get_stage_logs("raw"), "download_file", "{raw_file}.stats.jsonl"
+        ).as_posix()
     wildcard_constraints:
         raw_file="|".join([str(x) for x in manifest.reads.all_raw_paths]),
     retries: 2

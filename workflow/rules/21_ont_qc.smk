@@ -17,7 +17,7 @@ if len(ont_reads) > 0:
         log:
             Path(ont_log_parent, "{bpa_package_id}.log"),
         benchmark:
-            Path(ont_log_parent, "{bpa_package_id}.stats.jsonl")
+            Path(ont_log_parent, "{bpa_package_id}.stats.jsonl").as_posix()
         container:
             config["containers"]["atol_qc_raw_ont"]
         threads: lambda wildcards, attempt: int(64 * attempt)

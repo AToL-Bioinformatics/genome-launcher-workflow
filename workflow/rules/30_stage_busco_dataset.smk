@@ -51,7 +51,7 @@ rule expand_busco_lineage_files:
             "staging",
             "expand_busco_lineage_files",
             "{busco_dataset}.stats.jsonl",
-        )
+        ).as_posix()
     container:
         config["containers"]["pigz"]
     resources:
@@ -75,7 +75,7 @@ rule download_busco_lineage_files:
             "staging",
             "download_busco_lineage_files",
             "{busco_dataset}.stats.jsonl",
-        )
+        ).as_posix()
     retries: 3
     shadow:
         "minimal"
@@ -97,7 +97,7 @@ rule download_busco_manifest:
     log:
         Path("logs", "staging", "download_busco_manifest.log"),
     benchmark:
-        Path("logs", "staging", "download_busco_manifest.stats.jsonl")
+        Path("logs", "staging", "download_busco_manifest.stats.jsonl").as_posix()
     container:
         config["containers"]["wget"]
     params:

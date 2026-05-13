@@ -16,7 +16,7 @@ if len(hic_reads) > 0:
         log:
             Path(hic_log_parent, "{bpa_package_id}.log"),
         benchmark:
-            Path(hic_log_parent, "{bpa_package_id}.stats.jsonl")
+            Path(hic_log_parent, "{bpa_package_id}.stats.jsonl").as_posix()
         container:
             config["containers"]["atol_qc_raw_shortread"]
         threads: 12

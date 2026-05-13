@@ -16,7 +16,7 @@ if len(pacbio_reads) > 0:
         log:
             Path(pacbio_log_parent, "{bpa_package_id}.log"),
         benchmark:
-            Path(pacbio_log_parent, "{bpa_package_id}.stats.jsonl")
+            Path(pacbio_log_parent, "{bpa_package_id}.stats.jsonl").as_posix()
         container:
             config["containers"]["atol_qc_raw_pacbio"]
         threads: 8

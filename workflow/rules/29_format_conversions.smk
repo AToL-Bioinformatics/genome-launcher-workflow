@@ -18,7 +18,9 @@ rule reformat_fq_to_fa:
     log:
         Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.log"),
     benchmark:
-        Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.stats.jsonl")
+        Path(
+            log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.stats.jsonl"
+        ).as_posix()
     wildcard_constraints:
         file="|".join(
             [

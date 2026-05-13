@@ -50,7 +50,9 @@ rule broker_raw_reads:
         log=Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.log"),
         stats=Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.json"),  # Bytes per second
     benchmark:
-        Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.stats.jsonl")
+        Path(
+            log_dir_base, "broker_raw_reads", "{bpa_package_id}.stats.jsonl"
+        ).as_posix()
     container:
         config["containers"]["curl"]
     resources:

@@ -15,7 +15,7 @@ rule stage_s3_bucket:
     log:
         Path("logs", "stage_s3_bucket", "{bucket_name}.log"),
     benchmark:
-        Path("logs", "stage_s3_bucket", "{bucket_name}.stats.jsonl")
+        Path("logs", "stage_s3_bucket", "{bucket_name}.stats.jsonl").as_posix()
     wildcard_constraints:
         bucket_name="|".join(config.get("s3_buckets").keys()),
     container:
