@@ -3,7 +3,9 @@
 
 def get_reads_path(name, stage):
     reads = manifest.reads.get(name)
-    return reads.paths(stage)
+    reads_paths = reads.paths(stage)
+    reads_strings = {k: str_path(v) for k, v in reads_paths.items()}
+    return reads_strings
 
 
 def get_raw_reads(wildcards):
@@ -24,3 +26,12 @@ def get_git_info():
     hash = repo.head.object.hexsha
     parsed = giturlparse.parse(repo.remotes[0].url)
     return {"git_repo": f"{parsed.owner}/{parsed.repo}", "git_commit_hash": hash}
+
+
+def str_path(*args, **kwargs):
+    """
+    Path() objects aren't serialised properly if extended_benchmark is used.
+    Use this function instead of Path() whenever the rule has benchmarking
+    enabled.
+    """
+    return str(Path(*args, **kwargs))

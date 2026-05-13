@@ -13,15 +13,13 @@ rule pipeline_result_uploader:
     input:
         manifest=config["manifest"],
     output:
-        receipts=Path(
+        receipts=str_path(
             manifest.get_dir("results"), "upload_receipts", "{pipeline}.jsonl"
         ),
     log:
-        Path(log_dir_base, "{pipeline}", "pipeline_result_uploader.log"),
+        str_path(log_dir_base, "{pipeline}", "pipeline_result_uploader.log"),
     benchmark:
-        Path(
-            log_dir_base, "{pipeline}", "pipeline_result_uploader.stats.jsonl"
-        ).as_posix()
+        str_path(log_dir_base, "{pipeline}", "pipeline_result_uploader.stats.jsonl")
     container:
         config["containers"]["atol_genome_launcher"]
     threads: 8

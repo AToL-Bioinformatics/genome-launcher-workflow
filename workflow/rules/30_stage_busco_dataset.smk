@@ -38,20 +38,22 @@ def read_manifest(manifest):
 
 rule expand_busco_lineage_files:
     input:
-        busco_dataset=Path("resources", "busco_lineage_files", "{busco_dataset}.tar.gz"),
+        busco_dataset=str_path(
+            "resources", "busco_lineage_files", "{busco_dataset}.tar.gz"
+        ),
     output:
         lineage_directory=directory(
-            Path("resources", "staging", "busco", "lineages", "{busco_dataset}")
+            str_path("resources", "staging", "busco", "lineages", "{busco_dataset}")
         ),
     log:
-        Path("logs", "staging", "expand_busco_lineage_files", "{busco_dataset}.log"),
+        str_path("logs", "staging", "expand_busco_lineage_files", "{busco_dataset}.log"),
     benchmark:
-        Path(
+        str_path(
             "logs",
             "staging",
             "expand_busco_lineage_files",
             "{busco_dataset}.stats.jsonl",
-        ).as_posix()
+        )
     container:
         config["containers"]["pigz"]
     resources:
@@ -64,18 +66,22 @@ rule expand_busco_lineage_files:
 
 rule download_busco_lineage_files:
     input:
-        busco_manifest=Path("resources", "busco_lineage_files", "file_versions.tsv"),
+        busco_manifest=str_path("resources", "busco_lineage_files", "file_versions.tsv"),
     output:
-        busco_dataset=Path("resources", "busco_lineage_files", "{busco_dataset}.tar.gz"),
+        busco_dataset=str_path(
+            "resources", "busco_lineage_files", "{busco_dataset}.tar.gz"
+        ),
     log:
-        Path("logs", "staging", "download_busco_lineage_files", "{busco_dataset}.log"),
+        str_path(
+            "logs", "staging", "download_busco_lineage_files", "{busco_dataset}.log"
+        ),
     benchmark:
-        Path(
+        str_path(
             "logs",
             "staging",
             "download_busco_lineage_files",
             "{busco_dataset}.stats.jsonl",
-        ).as_posix()
+        )
     retries: 3
     shadow:
         "minimal"
@@ -93,11 +99,11 @@ rule download_busco_lineage_files:
 
 rule download_busco_manifest:
     output:
-        busco_manifest=Path("resources", "busco_lineage_files", "file_versions.tsv"),
+        busco_manifest=str_path("resources", "busco_lineage_files", "file_versions.tsv"),
     log:
-        Path("logs", "staging", "download_busco_manifest.log"),
+        str_path("logs", "staging", "download_busco_manifest.log"),
     benchmark:
-        Path("logs", "staging", "download_busco_manifest.stats.jsonl").as_posix()
+        str_path("logs", "staging", "download_busco_manifest.stats.jsonl")
     container:
         config["containers"]["wget"]
     params:

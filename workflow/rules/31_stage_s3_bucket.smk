@@ -11,11 +11,11 @@ def get_bucket(wildcards):
 # container creation failed` error for ANY job that uses a container.
 rule stage_s3_bucket:
     output:
-        staging_dir=directory(Path("resources", "staging", "{bucket_name}")),
+        staging_dir=directory(str_path("resources", "staging", "{bucket_name}")),
     log:
-        Path("logs", "stage_s3_bucket", "{bucket_name}.log"),
+        str_path("logs", "stage_s3_bucket", "{bucket_name}.log"),
     benchmark:
-        Path("logs", "stage_s3_bucket", "{bucket_name}.stats.jsonl").as_posix()
+        str_path("logs", "stage_s3_bucket", "{bucket_name}.stats.jsonl")
     wildcard_constraints:
         bucket_name="|".join(config.get("s3_buckets").keys()),
     container:

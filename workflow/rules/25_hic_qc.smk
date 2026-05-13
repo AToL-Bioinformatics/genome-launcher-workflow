@@ -11,12 +11,12 @@ if len(hic_reads) > 0:
         input:
             ancient(unpack(get_raw_reads)),
         output:
-            cram=Path(hic_cram_parent, "{bpa_package_id}.cram"),
-            stats=Path(hic_stats_parent, "{bpa_package_id}.json"),
+            cram=str_path(hic_cram_parent, "{bpa_package_id}.cram"),
+            stats=str_path(hic_stats_parent, "{bpa_package_id}.json"),
         log:
-            Path(hic_log_parent, "{bpa_package_id}.log"),
+            str_path(hic_log_parent, "{bpa_package_id}.log"),
         benchmark:
-            Path(hic_log_parent, "{bpa_package_id}.stats.jsonl").as_posix()
+            str_path(hic_log_parent, "{bpa_package_id}.stats.jsonl")
         container:
             config["containers"]["atol_qc_raw_shortread"]
         threads: 12
@@ -26,7 +26,9 @@ if len(hic_reads) > 0:
         params:
             dataset_id=manifest.dataset_id,
             hic_kit=config["hic_kit"],
-            qc_logs_dir=lambda wildcards: Path(qc_logs_dir, wildcards.bpa_package_id),
+            qc_logs_dir=lambda wildcards: str_path(
+                qc_logs_dir, wildcards.bpa_package_id
+            ),
         shell:
             "atol-qc-raw-shortread "
             "--cram {output.cram} "

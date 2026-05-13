@@ -16,9 +16,10 @@ def get_github_token(wildcards):
 
 def assembly_status_input(wildcards):
     if wildcards.pipeline == "qc":
-        return manifest.reads.flat_paths("qc")
+        flat_paths = [str_path(x) for x in manifest.reads.flat_paths("qc")]
+        return flat_paths
     return (
-        Path(
+        str_path(
             manifest.get_dir("results"),
             "upload_receipts",
             f"{wildcards.pipeline}.jsonl",
@@ -38,13 +39,13 @@ rule update_assembly_status:
     input:
         receipts=assembly_status_input,
     output:
-        response=Path(
+        response=str_path(
             manifest.get_dir("results"), "update_assembly_status", "{pipeline}.json"
         ),
     log:
-        Path("logs", "update_assembly_status", "{pipeline}.log"),
+        str_path("logs", "update_assembly_status", "{pipeline}.log"),
     benchmark:
-        Path("logs", "update_assembly_status", "{pipeline}.stats.jsonl").as_posix()
+        str_path("logs", "update_assembly_status", "{pipeline}.stats.jsonl")
     wildcard_constraints:
         pipeline="|".join(list(assembly_status.keys())),
     container:
