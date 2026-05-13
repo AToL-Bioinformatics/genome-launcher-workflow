@@ -2,7 +2,11 @@
 
 from datetime import date
 from functools import cache
+from git import Repo
+from git.exc import InvalidGitRepositoryError
 from pathlib import Path
+import giturlparse
+import json
 import tempfile
 import yaml_manifest
 
@@ -23,6 +27,7 @@ include: "rules/12_status_updates.smk"
 include: "rules/20_pacbio_qc.smk"
 include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
+include: "rules/28_ena_raw_data_upload.smk"
 include: "rules/29_format_conversions.smk"
 include: "rules/30_stage_busco_dataset.smk"
 include: "rules/31_stage_s3_bucket.smk"

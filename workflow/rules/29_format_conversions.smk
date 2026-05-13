@@ -2,10 +2,11 @@
 
 
 def get_haplotype_assemblies(wildcards):
-    return {
+    ascc_output_dict = {
         k: manifest.treeval_assembly.outputs_for("ascc").get(k)
         for k in ["PRIMARY", "HAPLO"]
     }
+    return ascc_output_dict
 
 
 # TODO: generalise
@@ -16,6 +17,8 @@ rule reformat_fq_to_fa:
         Path("{folder}", "{file}.fasta.gz"),
     log:
         Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.log"),
+    benchmark:
+        Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.stats.jsonl")
     wildcard_constraints:
         file="|".join(
             [

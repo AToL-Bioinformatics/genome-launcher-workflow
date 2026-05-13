@@ -1,5 +1,6 @@
 ---
 apptainer-prefix: $SINGULARITY_CACHEDIR/library
+benchmark-extended: True
 cluster-generic-cancel-cmd: scancel
 cluster-generic-status-cmd: status-sacct-robust.sh
 cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
