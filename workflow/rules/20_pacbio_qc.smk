@@ -11,12 +11,12 @@ if len(pacbio_reads) > 0:
         input:
             ancient(unpack(get_raw_reads)),
         output:
-            fastq=Path(pacbio_fastq_parent, "{bpa_package_id}.fastq.gz"),
-            stats=Path(pacbio_stats_parent, "{bpa_package_id}.json"),
+            fastq=str_path(pacbio_fastq_parent, "{bpa_package_id}.fastq.gz"),
+            stats=str_path(pacbio_stats_parent, "{bpa_package_id}.json"),
         log:
-            Path(pacbio_log_parent, "{bpa_package_id}.log"),
+            str_path(pacbio_log_parent, "{bpa_package_id}.log"),
         benchmark:
-            Path(pacbio_log_parent, "{bpa_package_id}.stats.jsonl").as_posix()
+            str_path(pacbio_log_parent, "{bpa_package_id}.stats.jsonl")
         container:
             config["containers"]["atol_qc_raw_pacbio"]
         threads: 8
@@ -25,7 +25,7 @@ if len(pacbio_reads) > 0:
             runtime="4h",
         params:
             mem_gb=lambda wildcards, resources: resources.mem_mb // 1000,
-            qc_logs_dir=lambda wildcards: Path(qc_logs_dir, wildcards.bpa_package_id),
+            qc_logs_dir=lambda wildcards: str_path(qc_logs_dir, wildcards.bpa_package_id),
         shell:
             "atol-qc-raw-pacbio "
             "--bam {input.single_end} "

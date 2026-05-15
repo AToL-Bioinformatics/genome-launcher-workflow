@@ -3,8 +3,8 @@
 
 def get_broker_input(wildcards):
     read_file = manifest.reads.get(wildcards.bpa_package_id)
-    reads = read_file.paths("qc")
-    reads["stats_file"] = read_file.stats_path("qc")
+    reads = {k: str_path(v) for k, v in read_file.paths("qc").items()}
+    reads["stats_file"] = str_path(read_file.stats_path("qc"))
     return reads
 
 
@@ -13,7 +13,7 @@ def generate_md5sum_file(wildcards, input):
         stats_data = json.load(f)
     input_reads_name = Path(input.reads).name
     md5sum = stats_data.get("checksums").get(input_reads_name).get("md5")
-    md5sum_file = Path(tempfile.mkdtemp(), f"{input_reads_name}.md5")
+    md5sum_file = str_path(tempfile.mkdtemp(), f"{input_reads_name}.md5")
     with open(md5sum_file, "wt") as f:
         f.write(f"{md5sum} {input_reads_name}\n")
     return md5sum_file
@@ -42,17 +42,15 @@ rule broker_raw_reads:
         unpack(get_broker_input),
     output:
         touch(
-            Path(
+            str_path(
                 manifest.get_dir("results"), "brokered_reads", "{bpa_package_id}.done"
             )
         ),
     log:
-        log=Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.log"),
-        stats=Path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.json"),  # Bytes per second
+        log=str_path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.log"),
+        stats=str_path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.json"),  # Bytes per second
     benchmark:
-        Path(
-            log_dir_base, "broker_raw_reads", "{bpa_package_id}.stats.jsonl"
-        ).as_posix()
+        str_path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.stats.jsonl")
     container:
         config["containers"]["curl"]
     resources:

@@ -12,12 +12,12 @@ if len(ont_reads) > 0:
         input:
             ancient(unpack(get_raw_reads)),
         output:
-            fastq=Path(ont_fastq_parent, "{bpa_package_id}.fastq.gz"),
-            stats=Path(ont_stats_parent, "{bpa_package_id}.json"),
+            fastq=str_path(ont_fastq_parent, "{bpa_package_id}.fastq.gz"),
+            stats=str_path(ont_stats_parent, "{bpa_package_id}.json"),
         log:
-            Path(ont_log_parent, "{bpa_package_id}.log"),
+            str_path(ont_log_parent, "{bpa_package_id}.log"),
         benchmark:
-            Path(ont_log_parent, "{bpa_package_id}.stats.jsonl").as_posix()
+            str_path(ont_log_parent, "{bpa_package_id}.stats.jsonl")
         container:
             config["containers"]["atol_qc_raw_ont"]
         threads: lambda wildcards, attempt: int(64 * attempt)
@@ -25,7 +25,9 @@ if len(ont_reads) > 0:
             mem=lambda wildcards, attempt: f"{int(255* attempt)}GB",
             runtime="24h",
         params:
-            qc_logs_dir=lambda wildcards: Path(qc_logs_dir, wildcards.bpa_package_id),
+            qc_logs_dir=lambda wildcards: str_path(
+                qc_logs_dir, wildcards.bpa_package_id
+            ),
             min_length=1000,
         shell:
             "atol-qc-raw-ont "

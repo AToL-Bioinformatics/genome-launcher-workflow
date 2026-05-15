@@ -12,15 +12,13 @@ def get_haplotype_assemblies(wildcards):
 # TODO: generalise
 rule reformat_fq_to_fa:
     input:
-        ancient(Path("{folder}", "{file}.fastq.gz")),
+        ancient(str_path("{folder}", "{file}.fastq.gz")),
     output:
-        Path("{folder}", "{file}.fasta.gz"),
+        str_path("{folder}", "{file}.fasta.gz"),
     log:
-        Path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.log"),
+        str_path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.log"),
     benchmark:
-        Path(
-            log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.stats.jsonl"
-        ).as_posix()
+        str_path(log_dir_base, "reformat", "{folder}", "{file}", "to_fasta.stats.jsonl")
     wildcard_constraints:
         file="|".join(
             [
