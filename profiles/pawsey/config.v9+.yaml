@@ -32,13 +32,17 @@ rerun-triggers:
   - mtime
 restart-times: 0
 set-resources:
-  ont_qc:
-    partitionFlag: "--partition=highmem"
-  assembly_data_downloader:
-    partitionFlag: "--partition=copy"
   broker_raw_reads:
     partitionFlag: "--partition=copy"
+  download_busco_lineage_files:
+    partitionFlag: "--partition=copy"
+  download_file:
+    partitionFlag: "--partition=copy"
+  ont_qc:
+    partitionFlag: "--partition=highmem"
   pipeline_result_uploader:
+    partitionFlag: "--partition=copy"
+  stage_s3_bucket:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   --nv
