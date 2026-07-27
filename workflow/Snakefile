@@ -75,9 +75,9 @@ rule post_genomeassembly:
 
 rule post_ascc:
     input:
-        Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
-        manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
         Path(manifest.get_dir("results"), "update_assembly_status", "ascc.json"),
+        Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
+        rules.reheader_target.output,
 
 
 rule post_treeval:
