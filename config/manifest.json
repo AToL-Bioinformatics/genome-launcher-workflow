@@ -8,7 +8,7 @@
     "ncbi_class": "",
     "find_plastid": false,
     "hic_motif": "GATC,GANTC,CTNAG,TTAA",
-    "mito_code": 4,
+    "mitochondrial_genetic_code_id": 4,
     "mitohifi_reference_species": "Rhynchosporium commune",
     "oatk_hmm_name": "dikarya_mito",
     "read_files": [

@@ -27,16 +27,14 @@ def get_local_logs_dir(wildcards):
             raise e
 
 
-_log_dir_names = ["logs", "qc_stats", "receipts"]
+_log_dir_names = ["logs", "qc_stats", "git_logs", "receipts", "status_updates"]
 
 
 rule pipeline_result_uploader:
     input:
         manifest=config["manifest"],
     output:
-        receipts=str_path(
-            manifest.get_dir("results"), "upload_receipts", "{pipeline}.jsonl"
-        ),
+        receipts=str_path(manifest.get_dir("receipts"), "{pipeline}.jsonl"),
     log:
         str_path(log_dir_base, "{pipeline}", "pipeline_result_uploader.log"),
     benchmark:

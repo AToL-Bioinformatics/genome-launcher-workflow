@@ -20,8 +20,7 @@ def assembly_status_input(wildcards):
         return flat_paths
     return (
         str_path(
-            manifest.get_dir("results"),
-            "upload_receipts",
+            manifest.get_dir("receipts"),
             f"{wildcards.pipeline}.jsonl",
         ),
     )
@@ -33,6 +32,25 @@ assembly_status = {
     "qc": "Reads QC done",
     "treeval": "Ready to curate",
 }
+
+
+rule record_git_info:
+    input:
+        manifest=config["manifest"],
+    output:
+        git_log=str_path(manifest.get_dir("git_logs"), "{pipeline}.json"),
+    log:
+        str_path("logs", "record_git_info", "{pipeline}.log"),
+    benchmark:
+        str_path("logs", "record_git_info", "{pipeline}.stats.jsonl")
+    wildcard_constraints:
+        pipeline="|".join(list(assembly_status.keys())),
+    container:
+        config["containers"]["atol_genome_launcher"]
+    params:
+        git_info=get_git_info(),  # returns a dict
+    shell:
+        "echo {params.git_info} > {output.git_log} 2> {log}"
 
 
 rule update_assembly_status:
