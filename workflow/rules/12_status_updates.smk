@@ -43,6 +43,8 @@ rule record_git_info:
         str_path("logs", "record_git_info", "{pipeline}.log"),
     wildcard_constraints:
         pipeline="|".join(list(assembly_status.keys())),
+    container:
+        config["containers"]["atol_genome_launcher"]
     params:
         git_info=get_git_info(),  # returns a dict
     run:

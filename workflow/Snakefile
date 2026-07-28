@@ -72,22 +72,22 @@ rule post_genomeassembly:
             "update_assembly_status",
             "genomeassembly.json",
         ),
-        Path("logs", "record_git_info", "genomeassembly.log"),
+        Path(manifest.get_dir("git_logs"), "genomeassembly.json"),
 
 
 rule post_ascc:
     input:
+        Path(manifest.get_dir("git_logs"), "ascc.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "ascc.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
         rules.reheader_target.output,
-        Path("logs", "record_git_info", "ascc.log"),
 
 
 rule post_treeval:
     input:
-        Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
+        Path(manifest.get_dir("git_logs"), "treeval.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "treeval.json"),
-        Path("logs", "record_git_info", "treeval.log"),
+        Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
 
 
 rule target:
