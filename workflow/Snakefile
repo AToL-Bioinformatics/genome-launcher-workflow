@@ -31,6 +31,7 @@ include: "rules/28_ena_raw_data_upload.smk"
 include: "rules/29_format_conversions.smk"
 include: "rules/30_stage_busco_dataset.smk"
 include: "rules/31_stage_s3_bucket.smk"
+include: "rules/40_assembly_stats.smk"
 
 
 rule download_reads:

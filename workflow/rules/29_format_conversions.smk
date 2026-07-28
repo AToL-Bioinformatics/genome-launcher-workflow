@@ -55,7 +55,9 @@ rule reheader_for_treeval:
     output:
         combined=manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
     log:
-        Path(log_dir_base, "reheader_for_treeval.log"),
+        str_path(log_dir_base, "reheader_for_treeval.log"),
+    benchmark:
+        str_path(log_dir_base, "reheader_for_treeval.stats.jsonl")
     container:
         config["containers"]["seqkit"]
     threads: 1
