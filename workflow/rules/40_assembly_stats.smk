@@ -31,8 +31,9 @@ rule all_assembly_stats:
         runtime=lambda wildcards, attempt: int(20 * attempt),
     shell:
         "seqkit stats "
+        "--all "
+        "--tabular "
         "-j {threads} "
-        "-T "
         "{input.assembly_files} "
         "> {output.stats} "
         "2> {log}"
