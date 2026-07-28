@@ -27,7 +27,14 @@ def get_local_logs_dir(wildcards):
             raise e
 
 
-_log_dir_names = ["logs", "qc_stats", "git_logs", "receipts", "status_updates"]
+_log_dir_names = [
+    "assembly_stats",
+    "git_logs",
+    "logs",
+    "qc_stats",
+    "receipts",
+    "status_updates",
+]
 
 
 rule pipeline_result_uploader:
