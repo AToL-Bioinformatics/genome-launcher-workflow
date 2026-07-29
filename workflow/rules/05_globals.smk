@@ -24,3 +24,9 @@ odb10_busco_dataset = f"{manifest.busco_odb10_dataset_name}_odb10"
 sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
 # wildcard_constraints:
 #     busco_dataset=busco_dataset,
+
+curation_dir = manifest.get_dir("pipeline_output", pipeline="curation")
+curation_output = {
+    k: str_path(curation_dir, v)
+    for k, v in manifest.treeval_assembly.outputs_for("curation").items()
+}

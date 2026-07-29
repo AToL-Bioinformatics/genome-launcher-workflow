@@ -42,13 +42,22 @@ rule reformat_fq_to_fa:
         "2> {log} "
 
 
+rule reheader_target:
+    input:
+        combined=manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+    output:
+        touch(Path(log_dir_base, "reheader_for_treeval.done")),
+
+
 rule reheader_for_treeval:
     input:
         unpack(get_haplotype_assemblies),
     output:
         combined=manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
     log:
-        Path(log_dir_base, "reheader_for_treeval.log"),
+        str_path(log_dir_base, "reheader_for_treeval.log"),
+    benchmark:
+        str_path(log_dir_base, "reheader_for_treeval.stats.jsonl")
     container:
         config["containers"]["seqkit"]
     threads: 1
