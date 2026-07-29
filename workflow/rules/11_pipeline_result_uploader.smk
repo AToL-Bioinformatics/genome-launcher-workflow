@@ -36,9 +36,23 @@ _log_dir_names = [
     "status_updates",
 ]
 
+_pipeline_flagfiles = {
+    "ascc": manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+    "curation": curation_output.values(),
+}
+
+
+def upload_flagfile(wildcards):
+    """
+    Use a list of flagfiles per-pipeline to make sure any conversion steps
+    happen before the uploader runs.
+    """
+    return _pipeline_flagfiles.get(wildcards.pipeline, [])
+
 
 rule pipeline_result_uploader:
     input:
+        upload_flagfile,
         manifest=config["manifest"],
     output:
         receipts=str_path(manifest.get_dir("receipts"), "{pipeline}.jsonl"),

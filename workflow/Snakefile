@@ -31,7 +31,8 @@ include: "rules/28_ena_raw_data_upload.smk"
 include: "rules/29_format_conversions.smk"
 include: "rules/30_stage_busco_dataset.smk"
 include: "rules/31_stage_s3_bucket.smk"
-include: "rules/40_assembly_stats.smk"
+include: "rules/40_curation.smk"
+include: "rules/50_assembly_stats.smk"
 
 
 rule download_reads:
@@ -80,7 +81,6 @@ rule post_ascc:
         Path(manifest.get_dir("git_logs"), "ascc.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "ascc.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
-        rules.reheader_target.output,
 
 
 rule post_treeval:
@@ -88,6 +88,13 @@ rule post_treeval:
         Path(manifest.get_dir("git_logs"), "treeval.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "treeval.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
+
+
+rule post_curation:
+    input:
+        Path(manifest.get_dir("git_logs"), "curation.json"),
+        Path(manifest.get_dir("results"), "update_assembly_status", "curation.json"),
+        Path(manifest.get_dir("results"), "upload_receipts", "curation.jsonl"),
 
 
 rule target:

@@ -31,6 +31,7 @@ assembly_status = {
     "genomeassembly": "Assembled",
     "qc": "Reads QC done",
     "treeval": "Ready to curate",
+    "curation": "Curated"
 }
 
 
