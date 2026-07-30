@@ -31,7 +31,7 @@ assembly_status = {
     "genomeassembly": "Assembled",
     "qc": "Reads QC done",
     "treeval": "Ready to curate",
-    "curation": "Curated"
+    "curation": "Curated",
 }
 
 
@@ -48,9 +48,14 @@ rule record_git_info:
         config["containers"]["atol_genome_launcher"]
     params:
         git_info=get_git_info(),  # returns a dict
-    run:
-        with open(output.git_log, "wt") as f:
-            f.write(json.dumps(params.git_info))
+    shell:
+        "echo "
+        "'{{"
+        '"git_repo":"{params.git_info[git_repo]}",'
+        '"git_commit_hash":"{params.git_info[git_commit_hash]}"'
+        "}}' "
+        "| tee {output.git_log} "
+        "&> {log}"
 
 
 rule update_assembly_status:
