@@ -24,7 +24,7 @@ rule remove_excluded_contigs:
         config["containers"]["bbmap"]
     threads: 1
     resources:
-        mem=lambda wildcards, attempt: f"{12* attempt}GB",
+        mem=lambda wildcards, attempt: f"{32* attempt}GB",
         runtime=lambda wildcards, attempt: int(10 * attempt),
     shell:
         "filterbyname.sh "
@@ -42,7 +42,7 @@ rule pretext_to_asm:
         **curation_input,
         combined=str_path(curation_dir, f"{sample_id}.fasta"),
     output:
-        **{k: temp(v.strip(".gz")) for k, v in curation_output.items()},
+        **{k: temp(str_path(v).strip(".gz")) for k, v in curation_output.items()},
     log:
         str_path(log_dir_base, "pretext_to_asm.log"),
     benchmark:
