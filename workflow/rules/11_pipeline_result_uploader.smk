@@ -18,13 +18,7 @@ def get_temp_tarfiles(wildcards):
 
 
 def get_local_logs_dir(wildcards):
-    try:
-        return manifest.get_dir(wildcards.dir_name)
-    except KeyError as e:
-        if wildcards.dir_name == "receipts":
-            return str_path(manifest.get_dir("results"), "upload_receipts")
-        else:
-            raise e
+    return manifest.get_dir(wildcards.dir_name)
 
 
 _log_dir_names = [
@@ -35,6 +29,7 @@ _log_dir_names = [
     "receipts",
     "status_updates",
 ]
+
 
 _pipeline_flagfiles = {
     "ascc": manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
@@ -77,11 +72,14 @@ rule pipeline_result_uploader:
         "&> {log}"
 
 
+# Check if there are logs to upload at run time
 rule upload_all_logs:
     input:
         expand(
             Path(".{dir_name}.upload_all_logs.done"),
-            dir_name=_log_dir_names,
+            dir_name=[
+                x for x in _log_dir_names if any(Path(manifest.get_dir(x)).iterdir())
+            ],
         ),
 
 

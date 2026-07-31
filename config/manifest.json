@@ -10,7 +10,7 @@
     "hic_motif": "GATC,GANTC,CTNAG,TTAA",
     "mitochondrial_genetic_code_id": 4,
     "mitohifi_reference_species": "Rhynchosporium commune",
-    "oatk_hmm_name": "dikarya_mito",
+    "oatk_hmm_name": "dikarya",
     "read_files": [
         {
             "name": "bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2",
