@@ -79,7 +79,18 @@ are included. A profile for [local testing](./profiles/local) is also included.
 7. Run the `post_treeval` target to upload the results to object storage. The
    `post_*` targets all upload the output of the preceding pipeline to object
    storage.
-
+8. **Optional**: curate the genome manually using
+   [PretextView](https://github.com/sanger-tol/PretextView). Add the AGP file
+   that is output by PretextView and a list of any contigs or scaffolds to
+   remove to the repository on GitHub. The files must be named as follows:
+   - `curation/{dataset_id}_{assembly_version}_normal_curated_v1.pretext.agp_1`
+   - `curation/{dataset_id}.{assembly_version}_scaffolds_to_remove.txt`
+9. Once the files from step 8 have been added, pull the updates and run the
+   `post_curation` target to split the haplotypes.
+10. **Optional**: use the `all_assembly_stats` target to run `seqkit stats
+    -all` on the list of expected assembly outputs.
+11. **Optional**: use the `upload_all_logs` target to backup all the log files
+    to object store.
 
 <details>
 
@@ -105,5 +116,12 @@ are included. A profile for [local testing](./profiles/local) is also included.
    5. `sbatch profiles/pawsey/35_post_ascc.sh`
    6. `sbatch profiles/pawsey/40_treeval.sh`
    7. `sbatch profiles/pawsey/45_post_treeval.sh`
+4. Curate manually, add the curation files to the repo, and update the repo:
+   1. `git pull origin main`
+   2. `sbatch profiles/pawsey/55_post_curation.sh`
+5. Generate assembly stats:
+   1. `sbatch profiles/pawsey/98_all_assembly_stats.sh`
+6. Backup the logs:
+   1. `sbatch profiles/pawsey/99_upload_all_logs.sh`
 
 </details>
