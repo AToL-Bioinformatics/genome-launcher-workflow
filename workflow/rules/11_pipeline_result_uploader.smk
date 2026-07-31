@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 
 
+def check_log_dir_exists(log_dir):
+    if not Path(log_dir).exists():
+        return False
+
+    return any(Path(log_dir).iterdir())
+
+
 def get_temp_tarfiles(wildcards):
 
     dir_name = wildcards.dir_name
@@ -78,7 +85,7 @@ rule upload_all_logs:
         expand(
             Path(".{dir_name}.upload_all_logs.done"),
             dir_name=[
-                x for x in _log_dir_names if any(Path(manifest.get_dir(x)).iterdir())
+                x for x in _log_dir_names if check_log_dir_exists(manifest.get_dir(x))
             ],
         ),
 
