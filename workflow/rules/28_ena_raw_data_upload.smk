@@ -46,7 +46,6 @@ rule ena_raw_data_upload:
 
 
 # this submits the runs
-# TODO keep receipts!
 rule broker_runs:
     input:
         str_path(manifest.get_dir("results"), "broker", "{bpa_package_id}.transferred"),
@@ -55,6 +54,9 @@ rule broker_runs:
     output:
         response=str_path(
             manifest.get_dir("results"), "broker", "{bpa_package_id}.brokered"
+        ),
+        receipts=str_path(
+            manifest.get_dir("results"), "broker", "{bpa_package_id}.tar.gz"
         ),
     log:
         log=str_path(log_dir_base, "broker_runs", "{bpa_package_id}.log"),
@@ -69,12 +71,18 @@ rule broker_runs:
         webin_ftp=config["webin_ftp"],
         webin_credentials=webin_credentials,
     shell:
-        # TODO. env vars
+        "receipts_dir=$( mktemp -d ) ; "
+        "BROKER_STATE_DIR=${{receipts_dir}} "
+        "BROKER_RECEIPT_DIR=${{receipts_dir}} "
         "submit_run_to_ena "
         "-n "
         "--qc_reads_report {input.stats_file} "
         "--bpa_package_id {wildcards.bpa_package_id} "
-        "{input.manifest}"
+        "{input.manifest} "
+        "&> {log} "
+        "&& "
+        "tar -cv --directory ${{receipts_dir}} . "
+        "| gzip -9 > {output.receipts}"
 
 
 # this sends the files
