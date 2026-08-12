@@ -79,7 +79,7 @@ rule broker_runs:
         "--qc_reads_report {input.stats_file} "
         "--bpa_package_id {wildcards.bpa_package_id} "
         "{input.manifest} "
-        "&> {log} "
+        "&> {log.log} "
         "&& "
         "tar -cv --directory ${{receipts_dir}} . "
         "| gzip -9 > {output.receipts}"
