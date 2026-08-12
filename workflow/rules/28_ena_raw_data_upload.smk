@@ -29,28 +29,69 @@ def webin_credentials(wildcards):
     return f"{webin_user}:{webin_pass}"
 
 
-rule ena_raw_data_upload:
+rule ena_raw_data_broker:
     input:
         [
-            Path(manifest.get_dir("results"), "brokered_reads", f"{x.name}.done")
+            Path(manifest.get_dir("results"), "broker", f"{x.name}.brokered")
             for x in manifest.reads
         ],
 
 
-rule broker_raw_reads:
+rule ena_raw_data_upload:
+    input:
+        [
+            Path(manifest.get_dir("results"), "broker", f"{x.name}.transferred")
+            for x in manifest.reads
+        ],
+
+
+# this submits the runs
+# TODO keep receipts!
+rule broker_runs:
+    input:
+        str_path(manifest.get_dir("results"), "broker", "{bpa_package_id}.transferred"),
+        unpack(get_broker_input),
+        manifest=config["manifest"],
+    output:
+        response=str_path(
+            manifest.get_dir("results"), "broker", "{bpa_package_id}.brokered"
+        ),
+    log:
+        log=str_path(log_dir_base, "broker_runs", "{bpa_package_id}.log"),
+        stats=str_path(log_dir_base, "broker_runs", "{bpa_package_id}.json"),
+    benchmark:
+        str_path(log_dir_base, "broker_runs", "{bpa_package_id}.stats.jsonl")
+    container:
+        config["containers"]["atol_genome_launcher"]
+    resources:
+        runtime="10m",
+    params:
+        webin_ftp=config["webin_ftp"],
+        webin_credentials=webin_credentials,
+    shell:
+        # TODO. env vars
+        "submit_run_to_ena "
+        "-n "
+        "--qc_reads_report {input.stats_file} "
+        "--bpa_package_id {wildcards.bpa_package_id} "
+        "{input.manifest}"
+
+
+# this sends the files
+rule transfer_raw_reads:
     input:
         unpack(get_broker_input),
     output:
         touch(
             str_path(
-                manifest.get_dir("results"), "brokered_reads", "{bpa_package_id}.done"
+                manifest.get_dir("results"), "broker", "{bpa_package_id}.transferred"
             )
         ),
     log:
-        log=str_path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.log"),
-        stats=str_path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.json"),  # Bytes per second
+        log=str_path(log_dir_base, "transfer_raw_reads", "{bpa_package_id}.log"),
+        stats=str_path(log_dir_base, "transfer_raw_reads", "{bpa_package_id}.json"),  # Bytes per second
     benchmark:
-        str_path(log_dir_base, "broker_raw_reads", "{bpa_package_id}.stats.jsonl")
+        str_path(log_dir_base, "transfer_raw_reads", "{bpa_package_id}.stats.jsonl")
     container:
         config["containers"]["curl"]
     resources:
