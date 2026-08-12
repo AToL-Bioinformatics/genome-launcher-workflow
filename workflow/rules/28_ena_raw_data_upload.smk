@@ -69,15 +69,11 @@ rule broker_runs:
         config["containers"]["atol_genome_launcher"]
     resources:
         runtime="10m",
-    params:
-        webin_ftp=config["webin_ftp"],
-        webin_credentials=webin_credentials,
     shell:
         "receipts_dir=$( mktemp -d ) ; "
         "BROKER_STATE_DIR=${{receipts_dir}} "
         "BROKER_RECEIPT_DIR=${{receipts_dir}} "
         "submit_run_to_ena "
-        "-n "
         "--qc_reads_report {input.stats_file} "
         "--bpa_package_id {wildcards.bpa_package_id} "
         "{input.manifest} "
