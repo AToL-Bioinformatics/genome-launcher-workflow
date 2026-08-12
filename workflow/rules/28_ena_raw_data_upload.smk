@@ -52,8 +52,10 @@ rule broker_runs:
         unpack(get_broker_input),
         manifest=config["manifest"],
     output:
-        response=str_path(
-            manifest.get_dir("results"), "broker", "{bpa_package_id}.brokered"
+        touch(
+            str_path(
+                manifest.get_dir("results"), "broker", "{bpa_package_id}.brokered"
+            )
         ),
         receipts=str_path(
             manifest.get_dir("results"), "broker", "{bpa_package_id}.tar.gz"
