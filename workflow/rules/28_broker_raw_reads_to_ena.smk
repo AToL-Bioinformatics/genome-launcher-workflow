@@ -29,18 +29,28 @@ def webin_credentials(wildcards):
     return f"{webin_user}:{webin_pass}"
 
 
-rule ena_raw_data_broker:
+rule broker_raw_reads_to_ena:
     input:
         [
-            Path(manifest.get_dir("results"), "broker", f"{x.name}.brokered")
+            Path(
+                manifest.get_dir("receipts"),
+                "broker",
+                f"{x.name}",
+                "broker_runs.done",
+            )
             for x in manifest.reads
         ],
 
 
-rule ena_raw_data_upload:
+rule transfer_raw_reads_to_ena:
     input:
         [
-            Path(manifest.get_dir("results"), "broker", f"{x.name}.transferred")
+            Path(
+                manifest.get_dir("receipts"),
+                "broker",
+                f"{x.name}",
+                "transfer_raw_reads.done",
+            )
             for x in manifest.reads
         ],
 
@@ -48,17 +58,22 @@ rule ena_raw_data_upload:
 # this submits the runs
 rule broker_runs:
     input:
-        str_path(manifest.get_dir("results"), "broker", "{bpa_package_id}.transferred"),
+        str_path(
+            manifest.get_dir("receipts"),
+            "broker",
+            "{bpa_package_id}",
+            "transfer_raw_reads.done",
+        ),
         unpack(get_broker_input),
         manifest=config["manifest"],
     output:
-        touch(
+        flagfile=touch(
             str_path(
-                manifest.get_dir("results"), "broker", "{bpa_package_id}.brokered"
+                manifest.get_dir("receipts"),
+                "broker",
+                "{bpa_package_id}",
+                "broker_runs.done",
             )
-        ),
-        receipts=str_path(
-            manifest.get_dir("results"), "broker", "{bpa_package_id}.tar.gz"
         ),
     log:
         log=str_path(log_dir_base, "broker_runs", "{bpa_package_id}.log"),
@@ -69,18 +84,16 @@ rule broker_runs:
         config["containers"]["atol_genome_launcher"]
     resources:
         runtime="10m",
+    params:
+        outdir=subpath(output.flagfile, parent=True),
     shell:
-        "receipts_dir=$( mktemp -d ) ; "
-        "BROKER_STATE_DIR=${{receipts_dir}} "
-        "BROKER_RECEIPT_DIR=${{receipts_dir}} "
+        "BROKER_STATE_DIR=$( readlink -f {params.outdir} ) "
+        "BROKER_RECEIPT_DIR=$( readlink -f {params.outdir} ) "
         "submit_run_to_ena "
         "--qc_reads_report {input.stats_file} "
         "--bpa_package_id {wildcards.bpa_package_id} "
         "{input.manifest} "
         "&> {log.log} "
-        "&& "
-        "tar -cv --directory ${{receipts_dir}} . "
-        "| gzip -9 > {output.receipts}"
 
 
 # this sends the files
@@ -90,7 +103,10 @@ rule transfer_raw_reads:
     output:
         touch(
             str_path(
-                manifest.get_dir("results"), "broker", "{bpa_package_id}.transferred"
+                manifest.get_dir("receipts"),
+                "broker",
+                "{bpa_package_id}",
+                "transfer_raw_reads.done",
             )
         ),
     log:
