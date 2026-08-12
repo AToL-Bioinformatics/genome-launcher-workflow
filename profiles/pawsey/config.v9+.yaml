@@ -32,8 +32,6 @@ rerun-triggers:
   - mtime
 restart-times: 0
 set-resources:
-  broker_raw_reads:
-    partitionFlag: "--partition=copy"
   broker_runs:
     partitionFlag: "--partition=copy"
   download_busco_lineage_files:
@@ -45,6 +43,8 @@ set-resources:
   pipeline_result_uploader:
     partitionFlag: "--partition=copy"
   stage_s3_bucket:
+    partitionFlag: "--partition=copy"
+  transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   --nv

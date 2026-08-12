@@ -4,6 +4,8 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --mem=8g
+#SBATCH --output=logs/slurm/broker_raw_reads_to_ena.%j.out
+#SBATCH --error=logs/slurm/broker_raw_reads_to_ena.%j.err
 
 # Source snakemake environment
 source profiles/pawsey/lib/snakemake_env.sh

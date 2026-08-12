@@ -89,7 +89,7 @@ rule broker_runs:
     shell:
         "BROKER_STATE_DIR=$( readlink -f {params.outdir} ) "
         "BROKER_RECEIPT_DIR=$( readlink -f {params.outdir} ) "
-        "submit_run_to_ena "
+        "submit-run-to-ena "
         "--qc_reads_report {input.stats_file} "
         "--bpa_package_id {wildcards.bpa_package_id} "
         "{input.manifest} "
