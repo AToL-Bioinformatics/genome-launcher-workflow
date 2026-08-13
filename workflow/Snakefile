@@ -43,6 +43,7 @@ rule download_reads:
 rule run_qc:
     input:
         manifest.reads.flat_paths("qc"),
+        Path(manifest.get_dir("git_logs"), "qc.json"),
 
 
 rule pre_genomeassembly:
