@@ -28,7 +28,7 @@ def main():
         .astype(int)
     )
 
-    assembly_stats.to_csv(snakemake.output["stats"], sep="\t")
+    assembly_stats.to_csv(snakemake.output["stats"], sep="\t", index=False)
 
 
 if __name__ == "__main__":
