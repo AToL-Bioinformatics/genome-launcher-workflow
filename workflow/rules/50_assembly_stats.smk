@@ -14,6 +14,22 @@ def get_all_assemblies(wildcards):
     )
 
 
+rule calculate_depth:
+    input:
+        stats=str_path(manifest.get_dir("assembly_stats"), "stats.tsv"),
+        read_stats=[str_path(x) for x in manifest.long_reads.stats_paths("qc")],
+    output:
+        stats=str_path(manifest.get_dir("assembly_stats"), "stats.with_depth.tsv"),
+    log:
+        str_path(log_dir_base, "calculate_depth.log"),
+    benchmark:
+        str_path(log_dir_base, "calculate_depth.stats.jsonl")
+    container:
+        config["containers"]["atol_qc_raw_shortread"] # has pandas and numpy
+    script:
+        "../scripts/calculate_depth.py"
+
+
 rule all_assembly_stats:
     input:
         assembly_files=get_all_assemblies,
