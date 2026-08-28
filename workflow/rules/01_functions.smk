@@ -35,3 +35,27 @@ def str_path(*args, **kwargs):
     enabled.
     """
     return str(Path(*args, **kwargs))
+
+
+def webin_user(wildcards):
+    webin_user = os.getenv("WEBIN_USER", None)
+    if not webin_user:
+        raise WorkflowError("Set the WEBIN_USER environment variable")
+    return webin_user
+
+
+def webin_pass(wildcards):
+    webin_pass = os.getenv("WEBIN_PASS", None)
+    if not webin_pass:
+        raise WorkflowError("Set the WEBIN_PASS environment variable")
+    return webin_pass
+
+
+def webin_credentials(wildcards):
+    webin_user = webin_user(wildcards)
+    webin_pass = webin_pass(wildcards)
+
+    if not (webin_user and webin_pass):
+        raise WorkflowError("Set the WEBIN_USER and WEBIN_PASS envirnoment variables")
+
+    return f"{webin_user}:{webin_pass}"
