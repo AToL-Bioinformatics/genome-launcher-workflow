@@ -24,6 +24,7 @@ include: "rules/05_globals.smk"
 include: "rules/10_assembly_data_downloader.smk"
 include: "rules/11_pipeline_result_uploader.smk"
 include: "rules/12_status_updates.smk"
+include: "rules/13_canopy_reports.smk"
 include: "rules/20_pacbio_qc.smk"
 include: "rules/21_ont_qc.smk"
 include: "rules/25_hic_qc.smk"
@@ -33,6 +34,7 @@ include: "rules/30_stage_busco_dataset.smk"
 include: "rules/31_stage_s3_bucket.smk"
 include: "rules/40_curation.smk"
 include: "rules/50_assembly_stats.smk"
+include: "rules/60_deposit_assembly_to_ena.smk"
 
 
 rule download_reads:
@@ -75,6 +77,7 @@ rule post_genomeassembly:
             "genomeassembly.json",
         ),
         Path(manifest.get_dir("git_logs"), "genomeassembly.json"),
+        str_path(manifest.get_dir("receipts"), "genomeassembly.stage_run_list.json"),
 
 
 rule post_ascc:
@@ -82,6 +85,7 @@ rule post_ascc:
         Path(manifest.get_dir("git_logs"), "ascc.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "ascc.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "ascc.jsonl"),
+        str_path(manifest.get_dir("receipts"), "ascc.stage_run_list.json"),
 
 
 rule post_treeval:
@@ -89,6 +93,7 @@ rule post_treeval:
         Path(manifest.get_dir("git_logs"), "treeval.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "treeval.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
+        str_path(manifest.get_dir("receipts"), "treeval.stage_run_list.json"),
 
 
 rule post_curation:
@@ -96,6 +101,7 @@ rule post_curation:
         Path(manifest.get_dir("git_logs"), "curation.json"),
         Path(manifest.get_dir("results"), "update_assembly_status", "curation.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "curation.jsonl"),
+        str_path(manifest.get_dir("receipts"), "curation.stage_run_list.json"),
 
 
 rule target:

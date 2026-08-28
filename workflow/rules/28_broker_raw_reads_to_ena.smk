@@ -19,16 +19,6 @@ def generate_md5sum_file(wildcards, input):
     return md5sum_file
 
 
-def webin_credentials(wildcards):
-    webin_user = os.getenv("WEBIN_USER", None)
-    webin_pass = os.getenv("WEBIN_PASS", None)
-
-    if not (webin_user and webin_pass):
-        raise WorkflowError("Set the WEBIN_USER and WEBIN_PASS envirnoment variables")
-
-    return f"{webin_user}:{webin_pass}"
-
-
 rule broker_raw_reads_to_ena:
     input:
         [
