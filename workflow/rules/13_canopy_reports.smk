@@ -14,10 +14,7 @@ rule report_pipeline_result_to_canopy:
             manifest.get_dir("receipts"), "{pipeline}.stage_run_list.json"
         ),
     log:
-        log=str_path(log_dir_base, "report_pipeline_result_to_canopy", "{pipeline}.log"),
-        stats=str_path(
-            log_dir_base, "report_pipeline_result_to_canopy", "{pipeline}.json"
-        ),
+        str_path(log_dir_base, "report_pipeline_result_to_canopy", "{pipeline}.log"),
     benchmark:
         str_path(
             log_dir_base, "report_pipeline_result_to_canopy", "{pipeline}.stats.jsonl"
@@ -31,4 +28,5 @@ rule report_pipeline_result_to_canopy:
         "--assembly_run_list {output.assembly_run_list} "
         "--stage_run_list {output.stage_run_list} "
         "{input.manifest} "
+        "{wildcards.pipeline} "
         "&> {log}"

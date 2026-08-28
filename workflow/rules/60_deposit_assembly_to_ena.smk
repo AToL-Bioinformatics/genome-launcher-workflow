@@ -17,8 +17,9 @@ def get_sequencing_depth(wildcards, input):
     fasta_file = input.fasta_file
 
     with open(stats_file, "rt") as f:
-        for line in f.readlines():
-            splits = line.split("\t")
+        lines = f.readlines()
+        for line in lines[1:]:
+            splits = line.rstrip("\n").split("\t")
             fn = splits[0]
             if fn in fasta_file:
                 return splits[-1]
@@ -37,6 +38,9 @@ rule deposit_ascc_assembly_to_ena:
             manifest.get_dir("receipts"),
             "ena",
             "ascc",
+            "genome",
+            sample_id,
+            "submit",
             "receipt.xml",
         ),
 
@@ -55,17 +59,19 @@ rule deposit_assembly_to_ena:
             manifest.get_dir("receipts"),
             "ena",
             "{pipeline}",
+            "genome",
+            sample_id,
+            "submit",
             "receipt.xml",
         ),
     log:
-        log=str_path(log_dir_base, "deposit_assembly_to_ena", "{pipeline}.log"),
-        stats=str_path(log_dir_base, "deposit_assembly_to_ena", "{pipeline}.json"),
+        str_path(log_dir_base, "deposit_assembly_to_ena", "{pipeline}.log"),
     benchmark:
         str_path(log_dir_base, "deposit_assembly_to_ena", "{pipeline}.stats.jsonl")
     container:
         config["containers"]["ena_webin_cli"]
     params:
-        outdir=subpath(output.receipt, parent=True),
+        outdir=subpath(output.receipt, ancestor=4),
         webin_pass=webin_pass,
         webin_user=webin_user,
     shell:
@@ -76,6 +82,7 @@ rule deposit_assembly_to_ena:
         "-manifest {input.ena_manifest} "
         "-outputDir {params.outdir} "
         "-submit "
+        "&> {log}"
 
 
 rule generate_ena_assembly_manifest:
@@ -94,10 +101,7 @@ rule generate_ena_assembly_manifest:
             "ena_manifest.txt",
         ),
     log:
-        log=str_path(log_dir_base, "generate_ena_assembly_manifest", "{pipeline}.log"),
-        stats=str_path(
-            log_dir_base, "generate_ena_assembly_manifest", "{pipeline}.json"
-        ),
+        str_path(log_dir_base, "generate_ena_assembly_manifest", "{pipeline}.log"),
     benchmark:
         str_path(
             log_dir_base, "generate_ena_assembly_manifest", "{pipeline}.stats.jsonl"
