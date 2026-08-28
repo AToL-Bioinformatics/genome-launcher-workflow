@@ -76,8 +76,8 @@ rule deposit_assembly_to_ena:
         webin_user=webin_user,
     shell:
         "ena-webin-cli "
-        "-username {params.webin_user} "
-        "-password {params.webin_pass} "
+        '-username "{params.webin_user}" '
+        '-password "{params.webin_pass}" '
         "-context genome "
         "-manifest {input.ena_manifest} "
         "-outputDir {params.outdir} "
