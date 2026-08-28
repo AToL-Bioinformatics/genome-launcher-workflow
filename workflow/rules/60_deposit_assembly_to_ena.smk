@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 def choose_assembly_to_deposit(wildcards):
     pipeline = wildcards.pipeline
     if pipeline == "curation":
@@ -26,6 +29,7 @@ def get_sequencing_depth(wildcards, input):
 # TODO: So far we are just uploading the ascc file, completely ignoring the
 # Chromosome file.
 
+
 # Change this to deposit the curated assembly too.
 rule deposit_ascc_assembly_to_ena:
     input:
@@ -35,6 +39,7 @@ rule deposit_ascc_assembly_to_ena:
             "ascc",
             "receipt.xml",
         ),
+
 
 rule deposit_assembly_to_ena:
     input:
