@@ -26,4 +26,5 @@ sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
 #     busco_dataset=busco_dataset,
 
 curation_dir = manifest.get_dir("pipeline_output", pipeline="curation")
+curation_input = manifest.pipeline_input("curation")
 curation_output = manifest.treeval_assembly.outputs_for("curation")

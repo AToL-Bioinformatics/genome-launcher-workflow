@@ -35,6 +35,7 @@ assembly_status = {
     "qc": "Reads QC done",
     "treeval": "Ready to curate",
     "curation": "Curated",
+    "submission": "Submitted",
 }
 
 

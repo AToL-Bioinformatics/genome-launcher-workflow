@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 
 
-def choose_assembly_to_deposit(wildcards):
-    pipeline = wildcards.pipeline
-    if pipeline == "curation":
-        return str_path(manifest.treeval_assembly.outputs_for("curation").get("HAP1"))
-    elif pipeline == "ascc":
-        primary = manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY")
-        return str_path(primary) + ".gz"
-    else:
-        raise ValueError(f"Don't have an assembly to deposit for pipeline {pipeline}")
+def _choose_assembly_to_deposit():
+    """
+    Return the name of the pipeline that needs to be completed before
+    submission. Ensures that the pipeline results have been reported to Canopy
+    before we try to Broker anything.
+    """
+    # If any of the curation input is present, the genome has been curated, and
+    # we are brokering the output from curation. We might be able to avoid
+    # brokering early by generating a "TODO" marker file in the curation
+    # directory.
+    if any([Path(x).exists() for x in curation_input.values()]):
+        return "curation"
+    return "ascc"
 
 
 def get_sequencing_depth(wildcards, input):
@@ -27,47 +31,68 @@ def get_sequencing_depth(wildcards, input):
     raise ValueError(f"Stats for {fasta_file} not found in {stats_file}")
 
 
-# TODO: So far we are just uploading the ascc file, completely ignoring the
-# Chromosome file.
+def get_submission_input(wildcards):
+    submission_input = {}
+    pipeline_value = _choose_assembly_to_deposit()
+
+    if pipeline_value == "curation":
+        # In this case we require a Chromosome List.
+        submission_input["fasta_file"] = str_path(
+            manifest.treeval_assembly.outputs_for("curation").get("HAP1")
+        )
+        submission_input["chromosome_list"] = str_path(
+            manifest.pipeline_input("submission").get("chromosome_list")
+        )
+    elif pipeline_value == "ascc":
+        primary = manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY")
+        submission_input["fasta_file"] = str_path(primary) + ".gz"
+    else:
+        raise ValueError(f"Unknown submission input {pipeline_value}")
+
+    submission_input["assembly_run_list"] = (
+        str_path(
+            manifest.get_dir("receipts"), f"{pipeline_value}.assembly_run_list.json"
+        ),
+    )
+
+    return submission_input
 
 
-# Change this to deposit the curated assembly too.
-rule deposit_ascc_assembly_to_ena:
+rule deposit_assembly_to_ena:
     input:
         str_path(
-            manifest.get_dir("receipts"),
-            "ena",
-            "ascc",
+            manifest.get_dir("pipeline_output", pipeline="submission"),
+            "assembly",
             "genome",
             sample_id,
             "submit",
             "receipt.xml",
         ),
+        Path(manifest.get_dir("results"), "upload_receipts", "submission.jsonl"),
+        Path(manifest.get_dir("results"), "update_assembly_status", "submission.json")
 
 
-rule deposit_assembly_to_ena:
+rule submit_assembly_to_ena:
     input:
+        unpack(get_submission_input),
         ena_manifest=str_path(
-            manifest.get_dir("receipts"),
-            "broker",
-            "{pipeline}",
+            manifest.get_dir("pipeline_output", pipeline="submission"),
+            "assembly",
             "ena_manifest.txt",
         ),
-        fasta_file=choose_assembly_to_deposit,
     output:
         receipt=str_path(
-            manifest.get_dir("receipts"),
-            "ena",
-            "{pipeline}",
+            manifest.get_dir("pipeline_output", pipeline="submission"),
+            "assembly",
             "genome",
             sample_id,
             "submit",
             "receipt.xml",
         ),
     log:
-        str_path(log_dir_base, "deposit_assembly_to_ena", "{pipeline}.log"),
+        str_path(log_dir_base, "deposit_assembly_to_ena.log"),
     benchmark:
-        str_path(log_dir_base, "deposit_assembly_to_ena", "{pipeline}.stats.jsonl")
+        str_path(log_dir_base, "deposit_assembly_to_ena.stats.jsonl")
     container:
         config["containers"]["ena_webin_cli"]
     params:
@@ -87,33 +112,33 @@ rule deposit_assembly_to_ena:
 
 rule generate_ena_assembly_manifest:
     input:
+        unpack(get_submission_input),
         manifest=config["manifest"],
-        fasta_file=choose_assembly_to_deposit,
         stats=str_path(manifest.get_dir("assembly_stats"), "stats.with_depth.tsv"),
-        assembly_run_list=str_path(
-            manifest.get_dir("receipts"), "{pipeline}.assembly_run_list.json"
-        ),
     output:
         ena_manifest=str_path(
-            manifest.get_dir("receipts"),
-            "broker",
-            "{pipeline}",
+            manifest.get_dir("pipeline_output", pipeline="submission"),
+            "assembly",
             "ena_manifest.txt",
         ),
     log:
-        str_path(log_dir_base, "generate_ena_assembly_manifest", "{pipeline}.log"),
+        str_path(log_dir_base, "generate_ena_assembly_manifest.log"),
     benchmark:
-        str_path(
-            log_dir_base, "generate_ena_assembly_manifest", "{pipeline}.stats.jsonl"
-        )
+        str_path(log_dir_base, "generate_ena_assembly_manifest.stats.jsonl")
     container:
         config["containers"]["atol_genome_launcher"]
     params:
         sequencing_depth=get_sequencing_depth,
+        chromosome_list=lambda wildcards, input: (
+            f"--chromosome_list {input.chromosome_list}"
+            if input.chromosome_list
+            else ""
+        ),
     shell:
         "generate-ena-assembly-manifest "
         "--fasta_file {input.fasta_file} "
         "--sequencing_depth {params.sequencing_depth} "
+        "{params.chromosome_list} "
         "{input.manifest} "
         "{output.ena_manifest} "
         "&> {log}"

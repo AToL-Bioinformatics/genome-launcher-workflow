@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-curation_input = manifest.pipeline_input("curation")
-
 
 # removing the manually excluded contigs has to happen after the split
 rule remove_excluded_contigs:
