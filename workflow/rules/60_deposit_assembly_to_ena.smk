@@ -16,6 +16,15 @@ def _choose_assembly_to_deposit():
     return "ascc"
 
 
+def get_chromosome_list_param(wildcards, input):
+    cl = input.get("chromosome_list", None)
+
+    if cl is None:
+        return ""
+
+    return f"--chromosome_list {input.chromosome_list}"
+
+
 def get_sequencing_depth(wildcards, input):
     stats_file = input.stats
     fasta_file = input.fasta_file
@@ -69,7 +78,7 @@ rule deposit_assembly_to_ena:
             "receipt.xml",
         ),
         Path(manifest.get_dir("results"), "upload_receipts", "submission.jsonl"),
-        Path(manifest.get_dir("results"), "update_assembly_status", "submission.json")
+        Path(manifest.get_dir("results"), "update_assembly_status", "submission.json"),
 
 
 rule submit_assembly_to_ena:
@@ -129,11 +138,7 @@ rule generate_ena_assembly_manifest:
         config["containers"]["atol_genome_launcher"]
     params:
         sequencing_depth=get_sequencing_depth,
-        chromosome_list=lambda wildcards, input: (
-            f"--chromosome_list {input.chromosome_list}"
-            if input.chromosome_list
-            else ""
-        ),
+        chromosome_list=get_chromosome_list_param,
     shell:
         "generate-ena-assembly-manifest "
         "--fasta_file {input.fasta_file} "
