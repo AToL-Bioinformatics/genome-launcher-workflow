@@ -67,6 +67,10 @@ def get_submission_input(wildcards):
     return submission_input
 
 
+# TODO:
+# - add submission outputs to _pipeline_flagfiles so upload runs after submission
+# - change the broker_raw_reads rule to use the directories for submission
+
 rule deposit_assembly_to_ena:
     input:
         str_path(
@@ -79,6 +83,7 @@ rule deposit_assembly_to_ena:
         ),
         Path(manifest.get_dir("results"), "upload_receipts", "submission.jsonl"),
         Path(manifest.get_dir("results"), "update_assembly_status", "submission.json"),
+        Path(manifest.get_dir("receipts"), "submission.jsonl"),
 
 
 rule submit_assembly_to_ena:
