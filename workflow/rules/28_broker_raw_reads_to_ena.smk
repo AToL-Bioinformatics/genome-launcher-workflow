@@ -12,7 +12,14 @@ def generate_md5sum_file(wildcards, input):
     with open(input.stats_file, "rb") as f:
         stats_data = json.load(f)
     input_reads_name = Path(input.reads).name
-    md5sum = stats_data.get("checksums").get(input_reads_name).get("md5")
+    checksums = stats_data.get("checksums")
+    read_checksums = checksums.get(input_reads_name)
+    try:
+        md5sum = read_checksums.get("md5")
+    except AttributeError as e:
+        raise ValueError(
+            f"The stats file {input.stats_file} doesn't have an entry for read {input_reads_name}"
+        )
     md5sum_file = str_path(tempfile.mkdtemp(), f"{input_reads_name}.md5")
     with open(md5sum_file, "wt") as f:
         f.write(f"{md5sum} {input_reads_name}\n")
@@ -21,36 +28,21 @@ def generate_md5sum_file(wildcards, input):
 
 rule broker_raw_reads_to_ena:
     input:
-        [
-            Path(
-                manifest.get_dir("receipts"),
-                "broker",
-                f"{x.name}",
-                "broker_runs.done",
-            )
-            for x in manifest.reads
-        ],
+        ena_raw_read_flagfiles,
+        Path(
+            manifest.get_dir("results"),
+            "upload_receipts",
+            "submission_reads.jsonl",
+        ),
+        Path(manifest.get_dir("receipts"), "submission_reads.jsonl"),
 
-
-rule transfer_raw_reads_to_ena:
-    input:
-        [
-            Path(
-                manifest.get_dir("receipts"),
-                "broker",
-                f"{x.name}",
-                "transfer_raw_reads.done",
-            )
-            for x in manifest.reads
-        ],
 
 
 # this submits the runs
 rule broker_runs:
     input:
         str_path(
-            manifest.get_dir("receipts"),
-            "broker",
+            manifest.get_dir("submission_reads"),
             "{bpa_package_id}",
             "transfer_raw_reads.done",
         ),
@@ -59,8 +51,7 @@ rule broker_runs:
     output:
         flagfile=touch(
             str_path(
-                manifest.get_dir("receipts"),
-                "broker",
+                manifest.get_dir("submission_reads"),
                 "{bpa_package_id}",
                 "broker_runs.done",
             )
@@ -93,8 +84,7 @@ rule transfer_raw_reads:
     output:
         touch(
             str_path(
-                manifest.get_dir("receipts"),
-                "broker",
+                manifest.get_dir("submission_reads"),
                 "{bpa_package_id}",
                 "transfer_raw_reads.done",
             )
@@ -112,7 +102,7 @@ rule transfer_raw_reads:
     params:
         md5sum_file=generate_md5sum_file,
         webin_ftp=config["webin_ftp"],
-        webin_credentials=webin_credentials,
+        webin_credentials=get_webin_credentials,
     shell:
         "curl "
         "--upload-file {params.md5sum_file} "

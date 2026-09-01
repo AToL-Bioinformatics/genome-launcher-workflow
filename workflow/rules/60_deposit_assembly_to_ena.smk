@@ -50,7 +50,7 @@ def get_submission_input(wildcards):
             manifest.treeval_assembly.outputs_for("curation").get("HAP1")
         )
         submission_input["chromosome_list"] = str_path(
-            manifest.pipeline_input("submission").get("chromosome_list")
+            manifest.pipeline_input("submission_assemblies").get("chromosome_list")
         )
     elif pipeline_value == "ascc":
         primary = manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY")
@@ -58,6 +58,7 @@ def get_submission_input(wildcards):
     else:
         raise ValueError(f"Unknown submission input {pipeline_value}")
 
+    # this is to make sure the results have been reported to Canopy
     submission_input["assembly_run_list"] = (
         str_path(
             manifest.get_dir("receipts"), f"{pipeline_value}.assembly_run_list.json"
@@ -68,51 +69,52 @@ def get_submission_input(wildcards):
 
 
 # TODO:
-# - add submission outputs to _pipeline_flagfiles so upload runs after submission
-# - change the broker_raw_reads rule to use the directories for submission
+# - handle secondary assembly
+
 
 rule deposit_assembly_to_ena:
     input:
         str_path(
-            manifest.get_dir("pipeline_output", pipeline="submission"),
-            "assembly",
+            manifest.get_dir("submission_assemblies"),
+            "primary",
             "genome",
             sample_id,
             "submit",
             "receipt.xml",
         ),
-        Path(manifest.get_dir("results"), "upload_receipts", "submission.jsonl"),
-        Path(manifest.get_dir("results"), "update_assembly_status", "submission.json"),
-        Path(manifest.get_dir("receipts"), "submission.jsonl"),
+        Path(
+            manifest.get_dir("results"),
+            "upload_receipts",
+            "submission_assemblies.jsonl",
+        ),
+        Path(
+            manifest.get_dir("results"),
+            "update_assembly_status",
+            "submission_assemblies.json",
+        ),
+        Path(manifest.get_dir("receipts"), "submission_assemblies.jsonl"),
 
 
 rule submit_assembly_to_ena:
     input:
         unpack(get_submission_input),
         ena_manifest=str_path(
-            manifest.get_dir("pipeline_output", pipeline="submission"),
-            "assembly",
+            manifest.get_dir("submission_assemblies"),
+            "primary",
             "ena_manifest.txt",
         ),
     output:
-        receipt=str_path(
-            manifest.get_dir("pipeline_output", pipeline="submission"),
-            "assembly",
-            "genome",
-            sample_id,
-            "submit",
-            "receipt.xml",
-        ),
+        receipt=ena_primary_assembly_receipt,
     log:
-        str_path(log_dir_base, "deposit_assembly_to_ena.log"),
+        str_path(log_dir_base, "deposit_assembly_to_ena.primary.log"),
     benchmark:
-        str_path(log_dir_base, "deposit_assembly_to_ena.stats.jsonl")
+        str_path(log_dir_base, "deposit_assembly_to_ena.primary.stats.jsonl")
     container:
         config["containers"]["ena_webin_cli"]
     params:
         outdir=subpath(output.receipt, ancestor=4),
-        webin_pass=webin_pass,
-        webin_user=webin_user,
+        webin_pass=get_webin_pass,
+        webin_user=get_webin_user,
     shell:
         "ena-webin-cli "
         '-username "{params.webin_user}" '
@@ -131,8 +133,8 @@ rule generate_ena_assembly_manifest:
         stats=str_path(manifest.get_dir("assembly_stats"), "stats.with_depth.tsv"),
     output:
         ena_manifest=str_path(
-            manifest.get_dir("pipeline_output", pipeline="submission"),
-            "assembly",
+            manifest.get_dir("submission_assemblies"),
+            "primary",
             "ena_manifest.txt",
         ),
     log:

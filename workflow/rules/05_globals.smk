@@ -28,3 +28,22 @@ sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
 curation_dir = manifest.get_dir("pipeline_output", pipeline="curation")
 curation_input = manifest.pipeline_input("curation")
 curation_output = manifest.treeval_assembly.outputs_for("curation")
+
+# ENA receipts. TODO add secondary assembly.
+ena_raw_read_flagfiles = [
+    Path(
+        manifest.get_dir("submission_reads"),
+        f"{x.name}",
+        "broker_runs.done",
+    )
+    for x in manifest.reads
+]
+
+ena_primary_assembly_receipt = str_path(
+    manifest.get_dir("submission_assemblies"),
+    "primary",
+    "genome",
+    sample_id,
+    "submit",
+    "receipt.xml",
+)
