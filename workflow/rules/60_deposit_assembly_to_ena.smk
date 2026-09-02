@@ -84,11 +84,6 @@ rule deposit_assembly_to_ena:
         ),
         Path(
             manifest.get_dir("results"),
-            "upload_receipts",
-            "submission_assemblies.jsonl",
-        ),
-        Path(
-            manifest.get_dir("results"),
             "update_assembly_status",
             "submission_assemblies.json",
         ),
