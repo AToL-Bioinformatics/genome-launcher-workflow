@@ -25,7 +25,7 @@ sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
 # wildcard_constraints:
 #     busco_dataset=busco_dataset,
 
-curation_dir = manifest.get_dir("pipeline_output", pipeline="curation")
+curation_dir = manifest.get_dir("curation")
 curation_input = manifest.pipeline_input("curation")
 curation_output = manifest.treeval_assembly.outputs_for("curation")
 
