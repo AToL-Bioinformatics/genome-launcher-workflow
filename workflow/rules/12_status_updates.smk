@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 def get_github_token(wildcards):
     """
     Use a resource to resolve the token at runtime, so the whole process
@@ -32,6 +35,7 @@ assembly_status = {
     "qc": "Reads QC done",
     "treeval": "Ready to curate",
     "curation": "Curated",
+    "submission_assemblies": "Submitted",
 }
 
 

@@ -25,7 +25,9 @@ if len(pacbio_reads) > 0:
             runtime="4h",
         params:
             mem_gb=lambda wildcards, resources: resources.mem_mb // 1000,
-            qc_logs_dir=lambda wildcards: str_path(qc_logs_dir, wildcards.bpa_package_id),
+            qc_logs_dir=lambda wildcards: str_path(
+                qc_logs_dir, wildcards.bpa_package_id
+            ),
         shell:
             "atol-qc-raw-pacbio "
             "--bam {input.single_end} "

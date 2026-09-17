@@ -72,3 +72,38 @@ rule reheader_for_treeval:
         "2> {log} "
         "| "
         "gzip > {output.combined}"
+
+
+# ascc outputs raw FASTA, some steps require gzip
+rule compress_ascc_output:
+    input:
+        "{file_path}",
+    output:
+        "{file_path}.gz",
+    log:
+        str_path(log_dir_base, "reformat", "{file_path}", "compress_ascc_output.log"),
+    benchmark:
+        str_path(
+            log_dir_base, "reformat", "{file_path}", "compress_ascc_output.stats.jsonl"
+        )
+    wildcard_constraints:
+        file_path="|".join(
+            [
+                str_path(manifest.treeval_assembly.outputs_for("ascc").get(x))
+                for x in ["PRIMARY", "HAPLO"]
+            ]
+        ),
+    container:
+        config["containers"]["bbmap"]
+    threads: 6
+    resources:
+        mem=lambda wildcards, attempt: f"{12* attempt}GB",
+        runtime=lambda wildcards, attempt: int(60 * attempt),
+    shell:
+        "reformat.sh "
+        "-Xmx{resources.mem_mb}m "
+        "threads={threads} "
+        "in={input} "
+        "int=f "
+        "out={output} "
+        "2> {log} "
