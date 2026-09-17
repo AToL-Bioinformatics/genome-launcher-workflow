@@ -1,26 +1,18 @@
 def get_tiberius_model_cfg(wildcards, input):
     if manifest.tiberius_model_cfg is None:
-        logger.error(
+        raise ValueError(
             (
                 "The Manifest doesn't specify tiberius_model_cfg. "
                 "This is currently parsed from augustus_dataset_name. "
                 "See https://github.com/AustralianBioCommons/atol-canopy/issues/67."
             )
         )
-        return None
     return manifest.tiberius_model_cfg
 
 
 rule annotation:
     input:
-        str_path(
-            manifest.treeval_assembly.outputs_for("annotation").get(
-                "annooddities_stats"
-            )
-        ),
-        qc_busco_json=str_path(
-            manifest.treeval_assembly.outputs_for("annotation").get("qc_busco_json")
-        ),
+        Path(manifest.get_dir("results"), "upload_receipts", "annotation.jsonl"),
 
 
 rule atol_qc_annotation:
@@ -30,8 +22,7 @@ rule atol_qc_annotation:
         busco_lineage=str_path(
             "resources", "staging", "busco", "lineages", odb12_busco_dataset
         ),
-        # db="data/omark/LUCA.h5", FIXME
-        # ete_ncbi_db="data/omark/ete/taxa.sqlite",  FIXME
+        annotationqc=str_path("resources", "staging", "annotationqc"),
     output:
         qc_busco_json=str_path(
             manifest.treeval_assembly.outputs_for("annotation").get("qc_busco_json")
@@ -65,7 +56,7 @@ rule atol_qc_annotation:
         lineages_path=subpath(input.busco_lineage, parent=True),
         mem_gb=lambda wildcards, resources: int(resources.mem_mb / 1000),
         outdir=subpath(output["qc_busco_json"], parent=True),
-        taxid=manifest.taxon_id
+        taxid=manifest.taxon_id,
     shell:
         "atol-qc-annotation "
         "--threads {threads} "
@@ -74,9 +65,9 @@ rule atol_qc_annotation:
         "--annot {input.gtf} "
         "--lineage_dataset {params.lineage_dataset} "
         "--lineages_path {params.lineages_path} "
-        # "--db {input.db} "
+        "--db {input.annotationqc}/annotationqc/LUCA.h5 "
         "--taxid {params.taxid} "
-        # "--ete_ncbi_db {input.ete_ncbi_db} "
+        "--ete_ncbi_db {input.annotationqc}/annotationqc/taxa.sqlite "
         "--outdir {params.outdir} "
         "--logs {params.outdir}/logs "
         "&> {log}"
