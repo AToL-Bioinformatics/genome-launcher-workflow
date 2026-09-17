@@ -11,16 +11,17 @@ def get_tiberius_model_cfg(wildcards, input):
     return manifest.tiberius_model_cfg
 
 
+
+
+
 # For now we just run annotation on the ascc output. In the future we need to
 # account for curated genomes. See how this is implemented in
 # workflow/rules/60_deposit_assembly_to_ena.smk
-
-
 rule tiberius:
     input:
         fasta=manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY"),
     output:
-        gtf=Path(manifest.get_dir("annotation"), "tiberius.gtf"),
+        **manifest.treeval_assembly.outputs_for("annotation")
     log:
         str_path(manifest.get_stage_logs("annotation"), "tiberius.primary.log"),
     benchmark:
