@@ -10,6 +10,7 @@ containers:
   pigz: "docker://quay.io/biocontainers/pigz:2.8"
   rclone: "docker://rclone/rclone:sha-e9fddaa"
   seqkit: "docker://quay.io/biocontainers/seqkit:2.13.0--he881be0_0"
+  tiberius: "docker://larsgabriel23/tiberius:2.0.7"
   wget: "docker://quay.io/biocontainers/wget:1.25.0"
 manifest: "config/manifest.json"
 webin_ftp: "ftp://webin2.ebi.ac.uk/"
