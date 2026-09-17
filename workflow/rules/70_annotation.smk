@@ -139,7 +139,7 @@ rule tiberius:
         mem=lambda wildcards, attempt: f"{int(attempt*64)}G",  # scales with the longest contig
         runtime=lambda wildcards, attempt: int(attempt * 60),
     params:
-        batch_size=16,
+        batch_size=32,
         model_cfg=get_tiberius_model_cfg,
     shell:
         "tiberius.py "
