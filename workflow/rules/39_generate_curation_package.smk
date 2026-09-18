@@ -97,21 +97,12 @@ _optional_files = {
 # stick the non-optional files together with the optional ones that exist
 _all_curation_files = {**_curation_files, **_optional_files}
 
-# raise ValueError(_all_curation_files)
-
 
 # either of the lines in here appear to work, they just chuck slightly different error messages
 def resolve_file(wildcards):
     # return _curation_files[wildcards.filename]
     return _all_curation_files.get(wildcards.filename, None)
 
-
-# result = resolve_file(_curation_files.keys())
-# raise ValueError(result)
-# raise ValueError(_curation_files)
-# raise ValueError(
-#     expand(Path(curation_package_dir, "{filename}"), filename=_curation_files.keys())
-# )
 
 
 rule generate_archive:
@@ -125,14 +116,18 @@ rule archive:
             Path(curation_package_dir, "{filename}"),
             filename=_all_curation_files.keys(),
         ),
+        expand(
+            Path(curation_package_dir, "{assembly_haplotype}_busco_full_table.csv"),
+            assembly_haplotype=assembly_haplotypes,
+        ),
     output:
         archive="archive.tar.gz",
     params:
         curation_package_dir=curation_package_dir,
     shell:
         "echo {input} {output.archive}"
-        # "tar -cv --directory {params.curation_package_dir} . "
-        # "| gzip > {output.archive}"
+        "tar -cv --directory {params.curation_package_dir} . "
+        "| gzip > {output.archive}"
 
 
 
@@ -185,15 +180,16 @@ rule generate_curation_package:
 # # - rename any duplicate files and put in the tmp folder
 # # - move other files to the tmp folder
 # # - compress tmp folder
-# rule rename_busco_files:
-#     input:
-#         get_busco_table_for_haplotype,
-#     output:
-#         Path(curation_package_dir, "{assembly_haplotype}_busco_full_table.csv"),
-#     wildcard_constraints:
-#         assembly_haplotype="|".join(assembly_haplotypes),
-#     shell:
-#         "cp {input} {output}"
+
+rule rename_busco_files:
+    input:
+        get_busco_table_for_haplotype,
+    output:
+        Path(curation_package_dir, "{assembly_haplotype}_busco_full_table.csv"),
+    wildcard_constraints:
+        assembly_haplotype="|".join(assembly_haplotypes),
+    shell:
+        "cp {input} {output}"
 
 # # put in here all the files that are non-optional and don't need to be re-named
 # rule copy_pretext_maps:
