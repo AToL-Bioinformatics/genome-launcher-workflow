@@ -44,6 +44,8 @@ set-resources:
     partitionFlag: "--partition=copy"
   stage_s3_bucket:
     partitionFlag: "--partition=copy"
+  tiberius:
+    partitionFlag: "--partition=gpu"
   transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
