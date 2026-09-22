@@ -41,7 +41,6 @@ _curation_files = {
     ),
 }
 
-# here are all the optional files that may or may not exist
 optional_files_list = {
     f"{manifest.dataset_id}.{manifest.assembly_version}_primary_mito_contamination_recommendation.txt": ascc_output.get(
         "PRIMARY_MT_CONTIGS"
