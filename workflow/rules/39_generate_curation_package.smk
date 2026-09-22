@@ -61,7 +61,6 @@ optional_files_list = {
 }
 
 
-# stick the non-optional files together with the optional ones that exist
 _all_curation_files = {**_curation_files, **optional_files_list}
 
 
