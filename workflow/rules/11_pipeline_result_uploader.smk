@@ -39,6 +39,7 @@ _log_dir_names = [
 
 
 _pipeline_flagfiles = {
+    "annotation": manifest.treeval_assembly.outputs_for("annotation").values(),
     "ascc": manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
     "curation": curation_output.values(),
     "submission_reads": ena_raw_read_flagfiles,
