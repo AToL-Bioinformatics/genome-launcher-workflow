@@ -53,7 +53,7 @@ def get_submission_input(wildcards):
             manifest.pipeline_input("submission_assemblies").get("chromosome_list")
         )
     elif pipeline_value == "ascc":
-        primary = manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY")
+        primary = ascc_output.get("PRIMARY")
         submission_input["fasta_file"] = str_path(primary) + ".gz"
     else:
         raise ValueError(f"Unknown submission input {pipeline_value}")

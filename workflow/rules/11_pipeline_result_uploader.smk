@@ -39,7 +39,7 @@ _log_dir_names = [
 
 
 _pipeline_flagfiles = {
-    "ascc": manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+    "ascc": ascc_output.get("COMBINED"),
     "curation": curation_output.values(),
     "submission_reads": ena_raw_read_flagfiles,
     "submission_assemblies": ena_primary_assembly_receipt,
