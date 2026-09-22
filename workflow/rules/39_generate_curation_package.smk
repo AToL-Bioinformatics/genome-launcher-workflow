@@ -14,7 +14,6 @@ curation_package_dir = Path(manifest.get_dir("curation"), "curation_package")
 
 assembly_haplotypes = ["primary", "secondary"]
 
-# List non-optional curation files here
 _curation_files = {
     f"{manifest.dataset_id}_{manifest.assembly_version}_hr.pretext": treeval_output.get(
         "HIRES_PRETEXT"
