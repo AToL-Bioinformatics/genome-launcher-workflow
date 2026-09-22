@@ -5,13 +5,20 @@ def get_busco_table_for_haplotype(wildcards):
         )
     if wildcards.assembly_haplotype == "secondary":
         return manifest.treeval_assembly.outputs_for("genomeassembly").get(
-            "HAPLO_BUSCO_TABLE"
-        )
-    raise ValueError(f"unknown assembly_haplotype: {wildcards.assembly_haplotype}")
+def check_optional_curation_files(wildcards):
+    existing_optional_files = [
+        Path(curation_package_dir, filename)
+        for filename, filepath in optional_files_list.items()
+        if Path(filepath).is_file()
+    ]
+    return existing_optional_files
+
+
+def resolve_file(wildcards):
+    return _all_curation_files.get(wildcards.filename, None)
 
 
 curation_package_dir = Path(manifest.get_dir("curation"), "curation_package")
-
 assembly_haplotypes = ["primary", "secondary"]
 
 _curation_files = {
@@ -59,21 +66,8 @@ optional_files_list = {
     ),
 }
 
-
 _all_curation_files = {**_curation_files, **optional_files_list}
 
-
-def resolve_file(wildcards):
-    return _all_curation_files.get(wildcards.filename, None)
-
-
-def check_optional_curation_files(wildcards):
-    existing_optional_files = [
-        Path(curation_package_dir, filename)
-        for filename, filepath in optional_files_list.items()
-        if Path(filepath).is_file()
-    ]
-    return existing_optional_files
 
 
 rule generate_curation_package:
