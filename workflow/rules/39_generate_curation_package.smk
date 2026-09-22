@@ -64,7 +64,6 @@ optional_files_list = {
 _all_curation_files = {**_curation_files, **optional_files_list}
 
 
-# either of the lines in here appear to work, they just chuck slightly different error messages
 def resolve_file(wildcards):
     return _all_curation_files.get(wildcards.filename, None)
 
