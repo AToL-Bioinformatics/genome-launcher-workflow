@@ -1,13 +1,6 @@
-def get_busco_table_for_haplotype(wildcards):
-    if wildcards.assembly_haplotype == "primary":
-        return manifest.treeval_assembly.outputs_for("genomeassembly").get(
-            "PRIMARY_BUSCO_TABLE"
-        )
-    if wildcards.assembly_haplotype == "secondary":
-        return manifest.treeval_assembly.outputs_for("genomeassembly").get(
 def check_optional_curation_files(wildcards):
     existing_optional_files = [
-        Path(curation_package_dir, filename)
+        str_path(curation_package_dir, filename)
         for filename, filepath in optional_files_list.items()
         if Path(filepath).is_file()
     ]
@@ -15,17 +8,27 @@ def check_optional_curation_files(wildcards):
 
 
 def resolve_file(wildcards):
-    return _all_curation_files.get(wildcards.filename, None)
+    return str_path(_all_curation_files.get(wildcards.filename))
 
 
 curation_package_dir = Path(manifest.get_dir("curation"), "curation_package")
-assembly_haplotypes = ["primary", "secondary"]
+
 
 _curation_files = {
-    f"{manifest.dataset_id}_{manifest.assembly_version}_hr.pretext": treeval_output.get(
+    f"{manifest.dataset_id}.{manifest.assembly_version}_primary_busco_full_table.csv": manifest.treeval_assembly.outputs_for(
+        "genomeassembly"
+    ).get(
+        "PRIMARY_BUSCO_TABLE"
+    ),
+    f"{manifest.dataset_id}.{manifest.assembly_version}_secondary_busco_full_table.csv": manifest.treeval_assembly.outputs_for(
+        "genomeassembly"
+    ).get(
+        "HAPLO_BUSCO_TABLE"
+    ),
+    f"{manifest.dataset_id}.{manifest.assembly_version}_hr.pretext": treeval_output.get(
         "HIRES_PRETEXT"
     ),
-    f"{manifest.dataset_id}_{manifest.assembly_version}_normal.pretext": treeval_output.get(
+    f"{manifest.dataset_id}.{manifest.assembly_version}_normal.pretext": treeval_output.get(
         "NORMAL_PRETEXT"
     ),
     f"{manifest.dataset_id}.{manifest.assembly_version}_primary_ABNORMAL_CHECK.csv": ascc_output.get(
@@ -68,50 +71,52 @@ optional_files_list = {
 
 _all_curation_files = {**_curation_files, **optional_files_list}
 
+# raise ValueError(list(type(x) for x in _all_curation_files.values()))
 
 
 rule generate_curation_package:
     input:
-        "curation.tar.gz",
+        str_path(manifest.get_dir("curation"), "curation.tar.gz"),
 
 
-rule archive:
+rule compress_curation_package:
     input:
         expand(
-            Path(curation_package_dir, "{filename}"),
+            str_path(curation_package_dir, "{filename}"),
             filename=_curation_files.keys(),
-        ),
-        expand(
-            Path(curation_package_dir, "{assembly_haplotype}_busco_full_table.csv"),
-            assembly_haplotype=assembly_haplotypes,
         ),
         check_optional_curation_files,
     output:
-        archive="curation.tar.gz",
+        archive=str_path(manifest.get_dir("curation"), "curation.tar.gz"),
+    log:
+        str_path(log_dir_base, "compress_curation_package.log"),
+    benchmark:
+        str_path(log_dir_base, "compress_curation_package.stats.jsonl")
+    container:
+        config["containers"]["pigz"]
+    threads: 4
+    resources:
+        runtime="20m"
     params:
         curation_package_dir=curation_package_dir,
     shell:
         "tar -cv --directory {params.curation_package_dir} . "
-        "| gzip > {output.archive}"
+        "2> {log} "
+        "| pigz -p {threads} > {output.archive}"
 
 
-rule copy_file:
+rule copy_curation_file:
     input:
         resolve_file,
     output:
-        Path(curation_package_dir, "{filename}"),
+        temp(str_path(curation_package_dir, "{filename}")),
+    log:
+        str_path(log_dir_base, "copy_curation_files", "{filename}.log"),
+    benchmark:
+        str_path(log_dir_base, "copy_curation_files", "{filename}.stats.jsonl")
     wildcard_constraints:
         filename="|".join(_all_curation_files.keys()),
+    container:
+        config["containers"]["pigz"]
     shell:
-        "cp {input} {output}"
-
-
-rule rename_busco_files:
-    input:
-        get_busco_table_for_haplotype,
-    output:
-        Path(curation_package_dir, "{assembly_haplotype}_busco_full_table.csv"),
-    wildcard_constraints:
-        assembly_haplotype="|".join(assembly_haplotypes),
-    shell:
-        "cp {input} {output}"
+        "cp {input} {output} &> {log}"

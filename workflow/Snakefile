@@ -96,6 +96,7 @@ rule post_treeval:
         Path(manifest.get_dir("results"), "update_assembly_status", "treeval.json"),
         Path(manifest.get_dir("results"), "upload_receipts", "treeval.jsonl"),
         str_path(manifest.get_dir("receipts"), "treeval.stage_run_list.json"),
+        str_path(manifest.get_dir("curation"), "curation.tar.gz"),
 
 
 rule post_curation:
