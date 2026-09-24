@@ -41,6 +41,10 @@ _log_dir_names = [
 _pipeline_flagfiles = {
     "annotation": manifest.treeval_assembly.outputs_for("annotation").values(),
     "ascc": ascc_output.get("COMBINED"),
+    "treeval": [
+        str_path(manifest.get_dir("curation"), "curation.tar.gz"),
+        Path(manifest.get_dir("git_logs"), "treeval.json"),
+    ],
     "curation": curation_output.values(),
     "submission_reads": ena_raw_read_flagfiles,
     "submission_assemblies": ena_primary_assembly_receipt,
