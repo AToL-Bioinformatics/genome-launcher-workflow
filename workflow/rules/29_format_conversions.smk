@@ -3,7 +3,7 @@
 
 def get_haplotype_assemblies(wildcards):
     ascc_output_dict = {
-        k: manifest.treeval_assembly.outputs_for("ascc").get(k)
+        k: ascc_output.get(k)
         for k in ["PRIMARY", "HAPLO"]
     }
     return ascc_output_dict
@@ -44,7 +44,7 @@ rule reformat_fq_to_fa:
 
 rule reheader_target:
     input:
-        combined=manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+        combined=ascc_output.get("COMBINED"),
     output:
         touch(Path(log_dir_base, "reheader_for_treeval.done")),
 
@@ -53,7 +53,7 @@ rule reheader_for_treeval:
     input:
         unpack(get_haplotype_assemblies),
     output:
-        combined=manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+        combined=ascc_output.get("COMBINED"),
     log:
         str_path(log_dir_base, "reheader_for_treeval.log"),
     benchmark:
@@ -89,7 +89,7 @@ rule compress_ascc_output:
     wildcard_constraints:
         file_path="|".join(
             [
-                str_path(manifest.treeval_assembly.outputs_for("ascc").get(x))
+                str_path(ascc_output.get(x))
                 for x in ["PRIMARY", "HAPLO"]
             ]
         ),

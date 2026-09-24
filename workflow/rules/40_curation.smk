@@ -63,7 +63,7 @@ rule pretext_to_asm:
 
 rule prepare_for_pretext_to_asm:
     input:
-        combined=manifest.treeval_assembly.outputs_for("ascc").get("COMBINED"),
+        combined=ascc_output.get("COMBINED"),
     output:
         combined=temp(str_path(curation_dir, f"{sample_id}.fasta")),
     log:
