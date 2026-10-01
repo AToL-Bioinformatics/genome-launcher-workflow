@@ -120,6 +120,17 @@ rule annooddities:
         "mv ao.AnnoOddities.oddity_summary.txt {output.summary} "
 
 
+# TODO: config On Setonix (only), there are two complications: normal RAM is
+# controlled by the number of "GPU allocation-packs" requested for the job
+# (29.44 GB per pack) and can't be requested separately. In benchmarking we
+# used up to 64 GB of RAM. Could start with 1 GPU and scale on retries.
+
+# Secondly, `containall` causes the job to immediately fail with OOM, so we
+# need to use the environment variable hack from
+# https://github.com/TomHarrop/compare-annotation-tools/blob/0402475311cd033367345911c5ea89b353438b1b/profiles/spartan/config.v9%2B.yaml#L80
+# to disable it specifically for tiberius jobs.
+
+
 # For now we just run annotation on the ascc output. In the future we need to
 # account for curated genomes. See how this is implemented in
 # workflow/rules/60_deposit_assembly_to_ena.smk
@@ -141,11 +152,13 @@ rule tiberius:
     params:
         batch_size=32,
         model_cfg=get_tiberius_model_cfg,
+        seq_len=259992,
     shell:
         "tiberius.py "
+        "--batch_size {params.batch_size} "
         "--genome {input.fasta} "
         "--model_cfg {params.model_cfg} "
-        "--out {output.gtf} "
-        "--batch_size {params.batch_size} "
         "--no_softmasking "
+        "--out {output.gtf} "
+        "--seq_len {params.seq_len} "
         "&> {log}"
