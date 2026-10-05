@@ -126,13 +126,6 @@ rule annooddities:
         "mv ao.AnnoOddities.oddity_summary.txt {output.summary} "
 
 
-
-# Secondly, `containall` causes the job to immediately fail with OOM, so we
-# need to use the environment variable hack from
-# https://github.com/TomHarrop/compare-annotation-tools/blob/0402475311cd033367345911c5ea89b353438b1b/profiles/spartan/config.v9%2B.yaml#L80
-# to disable it specifically for tiberius jobs.
-
-
 # For now we just run annotation on the ascc output. In the future we need to
 # account for curated genomes. See how this is implemented in
 # workflow/rules/60_deposit_assembly_to_ena.smk
