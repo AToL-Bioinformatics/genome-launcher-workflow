@@ -1,8 +1,8 @@
 Changelog
 =========
 
-(unreleased)
-------------
+0.17.5 (2026-10-05)
+-------------------
 
 - Merge pull request #48 from AToL-Bioinformatics/curation_files. [Amy
   Tims]
