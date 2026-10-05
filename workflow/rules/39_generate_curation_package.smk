@@ -11,7 +11,7 @@ def resolve_file(wildcards):
     return str_path(_all_curation_files.get(wildcards.filename))
 
 
-curation_package_dir = Path(manifest.get_dir("curation"), "curation_package")
+curation_package_dir = Path(manifest.get_dir("treeval"), "curation_package")
 
 
 _curation_files = {
@@ -76,7 +76,7 @@ _all_curation_files = {**_curation_files, **optional_files_list}
 
 rule generate_curation_package:
     input:
-        str_path(manifest.get_dir("curation"), "curation.tar.gz"),
+        str_path(manifest.get_dir("treeval"), "curation.tar.gz"),
 
 
 rule compress_curation_package:
@@ -87,7 +87,7 @@ rule compress_curation_package:
         ),
         check_optional_curation_files,
     output:
-        archive=str_path(manifest.get_dir("curation"), "curation.tar.gz"),
+        archive=str_path(manifest.get_dir("treeval"), "curation.tar.gz"),
     log:
         str_path(log_dir_base, "compress_curation_package.log"),
     benchmark:
