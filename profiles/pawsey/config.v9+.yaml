@@ -49,7 +49,6 @@ set-resources:
   transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
-  --nv
   -H $(mktemp -d)
   --pwd ${PWD}
   --containall --cleanenv --writable-tmpfs

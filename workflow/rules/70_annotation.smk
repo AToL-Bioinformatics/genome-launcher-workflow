@@ -10,7 +10,13 @@ def get_tiberius_model_cfg(wildcards, input):
     return manifest.tiberius_model_cfg
 
 
+# targets
 rule annotation:
+    input:
+        str_path(manifest.treeval_assembly.outputs_for("annotation").get("gtf")),
+
+
+rule post_annotation:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "annotation.jsonl"),
 
