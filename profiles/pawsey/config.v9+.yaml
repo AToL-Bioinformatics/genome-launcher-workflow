@@ -46,6 +46,7 @@ set-resources:
     partitionFlag: "--partition=copy"
   tiberius:
     partitionFlag: "--partition=gpu"
+    gpu: "attempt + 1"
   transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
