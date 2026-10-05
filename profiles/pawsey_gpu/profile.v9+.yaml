@@ -1,0 +1,40 @@
+cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
+  sbatch
+  --account=${GPU_ACCOUNT}
+  --gpus-per-task={resources.gpu}
+  --gres=gpu:{resources.gpu}
+  --job-name={rule}-smk
+  --nodes=1
+  --ntasks=1
+  --output=logs/slurm/{rule}/{rule}-%j.out
+  --parsable
+  --time={resources.runtime}
+  "--export={resources.sbatch_export} "
+  "{resources.partitionFlag}"
+default-resources:
+  - partitionFlag="--partition=gpu"
+  - runtime=10
+  - sbatch_export="APPTAINER_CLEANENV=true,APPTAINER_CONTAINALL=true,APPTAINER_WRITABLE_TMPFS=true"
+set-resources:
+  # sbatch_export hack is needed for the Pawsey tiberius container, but not the
+  # official Tiberius container.
+  tiberius:
+    gpu: "attempt + 1"
+    sbatch_export: 'APPTAINER_CLEANENV=true,APPTAINER_CONTAINALL="",APPTAINER_WRITABLE_TMPFS=true'
+    runtime: "20m"
+singularity-args: -B ${PWD},${TMPDIR},/scratch
+  -H $(mktemp -d)
+  --pwd ${PWD}
+  --env BPA_APIKEY=${BPA_APIKEY}
+  --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
+  --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
+  --env CANOPY_BASE_URL=${CANOPY_BASE_URL}
+  --env CANOPY_PASSWORD=${CANOPY_PASSWORD}
+  --env CANOPY_USERNAME=${CANOPY_USERNAME}
+  --env RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID=${RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID}
+  --env RCLONE_CONFIG_UPLOAD_ENDPOINT=${RCLONE_CONFIG_UPLOAD_ENDPOINT}
+  --env RCLONE_CONFIG_UPLOAD_PROVIDER=${RCLONE_CONFIG_UPLOAD_PROVIDER}
+  --env RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY=${RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY}
+  --env RCLONE_CONFIG_UPLOAD_TYPE=${RCLONE_CONFIG_UPLOAD_TYPE}
+  --env WEBIN_PASS=${WEBIN_PASS}
+  --env WEBIN_USER=${WEBIN_USER}
