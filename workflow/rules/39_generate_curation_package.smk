@@ -98,7 +98,7 @@ rule compress_curation_package:
     resources:
         runtime="20m"
     params:
-        curation_package_dir=curation_package_dir,
+        curation_package_dir=str_path(curation_package_dir),
     shell:
         "tar -cv --directory {params.curation_package_dir} . "
         "2> {log} "
