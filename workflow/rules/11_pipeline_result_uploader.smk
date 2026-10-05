@@ -42,7 +42,7 @@ _pipeline_flagfiles = {
     "annotation": manifest.treeval_assembly.outputs_for("annotation").values(),
     "ascc": ascc_output.get("COMBINED"),
     "treeval": [
-        str_path(manifest.get_dir("curation"), "curation.tar.gz"),
+        str_path(manifest.get_dir("treeval"), "curation.tar.gz"),
         Path(manifest.get_dir("git_logs"), "treeval.json"),
     ],
     "curation": curation_output.values(),
