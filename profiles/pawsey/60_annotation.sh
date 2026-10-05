@@ -25,6 +25,7 @@ export GPU_ACCOUNT="${PAWSEY_PROJECT:?PAWSEY_PROJECT must be set for Annotation}
 #     https://pawsey.atlassian.net/wiki/spaces/US/pages/51928618/Setonix+GPU+Partition+Quick+Start#f1f2fb2d-8761-45c3-9523-2f95f43e01cf-Pawsey's-way-for-requesting-resources-on-GPU-nodes-(different-to-standard-Slurm)
 XDG_CACHE_HOME="$(mktemp -d)" \
 	snakemake --profile profiles/pawsey \
+	--retries 1 \
 	--cluster-generic-submit-cmd "\
 		mkdir -p logs/slurm/{rule} \
 		&& \

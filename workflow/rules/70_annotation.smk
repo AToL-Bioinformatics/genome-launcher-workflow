@@ -126,10 +126,6 @@ rule annooddities:
         "mv ao.AnnoOddities.oddity_summary.txt {output.summary} "
 
 
-# TODO: config On Setonix (only), there are two complications: normal RAM is
-# controlled by the number of "GPU allocation-packs" requested for the job
-# (29.44 GB per pack) and can't be requested separately. In benchmarking we
-# used up to 64 GB of RAM. Could start with 1 GPU and scale on retries.
 
 # Secondly, `containall` causes the job to immediately fail with OOM, so we
 # need to use the environment variable hack from
@@ -140,6 +136,9 @@ rule annooddities:
 # For now we just run annotation on the ascc output. In the future we need to
 # account for curated genomes. See how this is implemented in
 # workflow/rules/60_deposit_assembly_to_ena.smk
+# Note: On Setonix (only) normal RAM is controlled by the number of "GPU
+# allocation-packs" requested for the job (29.44 GB per pack) and can't be
+# requested separately. This is set to attempt + 1 in the Pawsey profile..
 rule tiberius:
     input:
         fasta=str_path(manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY")),
