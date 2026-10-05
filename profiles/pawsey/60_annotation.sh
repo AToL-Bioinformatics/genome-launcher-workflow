@@ -16,28 +16,25 @@ setup_snakemake
 # check this here because it's annotation-specific (for now)
 export GPU_ACCOUNT="${PAWSEY_PROJECT:?PAWSEY_PROJECT must be set for Annotation}-gpu"
 
-# we need a custom snakemake command because the Pawsey GPU queue doesn't
-# accept the normal SBATCH arguments:
+# we need a custom jobscript because the Pawsey GPU queue doesn't accept the
+# normal SBATCH arguments:
 #   - `ntasks` and `nodes` must be set to 1
 #   - `gres=gpu` and `gpus-per-task` control the number of GPUs
 #   - normal RAM can't be requested, it is controlled by "GPU
 #     allocation-packs". See
 #     https://pawsey.atlassian.net/wiki/spaces/US/pages/51928618/Setonix+GPU+Partition+Quick+Start#f1f2fb2d-8761-45c3-9523-2f95f43e01cf-Pawsey's-way-for-requesting-resources-on-GPU-nodes-(different-to-standard-Slurm)
 
-
-# This is currently very broker, because the
-# '--export={resources.sbatch_export}' causes an error with snakemake
-# (singularity missing). I think the only solution will be to write an
-# additional profile for pawsey_gpu. Yuck.
-
+# To achieve this we have a second profile. Profile instances specified later
+# take precedence over earlier instances, wherever the same top-level entries
+# occur in multiple profiles, i.e. providing the GPU profile second means we
+# can override the singularity-args and submit cmd from the generi Pawsey
+# profile. See
+# https://snakemake.readthedocs.io/en/stable/executing/cli.html#using-multiple-global-profiles
 XDG_CACHE_HOME="$(mktemp -d)" \
 	snakemake \
-	--cluster-generic-submit-cmd "mkdir -p logs/slurm/{rule} && sbatch --parsable --account=${GPU_ACCOUNT} --gpus-per-task={resources.gpu} --gres=gpu:{resources.gpu} --ntasks=1 --nodes=1 '--export={resources.sbatch_export}' {resources.partitionFlag}" \
 	--profile profiles/pawsey \
+	--profile profiles/pawsey_gpu \
 	tiberius
-
-	# --retries 1 \
-	# --cluster-generic-submit-cmd "mkdir -p logs/slurm/{rule} && sbatch --parsable --account=${GPU_ACCOUNT} --export={resources.sbatch_export} --gpus-per-task={resources.gpu} --gres=gpu:{resources.gpu} --job-name={rule}-smk --ntasks=1 --nodes=1 --output=logs/slurm/{rule}/{rule}-%j.out --time={resources.runtime} {resources.partitionFlag} " \
 
 exit 0
 
