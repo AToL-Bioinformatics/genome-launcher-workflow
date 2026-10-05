@@ -50,12 +50,12 @@ set-resources:
     partitionFlag: "--partition=gpu"
     gpu: "attempt + 1"
     sbatch_export: 'APPTAINER_CLEANENV="",APPTAINER_WRITABLE_TMPFS=""'
+    runtime: "20m"
   transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   -H $(mktemp -d)
   --pwd ${PWD}
-  --containall --cleanenv --writable-tmpfs
   --env BPA_APIKEY=${BPA_APIKEY}
   --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
   --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
