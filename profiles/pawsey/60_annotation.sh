@@ -32,8 +32,8 @@ export GPU_ACCOUNT="${PAWSEY_PROJECT:?PAWSEY_PROJECT must be set for Annotation}
 # https://snakemake.readthedocs.io/en/stable/executing/cli.html#using-multiple-global-profiles
 XDG_CACHE_HOME="$(mktemp -d)" \
 	snakemake \
-	--profile profiles/pawsey \
-	--profile profiles/pawsey_gpu \
+	--profile profiles/pawsey/config.v9+.yaml \
+	--profile profiles/pawsey_gpu/config.v9+.yaml \
 	tiberius
 
 exit 0

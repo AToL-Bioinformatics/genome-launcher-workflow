@@ -1,3 +1,4 @@
+---
 cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   sbatch
   --account=${GPU_ACCOUNT}
@@ -9,22 +10,21 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   --output=logs/slurm/{rule}/{rule}-%j.out
   --parsable
   --time={resources.runtime}
-  "--export={resources.sbatch_export} "
   "{resources.partitionFlag}"
 default-resources:
   - partitionFlag="--partition=gpu"
   - runtime=10
-  - sbatch_export="APPTAINER_CLEANENV=true,APPTAINER_CONTAINALL=true,APPTAINER_WRITABLE_TMPFS=true"
 set-resources:
-  # sbatch_export hack is needed for the Pawsey tiberius container, but not the
-  # official Tiberius container.
   tiberius:
     gpu: "attempt + 1"
-    sbatch_export: 'APPTAINER_CLEANENV=true,APPTAINER_CONTAINALL="",APPTAINER_WRITABLE_TMPFS=true'
     runtime: "20m"
+  # The pawsey_gpu profile is required because the Pawsey Tiberius container
+  # OOMs with containall. The official Tiberius container works fine with
+  # containall
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   -H $(mktemp -d)
   --pwd ${PWD}
+  --cleanenv --writable-tmpfs
   --env BPA_APIKEY=${BPA_APIKEY}
   --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
   --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
