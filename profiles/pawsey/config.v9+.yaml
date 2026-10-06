@@ -49,7 +49,7 @@ set-resources:
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   -H $(mktemp -d)
   --pwd ${PWD}
-  --containall --cleanenv --writable-tmpfs
+  --cleanenv --containall --writable-tmpfs
   --env BPA_APIKEY=${BPA_APIKEY}
   --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
   --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
