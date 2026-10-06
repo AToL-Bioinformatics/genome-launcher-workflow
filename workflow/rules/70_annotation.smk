@@ -129,9 +129,6 @@ rule annooddities:
 # For now we just run annotation on the ascc output. In the future we need to
 # account for curated genomes. See how this is implemented in
 # workflow/rules/60_deposit_assembly_to_ena.smk
-# Note: On Setonix (only) normal RAM is controlled by the number of "GPU
-# allocation-packs" requested for the job (29.44 GB per pack) and can't be
-# requested separately. This is set to attempt + 1 in the Pawsey profile..
 rule tiberius:
     input:
         fasta=str_path(manifest.treeval_assembly.outputs_for("ascc").get("PRIMARY")),

@@ -1,4 +1,12 @@
 ---
+# The pawsey_gpu profile is used for two reasons, both requiring snakemake
+# 9.27.0.
+# 1. The UI for the gpu partition is different to the work partition so we
+#    override the `cluster-generic-submit-cmd`. Tiberius is limited by normal
+#    RAM, which is controlled by the number of "GPU allocation-packs" for the
+#    job (29.44 GB normal RAM per pack). This is set to attempt + 1 in the
+#    Pawsey profile (i.e. approx 60 GB RAM on the first attempt). The job is
+#    rejected if we request normal RAM separately.
 cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   sbatch
   --account=${GPU_ACCOUNT}
@@ -13,14 +21,14 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   "{resources.partitionFlag}"
 default-resources:
   - partitionFlag="--partition=gpu"
-  - runtime=10
+  - runtime=5
 set-resources:
   tiberius:
     gpu: "attempt + 1"
     runtime: "20m"
-  # The pawsey_gpu profile is required because the Pawsey Tiberius container
-  # OOMs with containall. The official Tiberius container works fine with
-  # containall
+# 2. The Pawsey Tiberius container OOMs with containall so we override
+#    `singularity-args` (note the official Tiberius container works fine with
+#    containall).
 singularity-args: -B ${PWD},${TMPDIR},/scratch
   -H $(mktemp -d)
   --pwd ${PWD}
