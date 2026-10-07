@@ -14,25 +14,21 @@ source profiles/pawsey/lib/snakemake_env.sh
 setup_snakemake
 
 # check this here because it's annotation-specific (for now)
-export GPU_ACCOUNT="${PAWSEY_ACCOUNT:?Set PAWSEY_ACCOUNT to run the Annotation job}_gpu"
+export GPU_ACCOUNT="${PAWSEY_PROJECT:?PAWSEY_PROJECT must be set for Annotation}-gpu"
 
-# we need a custom snakemake command because the Pawsey GPU queue doesn't
-# accept the normal SBATCH arguments.
+# Use a second profile for Tiberius. This requires Snakemake 9.27.0. From that
+# version, profile instances specified later take precedence over earlier
+# instances, wherever the same top-level entries occur in multiple profiles,
+# i.e. providing the GPU profile second means we can override the
+# singularity-args and submit cmd. See
+# https://snakemake.readthedocs.io/en/stable/executing/cli.html#using-multiple-global-profiles
 XDG_CACHE_HOME="$(mktemp -d)" \
-	snakemake --profile profiles/pawsey \
-	--cluster-generic-submit-cmd "\
-			mkdir -p logs/slurm/{rule} \
-			&& \
-			sbatch \
-			--time={resources.runtime} \
-			{resources.partitionFlag} \
-			--account=${GPU_ACCOUNT} \
-			--gres=gpu:{resources.gpu} \
-			--job-name={rule}-smk \
-			--output=logs/slurm/{rule}/{rule}-%j.out \
-			--parsable" \
+	snakemake \
+	--profile profiles/pawsey \
+	--profile profiles/pawsey_gpu \
 	tiberius
 
-exit 0
-
-run_snakemake annotation
+# This target runs QC, uploads etc. with the standard command.
+if [ $? -eq 0 ]; then
+	run_snakemake post_annotation
+fi

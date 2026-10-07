@@ -5,13 +5,13 @@ cluster-generic-cancel-cmd: scancel
 cluster-generic-status-cmd: status-sacct-robust.sh
 cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   sbatch
-  --time={resources.runtime}
   {resources.partitionFlag}
   --cpus-per-task={threads}
-  --mem={resources.mem_mb}
   --job-name={rule}-smk
+  --mem={resources.mem_mb}
   --output=logs/slurm/{rule}/{rule}-%j.out
   --parsable
+  --time={resources.runtime}
 configfile:
   - profiles/pawsey/workflow.config.yaml
 default-resources:
@@ -44,15 +44,12 @@ set-resources:
     partitionFlag: "--partition=copy"
   stage_s3_bucket:
     partitionFlag: "--partition=copy"
-  tiberius:
-    partitionFlag: "--partition=gpu"
   transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
-  --nv
   -H $(mktemp -d)
   --pwd ${PWD}
-  --containall --cleanenv --writable-tmpfs
+  --cleanenv --containall --writable-tmpfs
   --env BPA_APIKEY=${BPA_APIKEY}
   --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
   --env BPA_MIRROR_USER=${BPA_MIRROR_USER}

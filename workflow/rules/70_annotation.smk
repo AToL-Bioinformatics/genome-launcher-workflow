@@ -10,7 +10,13 @@ def get_tiberius_model_cfg(wildcards, input):
     return manifest.tiberius_model_cfg
 
 
+# targets
 rule annotation:
+    input:
+        str_path(manifest.treeval_assembly.outputs_for("annotation").get("gtf")),
+
+
+rule post_annotation:
     input:
         Path(manifest.get_dir("results"), "upload_receipts", "annotation.jsonl"),
 
@@ -141,11 +147,13 @@ rule tiberius:
     params:
         batch_size=32,
         model_cfg=get_tiberius_model_cfg,
+        seq_len=259992,
     shell:
         "tiberius.py "
+        "--batch_size {params.batch_size} "
         "--genome {input.fasta} "
         "--model_cfg {params.model_cfg} "
-        "--out {output.gtf} "
-        "--batch_size {params.batch_size} "
         "--no_softmasking "
+        "--out {output.gtf} "
+        "--seq_len {params.seq_len} "
         "&> {log}"
