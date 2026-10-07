@@ -1,6 +1,40 @@
 Changelog
 =========
 
+0.18.0 (2026-10-07)
+-------------------
+
+New
+
+~~~
+- Annotation config for Setonix. [Tom Harrop]
+- Update Snakemake to 9.27.0. [Tom Harrop]
+- Second profile for pawsey_gpu. [Tom Harrop]
+- Second profile for pawsey_gpu. [Tom Harrop]
+- Handle RAM / GPU allocation for Setonix. [Tom Harrop]
+- Extra CPU for Pawsey. [Tom Harrop]
+
+Changes
+~~~~~~~
+
+- Document Pawsey GPU config. [Tom Harrop]
+- Document Pawsey GPU config. [Tom Harrop]
+
+Fix
+
+~~~
+- Fix quoting in sbatch command. [Tom Harrop]
+
+Other
+~~~~~
+
+- Add sbatch_export hack to profile for Pawsey Tiberius container. [Tom
+  Harrop]
+- Configure Tiberius runscript. [Tom Harrop]
+- Merge branch 'main' into ac_merge. [Tom Harrop]
+- Merge branch 'main' into annotation_config. [Tom Harrop]
+- Seq_len param. [Tom Harrop]
+
 0.17.5 (2026-10-05)
 -------------------
 
