@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 
-def get_all_assemblies(wildcards):
+def get_all_assemblies(wildcards, output_types=None):
+    output_types = output_types or _FASTA_OUTPUT_TYPES
     expected_outputs = manifest.treeval_assembly.outputs
     all_outputs = []
     for pipeline, output_dict in expected_outputs.items():
         for output_type, output_file in output_dict.items():
-            if output_file.is_file():
+            if output_type in output_types and output_file.is_file():
                 all_outputs.append(str_path(output_file))
 
     if len(all_outputs) > 0:
@@ -15,6 +16,15 @@ def get_all_assemblies(wildcards):
     raise FileNotFoundError(
         f"Can't find any of the defined assembly outputs.\n\n{expected_outputs}\n"
     )
+
+
+_FASTA_OUTPUT_TYPES = {
+    "COMBINED",
+    "HAP1",
+    "HAP2",
+    "HAPLO",
+    "PRIMARY",
+}
 
 
 rule calculate_depth:
@@ -28,7 +38,7 @@ rule calculate_depth:
     benchmark:
         str_path(log_dir_base, "calculate_depth.stats.jsonl")
     container:
-        config["containers"]["atol_qc_raw_shortread"]  # has pandas and numpy
+        config["containers"]["atol_genome_launcher"]  # has pandas and numpy
     script:
         "../scripts/calculate_depth.py"
 
@@ -51,6 +61,7 @@ rule all_assembly_stats:
     shell:
         "seqkit stats "
         "--all "
+        "--skip-err " # stats exits 0 with no output otherwise
         "--tabular "
         "-j {threads} "
         "{input.assembly_files} "

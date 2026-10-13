@@ -3,7 +3,16 @@
 import json
 from pathlib import Path
 
+from numpy import nan, float64
 import pandas as pd
+
+
+def calculate_sequencing_depth(row: pd.Series, long_read_bases: int) -> int | float:
+    try:
+        sequencing_depth = long_read_bases / (row["sum_len"] - row["sum_n"])
+        return float64(sequencing_depth).round(0).astype(int)
+    except ZeroDivisionError as e:
+        return nan
 
 
 def read_json_from_path(path_to_json_file: Path) -> dict[str, str | int | list[str]]:
@@ -22,10 +31,8 @@ def main():
 
     assembly_stats = pd.read_csv(stats_file, sep="\t")
 
-    assembly_stats["sequencing_depth"] = (
-        (long_read_bases / (assembly_stats["sum_len"] - assembly_stats["sum_n"]))
-        .round(0)
-        .astype(int)
+    assembly_stats["sequencing_depth"] = assembly_stats.apply(
+        calculate_sequencing_depth, axis=1, long_read_bases=long_read_bases
     )
 
     assembly_stats.to_csv(snakemake.output["stats"], sep="\t", index=False)
