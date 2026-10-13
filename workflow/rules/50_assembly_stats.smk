@@ -61,6 +61,7 @@ rule all_assembly_stats:
     shell:
         "seqkit stats "
         "--all "
+        "--skip-err " # stats exits 0 with no output otherwise
         "--tabular "
         "-j {threads} "
         "{input.assembly_files} "
