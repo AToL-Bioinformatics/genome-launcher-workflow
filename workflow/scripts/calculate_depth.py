@@ -3,14 +3,14 @@
 import json
 from pathlib import Path
 
-from numpy import nan
+from numpy import nan, float64
 import pandas as pd
 
 
-def calculate_sequencing_depth(row: pd.Series, long_read_bases: int):
+def calculate_sequencing_depth(row: pd.Series, long_read_bases: int) -> int | float:
     try:
         sequencing_depth = long_read_bases / (row["sum_len"] - row["sum_n"])
-        return sequencing_depth.round(0).astype(int)
+        return float64(sequencing_depth).round(0).astype(int)
     except ZeroDivisionError as e:
         return nan
 
