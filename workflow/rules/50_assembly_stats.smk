@@ -38,7 +38,7 @@ rule calculate_depth:
     benchmark:
         str_path(log_dir_base, "calculate_depth.stats.jsonl")
     container:
-        config["containers"]["atol_qc_raw_shortread"]  # has pandas and numpy
+        config["containers"]["atol_genome_launcher"]  # has pandas and numpy
     script:
         "../scripts/calculate_depth.py"
 
