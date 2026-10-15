@@ -71,8 +71,6 @@ optional_files_list = {
 
 _all_curation_files = {**_curation_files, **optional_files_list}
 
-# raise ValueError(list(type(x) for x in _all_curation_files.values()))
-
 
 rule generate_curation_package:
     input:
@@ -96,7 +94,7 @@ rule compress_curation_package:
         config["containers"]["pigz"]
     threads: 4
     resources:
-        runtime="20m"
+        runtime="20m",
     params:
         curation_package_dir=str_path(curation_package_dir),
     shell:

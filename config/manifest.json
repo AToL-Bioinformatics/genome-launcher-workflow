@@ -14,7 +14,7 @@
     "augustus_dataset_name": "tiberius_model_cfg:fungi.yaml",
     "read_files": [
         {
-            "name": "bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2",
+            "name": "bpa-avid-pacbio-hifi-668779-m84073_260813_070932_s1",
             "data_type": "PACBIO_SMRT",
             "base_url": "https://downloads-qcif.bioplatforms.com/bpa/pp_staging/pacbio-hifi/BPAOPS-1452/20230809_PP_AGRF_CAGRF230615297_m84073_230802_055109_s2/",
             "single_end": [
