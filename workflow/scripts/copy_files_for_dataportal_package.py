@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import hashlib
 import json
 import logging
 from pathlib import Path
@@ -7,6 +8,14 @@ import shutil
 import tarfile
 
 from common import logger
+
+
+def md5sum(file: Path, blocksize: int = 65536) -> str:
+    hash = hashlib.md5()
+    with open(file, "rb") as f:
+        for block in iter(lambda: f.read(blocksize), b""):
+            hash.update(block)
+    return hash.hexdigest()
 
 
 def main():
@@ -34,6 +43,9 @@ def main():
     # generate the package directory
     _ = package_dir.mkdir(parents=True, exist_ok=True)
 
+    # accumulate files that need checksumming
+    files_to_checksum = []
+
     # copy the individual files
     for filetype, single_file in bp_files_map.get("single_files", {}).items():
         single_file_src = Path(single_file.get("path", ""))
@@ -52,6 +64,8 @@ def main():
         else:
             raise FileNotFoundError(single_file_src)
 
+        files_to_checksum.append(single_file_dst)
+
     # copy the multi-file objects
     for filetype, file_list in bp_files_map.get("file_lists", {}).items():
         tarfile_name = file_list.get("filename")
@@ -66,12 +80,14 @@ def main():
                 else:
                     raise FileNotFoundError(file_src_path)
 
+        files_to_checksum.append(tarfile_dst)
+
     # compress the whole-directory objects
     for filetype, whole_directory in bp_files_map.get("directories", {}).items():
         directory_src = Path(whole_directory.get("path", ""))
         tarfile_name = whole_directory.get("filename")
         tarfile_dst = Path(package_dir, tarfile_name)
-        logger.warning(
+        logger.info(
             f"Compressing {filetype} directory from {directory_src} to {tarfile_dst}"
         )
 
@@ -80,6 +96,22 @@ def main():
                 tar.add(directory_src, arcname=directory_src.name)
         else:
             raise FileNotFoundError(directory_src)
+
+        files_to_checksum.append(tarfile_dst)
+
+    # make an empty manifests file (for later use)
+    manifest_file = Path(package_dir, bp_files_map.get("manifest", {}).get("filename"))
+    with open(manifest_file, "wt") as f:
+        json.dump({}, f)
+    files_to_checksum.append(manifest_file)
+
+    # calculate checksums
+    checksum_file = Path(package_dir, bp_files_map.get("checksums", {}).get("filename"))
+    logger.info(f"Writing checksums to {checksum_file}.")
+    with open(checksum_file, "wt") as f:
+        for file in files_to_checksum:
+            checksum = md5sum(file)
+            f.write(f"{file.name}    {checksum}\n")
 
 
 if __name__ == "__main__":
