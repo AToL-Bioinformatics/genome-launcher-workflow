@@ -1,15 +1,30 @@
 #!/usr/bin/env python3
 
 import json
+import logging
 from pathlib import Path
 import shutil
 import tarfile
 
+from common import logger
+
 
 def main():
+
     try:
-        dp_files = snakemake.input["dp_files"]
-        package_dir = snakemake.output["package_dir"]
+        dp_files = Path(snakemake.input["dp_files"])
+        package_dir = Path(snakemake.output["package_dir"])
+
+        logger.handlers.clear()
+        logger.name = "copy_files_for_dataportal_package"
+
+        logging.basicConfig(
+            filename=snakemake.log[0],
+            level=logging.INFO,
+            format="%(asctime)s %(levelname)s %(name)s:\n    %(message)s",
+            datefmt="%H:%M:%S",
+        )
+
     except NameError:
         dp_files = Path("results/bpa_draft_assembly/filenames.json")
         package_dir = Path("results/bpa_draft_assembly/bpa_package")
@@ -25,7 +40,9 @@ def main():
         single_file_name = single_file.get("filename")
         single_file_dst = Path(package_dir, single_file_name)
 
-        print(f"Copying {filetype} file from {single_file_src} to {single_file_dst}")
+        logger.info(
+            f"Copying {filetype} file from {single_file_src} to {single_file_dst}"
+        )
         if single_file_src.is_file():
             _ = shutil.copyfile(
                 single_file_src,
@@ -39,11 +56,11 @@ def main():
     for filetype, file_list in bp_files_map.get("file_lists", {}).items():
         tarfile_name = file_list.get("filename")
         tarfile_dst = Path(package_dir, tarfile_name)
-        print(f"Generating {filetype} tarfile at {tarfile_dst}")
+        logger.info(f"Generating {filetype} tarfile at {tarfile_dst}")
         with tarfile.open(tarfile_dst, "w|gz") as tar:
             for file_src in file_list.get("paths", []):
                 file_src_path = Path(file_src)
-                print(f"Adding {file_src_path} to {tarfile_dst}")
+                logger.info(f"Adding {file_src_path} to {tarfile_dst}")
                 if file_src_path.is_file():
                     tar.add(file_src_path, arcname=file_src_path.name)
                 else:
@@ -54,7 +71,9 @@ def main():
         directory_src = Path(whole_directory.get("path", ""))
         tarfile_name = whole_directory.get("filename")
         tarfile_dst = Path(package_dir, tarfile_name)
-        print(f"Compressing {filetype} directory from {directory_src} to {tarfile_dst}")
+        logger.warning(
+            f"Compressing {filetype} directory from {directory_src} to {tarfile_dst}"
+        )
 
         if directory_src.is_dir():
             with tarfile.open(tarfile_dst, "w|gz") as tar:
