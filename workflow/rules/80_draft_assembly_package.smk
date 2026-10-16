@@ -29,6 +29,9 @@ rule copy_files_for_dataportal_package:
 rule generate_dataportal_filenames:
     input:
         manifest=config["manifest"],
+        stats=str_path(manifest.get_dir("assembly_stats"), "stats.with_depth.tsv"),
+        busco_primary=genomeassembly_output.get("PRIMARY_BUSCO_JSON"),
+        busco_secondary=genomeassembly_output.get("HAPLO_BUSCO_JSON"),
     output:
         dp_files=str_path(
             manifest.get_dir("results"), "bpa_draft_assembly", "filenames.json"
@@ -41,6 +44,9 @@ rule generate_dataportal_filenames:
         config["containers"]["atol_genome_launcher"]
     shell:
         "generate-dataportal-filenames "
+        "--stats {input.stats} "
+        "--busco_primary {input.busco_primary} "
+        "--busco_secondary {input.busco_secondary} "
         "{input.manifest} "
         "{output.dp_files} "
         "&> {log}"

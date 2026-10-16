@@ -27,6 +27,7 @@ sample_id = ".".join([manifest.dataset_id, str(manifest.assembly_version)])
 
 curation_dir = manifest.get_dir("curation")
 curation_input = manifest.pipeline_input("curation")
+genomeassembly_output=manifest.treeval_assembly.outputs_for("genomeassembly")
 curation_output = manifest.treeval_assembly.outputs_for("curation")
 treeval_output = manifest.treeval_assembly.outputs_for("treeval")
 ascc_output = manifest.treeval_assembly.outputs_for("ascc")
