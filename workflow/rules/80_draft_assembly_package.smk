@@ -31,8 +31,8 @@ rule generate_dataportal_metadata:
     input:
         manifest=config["manifest"],
         stats=str_path(manifest.get_dir("assembly_stats"), "stats.with_depth.tsv"),
-        busco_primary=genomeassembly_output.get("PRIMARY_BUSCO_JSON"),
-        busco_secondary=genomeassembly_output.get("HAPLO_BUSCO_JSON"),
+        busco_primary=str_path(genomeassembly_output.get("PRIMARY_BUSCO_JSON")),
+        busco_secondary=str_path(genomeassembly_output.get("HAPLO_BUSCO_JSON")),
     output:
         dp_filelist=str_path(
             manifest.get_dir("results"), "bpa_draft_assembly", "filelist.json"
