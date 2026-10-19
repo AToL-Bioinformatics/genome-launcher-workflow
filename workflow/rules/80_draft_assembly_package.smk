@@ -5,12 +5,13 @@ rule draft_assembly_package:
         str_path(manifest.get_dir("results"), "bpa_draft_assembly", "bpa_package"),
 
 
-# TODO: This script should also handle the metadata / checksum / manifest
-# generation
 rule copy_files_for_dataportal_package:
     input:
-        dp_files=str_path(
+        dp_filelist=str_path(
             manifest.get_dir("results"), "bpa_draft_assembly", "filelist.json"
+        ),
+        dp_metadata=str_path(
+            manifest.get_dir("results"), "bpa_draft_assembly", "metadata.xlsx"
         ),
     output:
         package_dir=directory(
@@ -49,8 +50,8 @@ rule generate_dataportal_metadata:
         str_path(log_dir_base, "generate_dataportal_metadata.log"),
     benchmark:
         str_path(log_dir_base, "generate_dataportal_metadata.stats.jsonl")
-    # container:
-    #     config["containers"]["atol_genome_launcher"]
+    container:
+        config["containers"]["atol_genome_launcher"]
     shell:
         "generate-dataportal-metadata "
         "--stats {input.stats} "

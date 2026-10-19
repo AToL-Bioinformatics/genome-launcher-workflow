@@ -37,7 +37,6 @@ rule broker_raw_reads_to_ena:
         Path(manifest.get_dir("receipts"), "submission_reads.jsonl"),
 
 
-
 # this submits the runs
 rule broker_runs:
     input:
