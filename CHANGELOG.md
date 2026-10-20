@@ -1,11 +1,51 @@
 Changelog
 =========
 
-0.18.0 (2026-10-07)
+0.19.0 (2026-10-20)
 -------------------
 
 New
 
+~~~
+- Target to generate draft assembly package. [Tom Harrop]
+- Target for BPA draft assembly package. [Tom Harrop]
+
+Changes
+~~~~~~~
+
+- Bump launcher to 0.22.3. [Tom Harrop]
+
+Fix
+
+~~~
+- Add BTK files without directory structure so they can be loaded into
+  Galaxy. [Tom Harrop]
+
+Other
+~~~~~
+
+- Generate the filenames for this assembly, and use python to copy the
+  files. [Tom Harrop]
+
+0.18.1 (2026-10-13)
+-------------------
+
+Changes
+
+~~~~~~~
+- Filter files in get_all_assemblies. [Tom Harrop]
+- Use --skip-err for seqkit stats. [Tom Harrop]
+- Filter files in get_all_assemblies Fixes #51. [Tom Harrop]
+
+Fix
+~~~
+- Handle nulls in calculate_depth script. [Tom Harrop]
+
+
+0.18.0 (2026-10-07)
+-------------------
+
+New
 ~~~
 - Annotation config for Setonix. [Tom Harrop]
 - Update Snakemake to 9.27.0. [Tom Harrop]
