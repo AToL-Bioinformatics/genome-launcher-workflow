@@ -2,7 +2,7 @@
     "assembly_version": 1,
     "dataset_id": "eTestTest1",
     "scientific_name": "Rhynchosporium graminicola",
-    "taxon_id": 2792576,
+    "taxon_id": 319761,
     "busco_odb10_dataset_name": "helotiales",
     "busco_odb12_dataset_name": "helotiales",
     "ncbi_class": "",
@@ -12,9 +12,10 @@
     "mitohifi_reference_species": "Rhynchosporium commune",
     "oatk_hmm_name": "dikarya",
     "augustus_dataset_name": "tiberius_model_cfg:fungi.yaml",
+    "assembly_id": "94b49f4f-835d-47d3-b1ec-43e6efcef6d3",
     "read_files": [
         {
-            "name": "bpa-pp-pacbio-hifi-395385-m84073_230802_055109_s2",
+            "name": "bpa-avid-pacbio-hifi-668779-m84073_260813_070932_s1",
             "data_type": "PACBIO_SMRT",
             "base_url": "https://downloads-qcif.bioplatforms.com/bpa/pp_staging/pacbio-hifi/BPAOPS-1452/20230809_PP_AGRF_CAGRF230615297_m84073_230802_055109_s2/",
             "single_end": [
