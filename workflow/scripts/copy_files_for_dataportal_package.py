@@ -7,8 +7,6 @@ from pathlib import Path
 import shutil
 import tarfile
 
-from common import logger
-
 
 def md5sum(file: Path, blocksize: int = 65536) -> str:
     hash = hashlib.md5()
@@ -20,25 +18,27 @@ def md5sum(file: Path, blocksize: int = 65536) -> str:
 
 def main():
 
+    logger = logging.getLogger("copy_files_for_dataportal_package")
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        datefmt="%H:%M:%S",
+        level=logging.INFO,
+    )
+
     try:
         dp_filelist = Path(snakemake.input["dp_filelist"])
         dp_metadata = Path(snakemake.input["dp_metadata"])
         package_dir = Path(snakemake.output["package_dir"])
 
+        fh = logging.FileHandler(snakemake.log[0])
         logger.handlers.clear()
-        logger.name = "copy_files_for_dataportal_package"
+        logger.addHandler(fh)
 
-        logging.basicConfig(
-            filename=snakemake.log[0],
-            level=logging.INFO,
-            format="%(asctime)s %(levelname)s %(name)s:\n    %(message)s",
-            datefmt="%H:%M:%S",
-        )
-
-    except NameError:
+    except NameError as e:
         dp_filelist = Path("results/bpa_draft_assembly/filelist.json")
         dp_metadata = Path("results/bpa_draft_assembly/metadata.xlsx")
         package_dir = Path("results/bpa_draft_assembly/bpa_package")
+
     with open(dp_filelist, "rb") as f:
         bp_files_map = json.loads(f.read())
 
@@ -101,7 +101,7 @@ def main():
                         f"Source file {file_src_path} is missing, but not required. It will be skipped."
                     )
                 else:
-                    raise FileNotFoundError(file_src_path)
+                    raise FileNotFoundError(single_file_src)
 
         files_to_checksum.append(tarfile_dst)
 
@@ -117,7 +117,9 @@ def main():
 
         if directory_src.is_dir():
             with tarfile.open(tarfile_dst, "w|gz") as tar:
-                tar.add(directory_src, arcname=directory_src.name)
+                for p in directory_src.iterdir():
+                    logger.debug(p)
+                    tar.add(p, arcname=p.name)
         elif required is False:
             logger.warning(
                 f"Source directory {directory_src} is missing, but not required. It will be skipped."
