@@ -1,23 +1,50 @@
 ---
-apptainer-prefix: $SINGULARITY_CACHEDIR/library
+# --env TMPDIR=/tmp breaks Helixer
+apptainer-args: -B $PWD,/data,/tmp
+  --nv
+  -H $(mktemp -d)
+  --pwd $PWD
+  --env TMPDIR=/tmp
+  --env LC_ALL=C
+  --env BPA_APIKEY=${BPA_APIKEY}
+  --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
+  --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
+  --env CANOPY_BASE_URL=${CANOPY_BASE_URL}
+  --env CANOPY_PASSWORD=${CANOPY_PASSWORD}
+  --env CANOPY_USERNAME=${CANOPY_USERNAME}
+  --env RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID=${RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID}
+  --env RCLONE_CONFIG_UPLOAD_ENDPOINT=${RCLONE_CONFIG_UPLOAD_ENDPOINT}
+  --env RCLONE_CONFIG_UPLOAD_PROVIDER=${RCLONE_CONFIG_UPLOAD_PROVIDER}
+  --env RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY=${RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY}
+  --env RCLONE_CONFIG_UPLOAD_TYPE=${RCLONE_CONFIG_UPLOAD_TYPE}
+  --env WEBIN_PASS=${WEBIN_PASS}
+  --env WEBIN_USER=${WEBIN_USER}
+apptainer-prefix: $APPTAINER_CACHEDIR
 benchmark-extended: True
+cores: 50
+configfile:
+  - profiles/spartan/workflow.config.yaml
 cluster-generic-cancel-cmd: scancel
 cluster-generic-status-cmd: status-sacct-robust.sh
 cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   sbatch
+  "--export={resources.sbatch_export} "
+  "--account=${PROJECT}"
   --time={resources.runtime}
   {resources.partitionFlag}
   --cpus-per-task={threads}
   --mem={resources.mem_mb}
-  --job-name={rule}-smk
+  --job-name=smk-{rule}
   --output=logs/slurm/{rule}/{rule}-%j.out
   --parsable
-configfile:
-  - profiles/spartan/workflow.config.yaml
+  --gpus={resources.gpu}
+  --tmp={resources.disk_mb}M
 default-resources:
   - partitionFlag=""
-  - mem_mb=4000
+  - mem="4G"
   - runtime=5
+  - gpu=0
+  - sbatch_export="APPTAINER_CLEANENV=true,APPTAINER_CONTAINALL=true,APPTAINER_WRITABLE_TMPFS=true"
 executor: cluster-generic
 jobs: 128
 keep-going: true
@@ -31,19 +58,15 @@ rerun-incomplete: true
 rerun-triggers:
   - mtime
 restart-times: 0
-singularity-args: -B ${PWD},${TMPDIR},/data
-  --nv
-  -H $(mktemp -d)
-  --pwd ${PWD}
-  --containall --cleanenv --writable-tmpfs
-  --env BPA_APIKEY=${BPA_APIKEY}
-  --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
-  --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
-  --env RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID=${RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID}
-  --env RCLONE_CONFIG_UPLOAD_ENDPOINT=${RCLONE_CONFIG_UPLOAD_ENDPOINT}
-  --env RCLONE_CONFIG_UPLOAD_PROVIDER=${RCLONE_CONFIG_UPLOAD_PROVIDER}
-  --env RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY=${RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY}
-  --env RCLONE_CONFIG_UPLOAD_TYPE=${RCLONE_CONFIG_UPLOAD_TYPE}
-singularity-prefix: $SINGULARITY_CACHEDIR/library
+set-resources:
+  annooddities:
+    runtime: "12h"
+  tiberius:
+    # gpu-h100 nodes have 285 GB RAM and 192 CPUs
+    # gpu-a100 nodes have 594 GB RAM and 384 CPUs
+    # see https://rcs-knowledge-hub.atlassian.net/wiki/spaces/KB/pages/958398465/Understanding+scheduling
+    partitionFlag: "--partition=gpu-a100"
+    mem: "256G"
+    runtime: "24h"
+use-apptainer: true
 use-conda: False
-use-singularity: true
