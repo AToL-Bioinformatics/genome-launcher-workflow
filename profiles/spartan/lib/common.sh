@@ -18,7 +18,7 @@ set_project_dir() {
 
 # Singularity/Apptainer setup
 setup_singularity() {
-    module load Apptainer/1.4.4
+    module load Apptainer/1.4.5
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
         printf "The SINGULARITY_CACHEDIR variable is required" 1>&2

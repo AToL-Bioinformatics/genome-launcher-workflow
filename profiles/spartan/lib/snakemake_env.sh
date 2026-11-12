@@ -7,8 +7,7 @@ source "${SCRIPT_DIR}/common.sh"
 
 # Setup snakemake environment
 setup_snakemake() {
-	module load GCCcore/13.3.0
-	module load Python/3.12.3
+	module load GCCcore/13.3.0; module load Python/3.12.3
 
 	# Singularity setup
 	setup_singularity
