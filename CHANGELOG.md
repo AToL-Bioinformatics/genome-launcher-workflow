@@ -1,6 +1,29 @@
 Changelog
 =========
 
+0.19.2 (2026-11-12)
+-------------------
+
+New
+
+~~~
+- Add env vars for ARDS handles. [Tom Harrop]
+
+Changes
+~~~~~~~
+
+- Bump launcher. [Tom Harrop]
+
+0.19.1 (2026-11-12)
+-------------------
+
+- Merge pull request #57 from AToL-Bioinformatics/ignore_juicer. [Tom
+  Harrop]
+
+  Ignore JUICERTOOLS_PRE
+- Update pawsey.config. [Tom Harrop]
+- Ignore JUICERTOOLS_PRE. [Tom Harrop]
+
 0.19.0 (2026-10-20)
 -------------------
 
