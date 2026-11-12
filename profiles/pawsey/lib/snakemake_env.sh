@@ -40,6 +40,10 @@ setup_snakemake() {
 	export CANOPY_USERNAME="${CANOPY_USERNAME}"
 	export CANOPY_PASSWORD="${CANOPY_PASSWORD}"
 
+	# ARDC Handle minting
+	export ARDC_APPID="${ARDC_APPID}"
+	export ARDC_BASE_URL="${ARDC_BASE_URL}"
+	export ARDC_SHARED_SECRET="${ARDC_SHARED_SECRET}"
 }
 
 # Run snakemake with standard options
