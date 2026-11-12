@@ -62,8 +62,10 @@ set-resources:
   annooddities:
     runtime: "12h"
   tiberius:
+    # gpu-h100 nodes have 285 GB RAM and 192 CPUs
+    # gpu-a100 nodes have 594 GB RAM and 384 CPUs
+    # see https://rcs-knowledge-hub.atlassian.net/wiki/spaces/KB/pages/958398465/Understanding+scheduling
     partitionFlag: "--partition=gpu-a100"
-    threads: 1
     mem: "256G"
     runtime: "24h"
 use-apptainer: true
