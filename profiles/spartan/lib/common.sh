@@ -1,5 +1,5 @@
 #!/bin/bash
-# Common setup for all Pawsey jobs
+# Common setup for all Spartan jobs
 
 set -eux
 
