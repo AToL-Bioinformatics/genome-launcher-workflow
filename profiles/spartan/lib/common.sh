@@ -1,5 +1,5 @@
 #!/bin/bash
-# Common setup for all Pawsey jobs
+# Common setup for all Spartan jobs
 
 set -eux
 
@@ -18,6 +18,7 @@ set_project_dir() {
 
 # Singularity/Apptainer setup
 setup_singularity() {
+	module load GCCcore/13.3.0
     module load Apptainer/1.4.4
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
