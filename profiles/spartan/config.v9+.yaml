@@ -6,13 +6,24 @@ apptainer-args: -B $PWD,/data,/tmp
   --pwd $PWD
   --env TMPDIR=/tmp
   --env LC_ALL=C
-  --env RCLONE_S3_ACCESS_KEY_ID=${RCLONE_S3_ACCESS_KEY_ID}
-  --env RCLONE_S3_ENDPOINT=${RCLONE_S3_ENDPOINT}
-  --env RCLONE_S3_PROVIDER=${RCLONE_S3_PROVIDER}
-  --env RCLONE_S3_SECRET_ACCESS_KEY=${RCLONE_S3_SECRET_ACCESS_KEY}
+  --env BPA_APIKEY=${BPA_APIKEY}
+  --env BPA_MIRROR_PASSWD=${BPA_MIRROR_PASSWD}
+  --env BPA_MIRROR_USER=${BPA_MIRROR_USER}
+  --env CANOPY_BASE_URL=${CANOPY_BASE_URL}
+  --env CANOPY_PASSWORD=${CANOPY_PASSWORD}
+  --env CANOPY_USERNAME=${CANOPY_USERNAME}
+  --env RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID=${RCLONE_CONFIG_UPLOAD_ACCESS_KEY_ID}
+  --env RCLONE_CONFIG_UPLOAD_ENDPOINT=${RCLONE_CONFIG_UPLOAD_ENDPOINT}
+  --env RCLONE_CONFIG_UPLOAD_PROVIDER=${RCLONE_CONFIG_UPLOAD_PROVIDER}
+  --env RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY=${RCLONE_CONFIG_UPLOAD_SECRET_ACCESS_KEY}
+  --env RCLONE_CONFIG_UPLOAD_TYPE=${RCLONE_CONFIG_UPLOAD_TYPE}
+  --env WEBIN_PASS=${WEBIN_PASS}
+  --env WEBIN_USER=${WEBIN_USER}
 apptainer-prefix: $APPTAINER_CACHEDIR
 benchmark-extended: True
 cores: 50
+configfile:
+  - profiles/spartan/workflow.config.yaml
 cluster-generic-cancel-cmd: scancel
 cluster-generic-status-cmd: status-sacct-robust.sh
 cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
@@ -21,7 +32,6 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   "--account=${PROJECT}"
   --time={resources.runtime}
   {resources.partitionFlag}
-  {resources.exclusive}
   --cpus-per-task={threads}
   --mem={resources.mem_mb}
   --job-name=smk-{rule}
@@ -31,7 +41,6 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   --tmp={resources.disk_mb}M
 default-resources:
   - partitionFlag=""
-  - exclusive=""
   - mem_mb=4000
   - runtime=5
   - gpu=0
@@ -52,34 +61,10 @@ restart-times: 0
 set-resources:
   annooddities:
     runtime: "12h"
-  clean_query:
-    runtime: "4d"
-    mem: "256G"
-  rm_build:
-    runtime: "4d"
-  rm_mask:
-    runtime: "4d"
-  rm_model:
-    mem: "256G"
-    runtime: "4d"
   tiberius:
     partitionFlag: "--partition=gpu-a100"
     threads: 1
     mem: "256G"
-    runtime: 1440
-  helixer:
-    partitionFlag: "--partition=gpu-a100"
-    threads: 1
-    mem: "256G"
-    runtime: 1440
-  braker3:
-    threads: 32
-    mem: "256G"
-  # override containall/cleanenv for funannotate specifically. See
-  # https://github.com/snakemake/snakemake/issues/262#issuecomment-3669712984
-  funannotate_predict:
-    threads: 64
-    mem: "512G"
-    sbatch_export: 'APPTAINER_CLEANENV="",APPTAINER_CONTAINALL="",APPTAINER_WRITABLE_TMPFS=""'
+    runtime: "24h"
 use-apptainer: true
 use-conda: False
