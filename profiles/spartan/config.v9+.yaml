@@ -41,7 +41,7 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
   --tmp={resources.disk_mb}M
 default-resources:
   - partitionFlag=""
-  - mem_mb=4000
+  - mem="4G"
   - runtime=5
   - gpu=0
   - sbatch_export="APPTAINER_CLEANENV=true,APPTAINER_CONTAINALL=true,APPTAINER_WRITABLE_TMPFS=true"
