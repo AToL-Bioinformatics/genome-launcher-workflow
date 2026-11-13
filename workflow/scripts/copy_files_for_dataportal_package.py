@@ -75,14 +75,13 @@ def main():
                 single_file_dst,
                 follow_symlinks=True,
             )
+            files_to_checksum.append(single_file_dst)
         elif required is False:
             logger.warning(
                 f"Source file {single_file_src} is missing, but not required. It will be skipped."
             )
         else:
             raise FileNotFoundError(single_file_src)
-
-        files_to_checksum.append(single_file_dst)
 
     # copy the multi-file objects
     for filetype, file_list in bp_files_map.get("file_lists", {}).items():
