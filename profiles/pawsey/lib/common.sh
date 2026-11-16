@@ -8,7 +8,7 @@ unset SBATCH_EXPORT
 
 # Singularity/Apptainer setup
 setup_singularity() {
-    module load singularity/4.1.0-nohost
+    module load pawseyenv/2025.08 singularity/4.1.0-nohost
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
         export SINGULARITY_CACHEDIR=/software/projects/pawsey1132/${USER}/.singularity
