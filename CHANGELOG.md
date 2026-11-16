@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.19.4 (2026-11-16)
+-------------------
+
+Changes
+
+~~~~~~~
+- Pawsey module change. [Tom Harrop]
+
+
+0.19.3 (2026-11-13)
+-------------------
+
+Changes
+~~~~~~~
+
+- Check if file exists before calling checksum. [Tom Harrop]
+
 0.19.2 (2026-11-12)
 -------------------
 
