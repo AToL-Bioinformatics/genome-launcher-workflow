@@ -31,7 +31,7 @@ set-resources:
 # 2. The Pawsey Tiberius container OOMs with containall so we override
 #    `singularity-args` (note the official Tiberius container works fine with
 #    containall).
-singularity-args: -B ${PWD},${TMPDIR},/scratch
+singularity-args: -B ${PWD},${TMPDIR},$(mktemp -d):/opt/Tiberius/model_weights
   -H $(mktemp -d)
   --pwd ${PWD}
   --cleanenv --writable-tmpfs
