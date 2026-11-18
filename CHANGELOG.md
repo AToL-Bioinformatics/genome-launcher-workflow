@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.19.6 (2026-11-18)
+0.19.7 (2026-11-18)
 -------------------
 
 Fix
@@ -10,37 +10,45 @@ Fix
 - Temporary workarounds for #65. [Tom Harrop]
 
 
-0.19.5 (2026-11-17)
+0.19.6 (2026-11-18)
 -------------------
 
 Fix
 ~~~
 
+- Temporary workarounds for #65. [Tom Harrop]
+
+0.19.5 (2026-11-17)
+-------------------
+
+Fix
+
+~~~
 - Hack in a model path in case Tiberius decides to download. [Tom
   Harrop]
+
 
 0.19.4 (2026-11-16)
 -------------------
 
 Changes
-
 ~~~~~~~
-- Pawsey module change. [Tom Harrop]
 
+- Pawsey module change. [Tom Harrop]
 
 0.19.3 (2026-11-13)
 -------------------
 
 Changes
-~~~~~~~
 
+~~~~~~~
 - Check if file exists before calling checksum. [Tom Harrop]
+
 
 0.19.2 (2026-11-12)
 -------------------
 
 New
-
 ~~~
 - Add env vars for ARDS handles. [Tom Harrop]
 
