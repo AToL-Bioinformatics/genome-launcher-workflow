@@ -1,6 +1,24 @@
 Changelog
 =========
 
+0.19.6 (2026-11-18)
+-------------------
+
+Fix
+
+~~~
+- Temporary workarounds for #65. [Tom Harrop]
+
+
+0.19.5 (2026-11-17)
+-------------------
+
+Fix
+~~~
+
+- Hack in a model path in case Tiberius decides to download. [Tom
+  Harrop]
+
 0.19.4 (2026-11-16)
 -------------------
 
