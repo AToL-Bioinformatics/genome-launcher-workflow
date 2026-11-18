@@ -24,10 +24,11 @@ cluster-generic-submit-cmd: mkdir -p logs/slurm/{rule} &&
 default-resources:
   - partitionFlag="--partition=gpu"
   - runtime=5
+restart-times: 1
 set-resources:
   tiberius:
     gpu: "attempt + 1"
-    runtime: "60 if attempt==1 else 1440"
+    runtime: "90 if attempt==1 else 1440"
 # 2. The Pawsey Tiberius container OOMs with containall so we override
 #    `singularity-args` (note the official Tiberius container works fine with
 #    containall).

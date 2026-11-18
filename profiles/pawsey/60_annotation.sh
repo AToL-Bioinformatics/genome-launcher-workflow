@@ -16,6 +16,11 @@ setup_snakemake
 # check this here because it's annotation-specific (for now)
 export GPU_ACCOUNT="${PAWSEY_PROJECT:?PAWSEY_PROJECT must be set for Annotation}-gpu"
 
+# Hard coded RAM amount for 2 GPUs (for now). Each MI250X reports 63714 MB
+# memory and we default to 2. see
+# https://github.com/AToL-Bioinformatics/genome-launcher-workflow/issues/65
+export TF_CUDNN_WORKSPACE_LIMIT_IN_MB=115000
+
 # Use a second profile for Tiberius. This requires Snakemake 9.27.0. From that
 # version, profile instances specified later take precedence over earlier
 # instances, wherever the same top-level entries occur in multiple profiles,
