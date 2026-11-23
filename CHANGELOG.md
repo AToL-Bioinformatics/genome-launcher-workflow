@@ -1,19 +1,28 @@
 Changelog
 =========
 
-0.19.8 (2026-11-23)
+0.19.9 (2026-11-23)
 -------------------
 
 Changes
 
 ~~~~~~~
-- Launcher and Webin version bump. [Tom Harrop]
+- Add runtime for deposit. [Tom Harrop]
 
+
+0.19.8 (2026-11-23)
+-------------------
+
+Changes
+~~~~~~~
+
+- Launcher and Webin version bump. [Tom Harrop]
 
 0.19.7 (2026-11-18)
 -------------------
 
 Fix
+
 ~~~
 - Temporary workarounds for #65. [Tom Harrop]
 
@@ -23,13 +32,14 @@ Fix
 
 Fix
 ~~~
-- Temporary workarounds for #65. [Tom Harrop]
 
+- Temporary workarounds for #65. [Tom Harrop]
 
 0.19.5 (2026-11-17)
 -------------------
 
 Fix
+
 ~~~
 - Hack in a model path in case Tiberius decides to download. [Tom
   Harrop]
