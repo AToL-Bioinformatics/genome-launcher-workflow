@@ -44,6 +44,8 @@ set-resources:
     partitionFlag: "--partition=copy"
   stage_s3_bucket:
     partitionFlag: "--partition=copy"
+  submit_assembly_to_ena:
+    runtime: "1h"
   transfer_raw_reads:
     partitionFlag: "--partition=copy"
 singularity-args: -B ${PWD},${TMPDIR},/scratch
