@@ -1,5 +1,5 @@
 #!/bin/bash
-# Common setup for all Pawsey jobs
+# Common setup for all Spartan jobs
 
 set -eux
 
@@ -18,7 +18,7 @@ set_project_dir() {
 
 # Singularity/Apptainer setup
 setup_singularity() {
-    module load Apptainer/1.4.4
+    module load Apptainer/1.4.5
 
     if [ -z "${SINGULARITY_CACHEDIR:-}" ]; then
         printf "The SINGULARITY_CACHEDIR variable is required" 1>&2
@@ -32,10 +32,11 @@ setup_singularity() {
 # Get sample/dataset ID from manifest or directory
 # FIXME - use yaml_manifest for this
 get_sample_id() {
-    if [ -f "config/manifest.yaml" ]; then
+    if [ -f "config/manifest.json" ]; then
         local dataset_id assembly_version
-        dataset_id="$(grep "dataset_id" config/manifest.yaml | head -n1 | cut -d' ' -f2 | sed 's/"//g')"
-        assembly_version="$(grep "assembly_version" config/manifest.yaml | head -n1 | cut -d' ' -f2 | sed 's/"//g')"
+        dataset_id="$(jq -r '.dataset_id' config/manifest.json)"
+        assembly_version="$(jq -r '.assembly_version' config/manifest.json)"
+
         printf "%s.%s" "${dataset_id}" "${assembly_version}"
     else
         basename "$(dirname "$(readlink -f venv)")"

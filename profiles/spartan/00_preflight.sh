@@ -23,8 +23,8 @@ scratch_directories=(
 )
 
 # get the assembly name from the manifest
-DATASET_ID="$(grep "dataset_id" config/manifest.yaml | head -n1 | cut -d' ' -f2 | sed "s/\"//g")"
-ASSEMBLY_VERSION="$(grep "assembly_version" config/manifest.yaml | head -n1 | cut -d' ' -f2 | sed "s/\"//g")"
+DATASET_ID="$(jq -r '.dataset_id' config/manifest.json)"
+ASSEMBLY_VERSION="$(jq -r '.assembly_version' config/manifest.json)"
 
 ASSEMBLY_ID="${DATASET_ID}.${ASSEMBLY_VERSION}"
 ASSEMBLY_BASE="${MYSCRATCH}/${ASSEMBLY_ID}"
